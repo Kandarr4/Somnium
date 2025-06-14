@@ -1,0 +1,138 @@
+/* Hi-Tech Survey Styles */
+:root {
+    --primary-color: #00e5ff;  /* Яркий циановый */
+    --background-dark: #0f1020;  /* Глубокий темно-синий */
+    --text-light: #e0e0e0;  /* Светло-серый */
+    --accent-color: #7e57c2;  /* Сиреневый акцент */
+}
+
+body {
+    font-family: 'Roboto', 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-dark);
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+#survey-content {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: rgba(15, 22, 36, 0.8);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0, 229, 255, 0.1);
+    border: 1px solid rgba(0, 229, 255, 0.2);
+}
+
+h1, h2 {
+    font-weight: 300;
+    color: var(--primary-color);
+    text-align: center;
+    letter-spacing: 1px;
+    margin-bottom: 30px;
+}
+
+#survey-form p {
+    font-weight: 400;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(0, 229, 255, 0.3);
+    color: var(--text-light);
+}
+
+.mb-4 {
+    background-color: rgba(30, 40, 60, 0.5);
+    border: 2px solid rgba(0, 229, 255, 0.2);
+    border-radius: 15px;
+    margin-bottom: 25px;
+    padding: 25px;
+    transition: all 0.3s ease;
+}
+
+.mb-4:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 229, 255, 0.1);
+}
+
+.form-check-label {
+    font-weight: 300;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.form-check-input {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+}
+
+.form-check-input:hover {
+    border-color: var(--accent-color);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border: none;
+    color: var(--background-dark);
+    font-weight: 500;
+    padding: 12px 40px;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-color);
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(126, 87, 194, 0.3);
+}
+
+/* Промо-блоки с футуристическим дизайном */
+.promo-block {
+    background: linear-gradient(135deg, rgba(0, 229, 255, 0.1), rgba(126, 87, 194, 0.1));
+    border: 1px solid rgba(0, 229, 255, 0.2);
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.promo-block:hover {
+    transform: scale(1.02);
+    box-shadow: 0 15px 30px rgba(0, 229, 255, 0.1);
+}
+
+/* Адаптивность и медиа-запросы */
+@media (max-width: 768px) {
+    #survey-content {
+        margin: 20px 10px;
+        padding: 15px;
+    }
+
+    .mb-4 {
+        padding: 15px;
+    }
+}
+
+/* Дополнительные футуристические элементы */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.hi-tech-pulse {
+    animation: pulse 2s infinite;
+}

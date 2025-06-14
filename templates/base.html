@@ -1,0 +1,3102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Somnium - IT компания | Разработка ПО и IT-услуги{% endblock %}</title>
+    
+    <!-- Meta-теги -->
+    <meta name="author" content="ИП Somnium - Валентин Бортников">
+    <meta name="description" content="{% block description %}IT-компания. Разработка ПО, ремонт ПК и IT-услуги в Темиртау и Караганде{% endblock %}">
+    <meta name="keywords" content="{% block keywords %}IT-компания, разработка ПО, ремонт компьютеров, IT-услуги, Темиртау, Караганда{% endblock %}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+    <!-- OG теги -->
+    <meta property="og:title" content="{% block og_title %}Somnium - IT компания | Разработка ПО и IT-услуги{% endblock %}" />
+    <meta property="og:description" content="{% block og_description %}Разработка ПО, ремонт ПК, IT-услуги в Темиртау и Караганде{% endblock %}" />
+    <meta property="og:url" content="{% block og_url %}https://somnium.kz{% endblock %}" />
+    <meta property="og:image" content="{% block og_image %}https://somnium.kz/static/img/og-image.jpg{% endblock %}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Somnium" />
+    
+    <!-- Twitter карточки -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{% block twitter_title %}Somnium - IT компания | Технологические решения для бизнеса{% endblock %}" />
+    <meta name="twitter:description" content="{% block twitter_description %}Разработка ПО, ремонт ПК, IT-услуги в Темиртау и Караганде{% endblock %}" />
+    <meta name="twitter:image" content="{% block twitter_image %}https://somnium.kz/static/img/twitter-card.jpg{% endblock %}" />
+    
+    <link rel="icon" href="/static/img/favicon/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/static/img/favicon/apple-touch-icon.png">
+    <link rel="manifest" href="/static/img/favicon/site.webmanifest">
+    
+    <!-- Шрифты и библиотеки -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.5/swiper-bundle.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            /* Основные цвета */
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #a5b4fc;
+            --accent-color: #8b5cf6;
+            --accent-light: #c4b5fd;
+            
+            /* Нейтральные цвета */
+            --light-color: #f9fafb;
+            --gray-lightest: #f3f4f6;
+            --gray-lighter: #e5e7eb;
+            --gray-light: #d1d5db;
+            --gray-color: #9ca3af;
+            --gray-dark: #6b7280;
+            --dark-color: #374151;
+            --dark-deep: #1f2937;
+            --dark-accent: #111827;
+            
+            /* Функциональные цвета */
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            
+            /* Размеры скруглений */
+            --border-radius-sm: 0.25rem;
+            --border-radius-md: 0.5rem;
+            --border-radius-lg: 1rem;
+            --border-radius-xl: 1.5rem;
+            --border-radius-full: 9999px;
+            
+            /* Тени */
+            --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+            --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            
+            /* Переходы */
+            --transition-fast: all 0.2s ease;
+            --transition-normal: all 0.3s ease;
+            --transition-slow: all 0.5s ease;
+            
+            /* Размеры контейнеров */
+            --container-width: 1320px;
+            --container-padding: 1.5rem;
+            --section-spacing: 6rem;
+        }
+        
+        /* Глобальные стили */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Roboto', sans-serif;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            font-size: 16px;
+        }
+        
+        h1, h2, h3, h4, h5, h6, .title, .nav-link {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            line-height: 1.4;
+            color: var(--dark-deep);
+        }
+        
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+            transition: var(--transition-normal);
+        }
+        
+        a:hover {
+            color: var(--primary-dark);
+        }
+        
+        p {
+            margin-bottom: 1.5rem;
+            color: var(--dark-color);
+        }
+        
+        section {
+            padding: 5rem 0;
+            position: relative;
+        }
+        
+        .section-sm {
+            padding: 3rem 0;
+        }
+        
+        .section-lg {
+            padding: 8rem 0;
+        }
+        
+        .container {
+            max-width: var(--container-width);
+            padding-left: var(--container-padding);
+            padding-right: var(--container-padding);
+            margin: 0 auto;
+        }
+        
+        /* Utility Classes */
+        .bg-primary {
+            background-color: var(--primary-color) !important;
+        }
+        
+        .bg-secondary {
+            background-color: var(--accent-color) !important;
+        }
+        
+        .bg-dark {
+            background-color: var(--dark-deep) !important;
+        }
+        
+        .bg-light {
+            background-color: var(--light-color) !important;
+        }
+        
+        .bg-gray {
+            background-color: var(--gray-lightest) !important;
+        }
+        
+        .text-primary {
+            color: var(--primary-color) !important;
+        }
+        
+        .text-secondary {
+            color: var(--accent-color) !important;
+        }
+        
+        .text-muted {
+            color: var(--gray-dark) !important;
+        }
+        
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color)) !important;
+        }
+        
+        .bg-gradient-dark {
+            background: linear-gradient(135deg, var(--dark-color), var(--dark-accent)) !important;
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+        
+        .shadow-hover {
+            transition: var(--transition-normal);
+        }
+        
+        .shadow-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            border-radius: var(--border-radius-md);
+            transition: var(--transition-normal);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            text-align: center;
+            line-height: 1.5;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(99, 102, 241, 0.35);
+            color: white;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .btn-white {
+            background-color: white;
+            color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-white:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            color: var(--primary-dark);
+        }
+        
+        .btn-lg {
+            padding: 1rem 2.5rem;
+            font-size: 1.125rem;
+        }
+        
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .btn-icon {
+            margin-left: 0.5rem;
+            transition: var(--transition-normal);
+        }
+        
+        .btn:hover .btn-icon-right {
+            transform: translateX(4px);
+        }
+        
+        .btn:hover .btn-icon-left {
+            transform: translateX(-4px);
+        }
+        
+        /* Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-normal);
+        }
+        
+        .header.scrolled {
+            box-shadow: var(--shadow-md);
+        }
+        
+        .header-hidden {
+            transform: translateY(-100%);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            transition: var(--transition-normal);
+        }
+        
+        .scrolled .header-container {
+            padding: 0.75rem 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 48px;
+            transition: var(--transition-normal);
+        }
+        
+        .scrolled .logo img {
+            height: 40px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+        
+        .nav-item {
+            position: relative;
+            margin: 0 0.25rem;
+        }
+        
+        .nav-link {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: var(--transition-normal);
+            border-radius: var(--border-radius-md);
+            font-size: 0.95rem;
+        }
+        
+        .nav-link:hover, 
+        .nav-item.active .nav-link {
+            color: var(--primary-color);
+            background-color: rgba(99, 102, 241, 0.08);
+        }
+        
+        .dropdown-icon {
+            margin-left: 0.25rem;
+            font-size: 0.75rem;
+            transition: var(--transition-normal);
+        }
+        
+        .nav-item.active .dropdown-icon {
+            transform: rotate(180deg);
+        }
+        
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 250px;
+            background-color: white;
+            box-shadow: var(--shadow-lg);
+            border-radius: var(--border-radius-md);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: var(--transition-normal);
+            padding: 0.75rem 0;
+            z-index: 100;
+            border: 1px solid var(--gray-lighter);
+        }
+        
+        .nav-item:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.25rem;
+            color: var(--dark-color);
+            text-decoration: none;
+            transition: var(--transition-normal);
+            font-size: 0.9rem;
+        }
+        
+        .dropdown-item:hover {
+            background-color: rgba(99, 102, 241, 0.08);
+            color: var(--primary-color);
+        }
+        
+        .dropdown-icon-item {
+            margin-right: 0.75rem;
+            color: var(--primary-color);
+            width: 1.5rem;
+            text-align: center;
+            font-size: 1rem;
+        }
+        
+        .header-buttons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .auth-btn, 
+        .contact-btn {
+            display: flex;
+            align-items: center;
+            padding: 0.6rem 1.25rem;
+            border-radius: var(--border-radius-full);
+            font-weight: 600;
+            transition: var(--transition-normal);
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+        
+        .auth-btn {
+            background-color: rgba(99, 102, 241, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .auth-btn:hover {
+            background-color: rgba(99, 102, 241, 0.2);
+            transform: translateY(-2px);
+            color: var(--primary-color);
+        }
+        
+        .contact-btn {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+        }
+        
+        .contact-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(99, 102, 241, 0.35);
+            color: white;
+        }
+        
+        .auth-btn i, 
+        .contact-btn i {
+            margin-right: 0.5rem;
+        }
+		
+		.fa-brands, .fab {
+			font-weight: 400;
+			background-color: #ADD8E6;
+			padding: 5px;
+			border-radius: 10px;
+			margin: 5px;
+		}
+        
+        .mobile-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        
+        .mobile-toggle span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background-color: var(--dark-color);
+            border-radius: 3px;
+            transition: var(--transition-normal);
+        }
+        
+        .mobile-toggle.active span:nth-child(1) {
+            transform: translateY(9px) rotate(45deg);
+        }
+        
+        .mobile-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .mobile-toggle.active span:nth-child(3) {
+            transform: translateY(-9px) rotate(-45deg);
+        }
+        
+        /* User Profile Styles */
+        .profile-dropdown {
+            position: relative;
+        }
+        
+        .profile-toggle {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            padding: 0.5rem;
+            border-radius: var(--border-radius-full);
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-normal);
+            border: 1px solid var(--gray-lighter);
+        }
+        
+        .profile-toggle:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        
+        .profile-avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 0.75rem;
+            border: 2px solid var(--primary-light);
+        }
+        
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-info h5 {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--dark-color);
+        }
+        
+        .profile-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 0.5rem);
+            right: 0;
+            background-color: white;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-lg);
+            padding: 0.75rem 0;
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: var(--transition-normal);
+            z-index: 100;
+            border: 1px solid var(--gray-lighter);
+        }
+        
+        .profile-dropdown:hover .profile-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .profile-menu-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.25rem;
+            color: var(--dark-color);
+            text-decoration: none;
+            transition: var(--transition-normal);
+            width: 100%;
+            font-size: 0.9rem;
+        }
+        
+        .profile-menu-item:hover {
+            background-color: rgba(99, 102, 241, 0.08);
+            color: var(--primary-color);
+        }
+        
+        .profile-menu-item.logout {
+            color: var(--danger-color);
+        }
+        
+        .profile-menu-item.logout:hover {
+            background-color: rgba(239, 68, 68, 0.08);
+        }
+        
+        .profile-menu-item i {
+            margin-right: 0.75rem;
+            width: 1.25rem;
+            text-align: center;
+        }
+
+        .swal2-container {
+            z-index: 9999 !important;
+        }
+        .auth-tabs .nav-link {
+            color: #495057;
+        }
+        .auth-tabs .nav-link.active {
+            color: #007bff;
+            font-weight: bold;
+        }
+        .auth-form .form-control {
+            margin-bottom: 10px;
+        }
+        .form-check {
+            margin-bottom: 10px;
+        }
+
+        {% block additional_css %}
+        {% endblock %}
+        
+        /* Category Section */
+        .category-section {
+            padding: 5rem 0;
+            background-color: var(--light-color);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -0.75rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 3px;
+        }
+        
+        .section-title p {
+            font-size: 1.125rem;
+            color: var(--gray-dark);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .category-card {
+            background-color: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition-normal);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            cursor: pointer;
+            border: 1px solid var(--gray-lighter);
+            overflow: hidden;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-light);
+        }
+        
+        .category-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-top-left-radius: var(--border-radius-lg);
+            border-top-right-radius: var(--border-radius-lg);
+            transition: var(--transition-normal);
+        }
+        
+        .category-card:hover img {
+            transform: scale(1.05);
+        }
+        
+        .category-card .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            flex-grow: 1;
+            padding: 1.5rem;
+        }
+        
+        .category-card .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--dark-deep);
+            transition: var(--transition-normal);
+        }
+        
+        .category-card:hover .card-title {
+            color: var(--primary-color);
+        }
+        
+        .category-card .card-description {
+            position: relative;
+            height: 0;
+            opacity: 0;
+            margin-bottom: 0;
+            overflow: hidden;
+            transition: var(--transition-normal);
+            color: var(--gray-dark);
+            font-size: 0.9rem;
+        }
+        
+        .category-card:hover .card-description {
+            height: auto;
+            opacity: 1;
+            margin-bottom: 1rem;
+        }
+        
+        .card-subcategory-count {
+            font-size: 0.875rem;
+            color: var(--gray-dark);
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background-color: var(--gray-lightest);
+            border-radius: var(--border-radius-full);
+            transition: var(--transition-normal);
+        }
+        
+        .category-card:hover .card-subcategory-count {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+        }
+        
+        /* Subcategory Styles */
+        .subcategory-card {
+            background-color: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition-normal);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            cursor: pointer;
+            border: 1px solid var(--gray-lighter);
+            overflow: hidden;
+        }
+        
+        .subcategory-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--accent-light);
+        }
+        
+        .subcategory-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-top-left-radius: var(--border-radius-lg);
+            border-top-right-radius: var(--border-radius-lg);
+            transition: var(--transition-normal);
+        }
+        
+        .subcategory-card:hover img {
+            transform: scale(1.05);
+        }
+        
+        .subcategory-card .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            flex-grow: 1;
+            padding: 1.5rem;
+        }
+        
+        .subcategory-card .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--dark-deep);
+            transition: var(--transition-normal);
+        }
+        
+        .subcategory-card:hover .card-title {
+            color: var(--accent-color);
+        }
+        
+        .subcategory-card .card-description {
+            position: relative;
+            height: 0;
+            opacity: 0;
+            margin-bottom: 0;
+            overflow: hidden;
+            transition: var(--transition-normal);
+            color: var(--gray-dark);
+            font-size: 0.9rem;
+        }
+        
+        .subcategory-card:hover .card-description {
+            height: auto;
+            opacity: 1;
+            margin-bottom: 1rem;
+        }
+        
+        /* Product Card Styles */
+        .product-card {
+            background-color: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition-normal);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            cursor: pointer;
+            border: 1px solid var(--gray-lighter);
+            overflow: hidden;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-light);
+        }
+        
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-top-left-radius: var(--border-radius-lg);
+            border-top-right-radius: var(--border-radius-lg);
+            transition: var(--transition-normal);
+        }
+        
+        .product-card:hover img {
+            transform: scale(1.05);
+        }
+        
+        .product-card .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            flex-grow: 1;
+            padding: 1.5rem;
+        }
+        
+        .product-card .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-deep);
+            transition: var(--transition-normal);
+        }
+        
+        .product-card:hover .card-title {
+            color: var(--primary-color);
+        }
+        
+        .product-card .card-article {
+            font-size: 0.875rem;
+            color: var(--gray-dark);
+            margin-bottom: 0.75rem;
+        }
+        
+        .product-card .card-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--success-color);
+            margin-top: 0.5rem;
+        }
+        
+        .product-card .card-id {
+            position: absolute;
+            top: 0.75rem;
+            left: 0.75rem;
+            font-size: 0.75rem;
+            color: white;
+            background: rgba(99, 102, 241, 0.8);
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--border-radius-sm);
+            z-index: 1;
+        }
+        
+        .product-card-link {
+            display: block;
+            height: 100%;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        /* Navigation Buttons */
+        .navigation-buttons {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .navigation-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--gray-lightest);
+            color: var(--dark-deep);
+            border-radius: var(--border-radius-md);
+            transition: var(--transition-normal);
+            border: 1px solid var(--gray-lighter);
+            cursor: pointer;
+            font-weight: 500;
+            margin: 0 0.5rem;
+        }
+        
+        .navigation-button:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .navigation-button i {
+            margin-right: 0.5rem;
+        }
+        
+        /* Features Section */
+        .features-section {
+            background-color: var(--dark-deep);
+            color: white;
+            padding: 5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .features-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><circle cx="15" cy="15" r="1.5" fill="white" opacity="0.2"/></svg>');
+            opacity: 0.3;
+            z-index: 0;
+        }
+        
+        .features-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 1.5rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius-lg);
+            margin-bottom: 1.5rem;
+            transition: var(--transition-normal);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .features-item:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .features-item .content {
+            flex: 1;
+        }
+        
+        .features-item h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: white;
+        }
+        
+        .features-item p {
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0;
+            font-size: 1rem;
+        }
+        
+        .features-icon {
+            font-size: 1.75rem;
+            color: var(--primary-light);
+            margin-right: 1.25rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            width: 3.5rem;
+            height: 3.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: var(--transition-normal);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .features-item:hover .features-icon {
+            transform: scale(1.1);
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .features-image {
+            display: flex;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .features-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--border-radius-lg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            animation: float 5s ease-in-out infinite;
+        }
+        
+        /* Tabs Section */
+        .tabs-section {
+            padding: 5rem 0;
+            background-color: var(--gray-lightest);
+        }
+        
+        .tabs-navigation {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background-color: white;
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gray-lighter);
+        }
+        
+        .tab-button {
+            display: flex;
+            align-items: center;
+            padding: 1.25rem;
+            color: var(--dark-deep);
+            border: none;
+            background: none;
+            border-radius: 0;
+            transition: var(--transition-normal);
+            font-weight: 500;
+            position: relative;
+            text-align: left;
+            cursor: pointer;
+        }
+        
+        .tab-button::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0;
+            background-color: var(--primary-color);
+            transition: var(--transition-normal);
+            opacity: 0.1;
+        }
+        
+        .tab-button:hover::before {
+            width: 5px;
+        }
+        
+        .tab-button.active {
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            color: white;
+        }
+        
+        .tab-button.active::before {
+            display: none;
+        }
+        
+        .tab-button .icon {
+            margin-right: 1rem;
+            font-size: 1.25rem;
+            width: 2rem;
+            text-align: center;
+        }
+        
+        .tab-content {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            height: 100%;
+            border: 1px solid var(--gray-lighter);
+        }
+        
+        .tab-pane {
+            padding: 2rem;
+            display: none;
+        }
+        
+        .tab-pane.active {
+            display: flex;
+            flex-direction: row-reverse;
+            opacity: 1;
+            visibility: visible;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+        
+        .tab-pane .tab-image {
+            flex: 1;
+            margin-bottom: 2rem;
+        }
+        
+        .tab-pane .tab-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition-normal);
+        }
+        
+        .tab-pane .tab-content-inner {
+            flex: 1;
+        }
+        
+        .tab-pane h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            color: var(--dark-deep);
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        
+        .tab-pane h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 3px;
+        }
+        
+        .tab-pane p {
+            color: var(--gray-dark);
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            transition: var(--transition-normal);
+        }
+        
+        .feature-list li:hover {
+            transform: translateX(5px);
+        }
+        
+        .feature-list li i {
+            color: var(--success-color);
+            margin-right: 1rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            background-color: rgba(16, 185, 129, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            transition: var(--transition-normal);
+        }
+        
+        .feature-list li:hover i {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .feature-list li span {
+            color: var(--dark-color);
+            font-size: 1rem;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            position: relative;
+            overflow: hidden;
+            color: white;
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            right: -100px;
+            top: -100px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .cta-section::after {
+            content: '';
+            position: absolute;
+            left: -100px;
+            bottom: -100px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta-text {
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: white;
+            color: var(--primary-color);
+            border-radius: var(--border-radius-md);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition-normal);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            color: var(--primary-dark);
+        }
+        
+        .cta-button i {
+            margin-left: 0.75rem;
+            transition: var(--transition-normal);
+        }
+        
+        .cta-button:hover i {
+            transform: translateX(5px);
+        }
+        
+        /* Footer Styles */
+        .footer {
+            background-color: var(--dark-deep);
+            color: white;
+            padding-top: 5rem;
+            position: relative;
+        }
+        
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="1" fill="white" opacity="0.1"/></svg>');
+            opacity: 0.5;
+            z-index: 0;
+        }
+        
+        .footer-top {
+            position: relative;
+            z-index: 1;
+            padding-bottom: 3rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-widget {
+            margin-bottom: 2rem;
+        }
+        
+        .footer-logo {
+            display: block;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-logo img {
+            height: 3.5rem;
+            width: auto;
+        }
+        
+        .footer-about {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+        
+        .footer-social {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            gap: 0.75rem;
+        }
+        
+        .footer-social li a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50%;
+            transition: var(--transition-normal);
+        }
+        
+        .footer-social li a:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .footer-widget-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: white;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        
+        .footer-widget-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-links li a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: var(--transition-normal);
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+        }
+        
+        .footer-links li a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .footer-links li a i {
+            margin-right: 0.75rem;
+            font-size: 0.7rem;
+            color: var(--primary-light);
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 50%;
+            background-color: rgba(99, 102, 241, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-normal);
+        }
+        
+        .footer-links li a:hover i {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .footer-contact {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .footer-contact li {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.25rem;
+        }
+        
+        .contact-icon {
+            margin-right: 1rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            background-color: rgba(99, 102, 241, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-normal);
+            flex-shrink: 0;
+        }
+        
+        .footer-contact li:hover .contact-icon {
+            background-color: var(--primary-color);
+            transform: scale(1.1);
+        }
+        
+        .contact-icon i {
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .contact-info {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: var(--transition-normal);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .contact-info:hover {
+            color: white;
+        }
+        
+        .contact-info span {
+            display: block;
+            color: white;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .footer-bottom {
+            position: relative;
+            z-index: 1;
+            padding: 1.5rem 0;
+            text-align: center;
+        }
+        
+        .footer-copyright {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+        
+        .footer-copyright a {
+            color: var(--primary-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition-normal);
+        }
+        
+        .footer-copyright a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        
+        /* Scroll to Top Button */
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            width: 3rem;
+            height: 3rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition-normal);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .scroll-top.active {
+            opacity: 1;
+            visibility: visible;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+            }
+        }
+        
+        .scroll-top:hover {
+            transform: scale(1.1);
+        }
+        
+        .scroll-top i {
+            color: white;
+            font-size: 1.25rem;
+        }
+
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: white;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-lg);
+            padding: 1.5rem;
+            max-width: 350px;
+            width: 100%;
+            transform: translateY(100%);
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition-normal);
+            z-index: 2000;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .notification.active {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .notification.success {
+            border-color: var(--success-color);
+        }
+        
+        .notification.success .notification-icon {
+            color: var(--success-color);
+        }
+        
+        .notification.error {
+            border-color: var(--danger-color);
+        }
+        
+        .notification.error .notification-icon {
+            color: var(--danger-color);
+        }
+        
+        .notification-content {
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .notification-icon {
+            margin-right: 1rem;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .notification-text {
+            flex: 1;
+        }
+        
+        .notification-title {
+            font-weight: 600;
+            color: var(--dark-deep);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .notification-message {
+            color: var(--gray-dark);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+        
+        .notification-close {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: none;
+            border: none;
+            color: var(--gray-dark);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition-normal);
+        }
+        
+        .notification-close:hover {
+            color: var(--danger-color);
+            transform: rotate(90deg);
+        }
+        
+        .notification-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--gray-lighter);
+            border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
+            overflow: hidden;
+        }
+        
+        .notification-progress-bar {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 100%;
+            border-radius: 0 0 0 var(--border-radius-md);
+            animation: progress 5s linear forwards;
+        }
+        
+        @keyframes progress {
+            from {
+                width: 100%;
+            }
+            to {
+                width: 0;
+            }
+        }
+        
+        /* Animation Classes */
+        .fade-in {
+            animation: fadeIn 1s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 1s ease forwards;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in-down {
+            animation: fadeInDown 1s ease forwards;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in-left {
+            animation: fadeInLeft 1s ease forwards;
+        }
+        
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .fade-in-right {
+            animation: fadeInRight 1s ease forwards;
+        }
+        
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 1199.98px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2.25rem;
+            }
+            
+            .features-item {
+                padding: 1.25rem;
+            }
+            
+            .features-icon {
+                width: 3rem;
+                height: 3rem;
+                font-size: 1.5rem;
+            }
+            
+            .tab-pane h3 {
+                font-size: 1.5rem;
+            }
+            
+            .cta-title {
+                font-size: 2.25rem;
+            }
+            
+            .swiper-button-prev {
+                left: 1rem;
+            }
+            
+            .swiper-button-next {
+                right: 1rem;
+            }
+			
+		@media (max-width: 991.98px) {
+            .header {
+                padding: 0.5rem 0;
+            }
+            
+            .mobile-toggle {
+                display: flex;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                left: -300px;
+                width: 280px;
+                height: 100vh;
+                background-color: white;
+                flex-direction: column;
+                padding: 5rem 1.5rem 1.5rem;
+                box-shadow: var(--shadow-lg);
+                transition: var(--transition-normal);
+                overflow-y: auto;
+                z-index: 999;
+                align-items: flex-start;
+            }
+            
+            .nav-menu.active {
+                left: 0;
+            }
+            
+            .nav-item {
+                width: 100%;
+                margin: 0 0 0.5rem;
+            }
+            
+            .nav-link {
+                width: 100%;
+                padding: 0.75rem 1rem;
+            }
+            
+            .dropdown-menu {
+                position: static;
+                width: 100%;
+                box-shadow: none;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                display: none;
+                padding: 0;
+                margin-top: 0.5rem;
+                margin-bottom: 0.5rem;
+                border: none;
+                background-color: var(--gray-lightest);
+            }
+            
+            .dropdown-item {
+                padding: 0.75rem 1rem;
+            }
+            
+            .nav-item.active .dropdown-menu {
+                display: block;
+            }
+            
+            .hero-section {
+                padding-top: 5rem;
+            }
+            
+            .hero-slide {
+                min-height: auto;
+                padding: 4rem 0;
+                text-align: center;
+            }
+            
+            .hero-content {
+                margin: 0 auto 3rem;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-description {
+                font-size: 1rem;
+            }
+            
+            .swiper-button-prev,
+            .swiper-button-next {
+                width: 3rem;
+                height: 3rem;
+            }
+            
+            .swiper-button-prev i,
+            .swiper-button-next i {
+                font-size: 1.25rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .features-section .col-lg-4 {
+                margin-bottom: 2rem;
+            }
+            
+            .tabs-navigation {
+                margin-bottom: 2rem;
+            }
+            
+            .tab-content {
+                height: auto;
+            }
+            
+            .tab-pane .tab-image {
+                margin-bottom: 1.5rem;
+            }
+            
+            .tab-pane h3 {
+                font-size: 1.5rem;
+            }
+            
+            .cta-title {
+                font-size: 2rem;
+            }
+            
+            .footer-widget {
+                margin-bottom: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-btn {
+                padding: 0.875rem 1.5rem;
+                font-size: 0.9rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.75rem;
+            }
+            
+            
+            
+            .scroll-top {
+                bottom: 1.5rem;
+                left: 1.5rem;
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+            
+            .scroll-top i {
+                font-size: 1rem;
+            }
+            
+            .swiper-button-prev,
+            .swiper-button-next {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+            
+            .swiper-button-prev i,
+            .swiper-button-next i {
+                font-size: 1rem;
+            }
+            
+            .tech-icon {
+                width: 3rem;
+                height: 3rem;
+            }
+            
+            .tech-icon i {
+                font-size: 1.5rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .hero-btn {
+                width: 100%;
+            }
+            
+            .cta-button {
+                padding: 0.875rem 1.5rem;
+                font-size: 0.9rem;
+            }
+            
+            .tab-button {
+                padding: 1rem;
+            }
+            
+            .tab-button .icon {
+                margin-right: 0.75rem;
+                font-size: 1rem;
+                width: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 575.98px) {
+            .container {
+                padding-left: 1.25rem;
+                padding-right: 1.25rem;
+            }
+            
+            .logo img {
+                height: 40px;
+            }
+            
+            .scrolled .logo img {
+                height: 35px;
+            }
+            
+            .auth-btn,
+            .contact-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+            }
+            
+            .hero-title {
+                font-size: 1.75rem;
+            }
+            
+            .hero-badge {
+                font-size: 0.75rem;
+                padding: 0.375rem 0.75rem;
+                margin-bottom: 1rem;
+            }
+            
+            .hero-description {
+                font-size: 0.9rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.5rem;
+            }
+            
+            .section-title p {
+                font-size: 0.9rem;
+            }
+            
+            .features-item h3 {
+                font-size: 1.1rem;
+            }
+            
+            .features-item p {
+                font-size: 0.9rem;
+            }
+            
+            .features-icon {
+                width: 2.5rem;
+                height: 2.5rem;
+                font-size: 1.25rem;
+                margin-right: 1rem;
+            }
+            
+            .tab-pane {
+                padding: 1.5rem;
+            }
+            
+            .tab-pane h3 {
+                font-size: 1.25rem;
+            }
+            
+            .cta-title {
+                font-size: 1.5rem;
+            }
+            
+            .cta-text {
+                font-size: 0.9rem;
+            }
+            
+            .footer-widget-title {
+                font-size: 1.1rem;
+            }
+            
+            .swiper-button-prev,
+            .swiper-button-next {
+                display: none;
+            }
+            
+            
+        }
+	}		
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+
+{% include 'messenger_widget.html' %}
+
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-container">
+                <div class="mobile-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                
+                <a href="/" class="logo">
+                    <img src="/static/img/logo/logo_animation.gif" alt="Логотип Somnium">
+                </a>
+                
+                <ul class="nav-menu">
+                    <li class="nav-item active">
+                        <a href="#" class="nav-link">Наши продукты <i class="fas fa-chevron-down dropdown-icon"></i></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="/survey-system" class="dropdown-item">
+                                    <i class="fa-solid fa-clipboard-check dropdown-icon-item"></i>
+                                    <span>Система создания опросов/тестов</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/queue-system" class="dropdown-item">
+                                    <i class="fa-solid fa-people-arrows dropdown-icon-item"></i>
+                                    <span>Электронная очередь "Quick Queue"</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/emergency-codes" class="dropdown-item">
+                                    <i class="fa-solid fa-heartbeat dropdown-icon-item"></i>
+                                    <span>"Вызов медицинских кодов опасности"</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/online-tickets" class="dropdown-item">
+                                    <i class="fa-solid fa-ticket-alt dropdown-icon-item"></i>
+                                    <span>Система онлайн заявок</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/about" class="nav-link">О компании</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/hosting" class="nav-link">Хостинг</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Услуги <i class="fas fa-chevron-down dropdown-icon"></i></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="/hosting-rent" class="dropdown-item">
+                                    <i class="fa-solid fa-server dropdown-icon-item"></i>
+                                    <span>Хостинг в аренду</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/storage-rent" class="dropdown-item">
+                                    <i class="fa-solid fa-hdd dropdown-icon-item"></i>
+                                    <span>Пространства в аренду</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/services" class="dropdown-item">
+                                    <i class="fa-solid fa-cogs dropdown-icon-item"></i>
+                                    <span>Сервисы</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <div class="header-buttons">
+                    {% if current_user.is_authenticated %}
+                        <div class="profile-dropdown">
+                            <div class="profile-toggle">
+                                <div class="profile-avatar">
+                                    <img src="{{ url_for('static', filename=current_user.avatar) }}" alt="Аватарка">
+                                </div>
+                                <div class="profile-info">
+                                    <h5>{{ current_user.first_name or current_user.username }}</h5>
+                                </div>
+                            </div>
+                            <div class="profile-dropdown-menu">
+                                <a href="{{ url_for('profile') }}" class="profile-menu-item">
+                                    <i class="fas fa-user"></i>
+                                    <span>Профиль</span>
+                                </a>
+                                <a href="{{ url_for('logout') }}" class="profile-menu-item logout">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    <span>Выход</span>
+                                </a>
+                            </div>
+                        </div>
+                    {% else %}
+						<!-- Кнопка входа -->
+						<a href="#" class="auth-btn" onclick="showAuthModal()">
+							<i class="fas fa-sign-in-alt"></i>
+							<span>Вход</span>
+						</a>
+                    {% endif %}
+                    <a href="/contact" class="contact-btn">
+                        <span>Связаться с нами</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                        <div class="footer-widget">
+                            <a href="/" class="footer-logo">
+                                <img src="/static/img/logo/logo-white.png" alt="Логотип Somnium">
+                            </a>
+                            <p class="footer-about">
+                                Мы помогаем бизнесам расти и развиваться с помощью современных IT-решений. Всегда на связи!
+                            </p>
+                            <ul class="footer-social">
+                                <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                <li><a href="https://wa.me/+77081287246"><i class="fab fa-whatsapp"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                        <div class="footer-widget">
+                            <h3 class="footer-widget-title">Услуги</h3>
+                            <ul class="footer-links">
+                                <li>
+                                    <a href="#0">
+                                        <i class="fas fa-caret-right"></i> Ремонт компьютеров
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#0">
+                                        <i class="fas fa-caret-right"></i> Настройка сетей
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#0">
+                                        <i class="fas fa-caret-right"></i> Слаботочные системы
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#0">
+                                        <i class="fas fa-caret-right"></i> IT-инфраструктура
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#0">
+                                        <i class="fas fa-caret-right"></i> Разработка сайтов
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#0">
+                                        <i class="fas fa-caret-right"></i> IT-консультации
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                        <div class="footer-widget">
+                            <h3 class="footer-widget-title">Дополнительные услуги</h3>
+                            <ul class="footer-links">
+                                <li>
+                                    <a href="#0">
+                                        <i class="fas fa-caret-right"></i> Настройка периферии
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#0">
+                                        <i class="fas fa-caret-right"></i> Оптимизация сетей
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#0">
+                                        <i class="fas fa-caret-right"></i> Серверное администрирование
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#0">
+                                        <i class="fas fa-caret-right"></i> Системы видеонаблюдения
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#0">
+                                        <i class="fas fa-caret-right"></i> Резервное копирование
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#0">
+                                        <i class="fas fa-caret-right"></i> Защита данных
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget">
+                            <h3 class="footer-widget-title">Наши контакты</h3>
+                            <ul class="footer-contact">
+                                <li>
+                                    <div class="contact-icon">
+                                        <i class="far fa-envelope"></i>
+                                    </div>
+                                    <a href="mailto:kandarr4@gmail.com" class="contact-info">
+                                        <span>Email:</span>
+                                        kandarr4@gmail.com
+                                    </a>
+                                </li>
+                                <li>
+                                    <div class="contact-icon">
+                                        <i class="fab fa-whatsapp"></i>
+                                    </div>
+                                    <a href="https://wa.me/+77081287246" class="contact-info">
+                                        <span>WhatsApp:</span>
+                                        +7 708 128 7246
+                                    </a>
+                                </li>
+                                <li>
+                                    <div class="contact-icon">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                    </div>
+                                    <div class="contact-info">
+                                        <span>Адрес:</span>
+                                        Темиртау, Караганда
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    Copyright &copy; 2025 Somnium | Дизайн и разработка: <a href="#0">Bortnikov V.V</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    </div>
+    
+    
+    <!-- Индикатор непрочитанных сообщений -->
+    <div class="unread-badge" id="unreadBadge" style="display: none;">
+        <span id="unreadCount">0</span>
+    </div>
+</div>
+    <!-- Scroll to top button -->
+    <div class="scroll-top" id="scrollTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Notification Modal -->
+    <div class="notification" id="notification">
+        <div class="notification-content">
+            <i class="notification-icon fas fa-info-circle"></i>
+            <div class="notification-text">
+                <h4 class="notification-title">Уведомление</h4>
+                <p class="notification-message"></p>
+            </div>
+        </div>
+        <button class="notification-close">&times;</button>
+        <div class="notification-progress">
+            <div class="notification-progress-bar"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.5/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script>
+    // Глобальные функции для использования в inline onclick
+    function showAuthModal() {
+        const event = window.event;
+        if (event) event.preventDefault();
+        
+        // Проверяем, существует ли функция в глобальной области видимости
+        if (window.authModalInstance && typeof window.authModalInstance === 'function') {
+            window.authModalInstance();
+        }
+    }
+
+    function googleLogin() {
+        window.location.href = '/login/google';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Функция для показа модального окна авторизации
+        const authModalInstance = function() {
+            // Получаем CSRF-токен из мета-тега
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
+            Swal.fire({
+                html: `
+                    <div class="container">
+                        <ul class="nav nav-tabs auth-tabs justify-content-center mb-3" id="authTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab">Вход</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab">Регистрация</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="authTabsContent">
+                            <div class="tab-pane fade show active" id="login" role="tabpanel">
+                                <form id="loginForm" class="auth-form">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="loginUsername" placeholder="Имя пользователя или Email" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" class="form-control" id="loginPassword" placeholder="Пароль" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">Войти</button>
+                                    <div class="text-center mt-2">
+                                        <a href="#" class="text-muted small">Забыли пароль?</a>
+                                    </div>
+                                    <div class="text-center mt-3">
+                                        <p class="small">Или войдите через:</p>
+                                        <button type="button" class="btn btn-outline-danger me-2" onclick="googleLogin()">
+                                            <i class="fab fa-google"></i> Google
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" id="register" role="tabpanel">
+                                <form id="registerForm" class="auth-form">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="registerUsername" placeholder="Имя пользователя" required minlength="4" maxlength="25">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="email" class="form-control" id="registerEmail" placeholder="Электронная почта" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" class="form-control" id="registerPassword" placeholder="Пароль" required minlength="8">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" class="form-control" id="registerConfirmPassword" placeholder="Подтвердите пароль" required>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="registerAgreement" required>
+                                        <label class="form-check-label" for="registerAgreement">
+                                            Я согласен с пользовательским соглашением и подтверждаю, что мне не менее 18 лет
+                                        </label>
+                                    </div>
+                                    <button type="submit" class="btn btn-success w-100">Создать аккаунт</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                showConfirmButton: false,
+                width: '500px',
+                padding: '2rem',
+                didRender: () => {
+                    // Инициализация Bootstrap Tab
+                    const triggerTabList = document.querySelectorAll('#authTabs button')
+                    triggerTabList.forEach(triggerEl => {
+                        const tabTrigger = new bootstrap.Tab(triggerEl)
+                        triggerEl.addEventListener('click', event => {
+                            event.preventDefault()
+                            tabTrigger.show()
+                        })
+                    });
+
+					// Обработчик формы входа
+					document.getElementById('loginForm').addEventListener('submit', async (e) => {
+						e.preventDefault();
+						const username = document.getElementById('loginUsername').value;
+						const password = document.getElementById('loginPassword').value;
+
+						try {
+							const response = await fetch('/login', {
+								method: 'POST',
+								headers: {
+									'Content-Type': 'application/json',
+									'X-CSRFToken': csrfToken
+								},
+								body: JSON.stringify({ username, password })
+							});
+
+							const result = await response.json();
+
+							if (result.success) {
+								Swal.fire({
+									icon: 'success',
+									title: 'Вход выполнен!',
+									text: result.message,
+									timer: 1500,
+									showConfirmButton: false
+								}).then(() => {
+									window.location.reload();
+								});
+							} else {
+								Swal.fire({
+									icon: 'error',
+									title: 'Ошибка входа',
+									text: result.message
+								});
+							}
+						} catch (error) {
+							Swal.fire({
+								icon: 'error',
+								title: 'Ошибка',
+								text: 'Что-то пошло не так. Попробуйте снова.'
+							});
+						}
+					});
+
+					// Обработчик формы регистрации
+					document.getElementById('registerForm').addEventListener('submit', async (e) => {
+						e.preventDefault();
+						const username = document.getElementById('registerUsername').value;
+						const email = document.getElementById('registerEmail').value;
+						const password = document.getElementById('registerPassword').value;
+						const confirmPassword = document.getElementById('registerConfirmPassword').value;
+						const agreement = document.getElementById('registerAgreement').checked;
+
+						// Базовая клиентская валидация
+						if (password !== confirmPassword) {
+							Swal.fire({
+								icon: 'error',
+								title: 'Ошибка',
+								text: 'Пароли не совпадают'
+							});
+							return;
+						}
+
+						if (!agreement) {
+							Swal.fire({
+								icon: 'error',
+								title: 'Ошибка',
+								text: 'Вы должны согласиться с пользовательским соглашением'
+							});
+							return;
+						}
+
+						try {
+							const response = await fetch('/register', {
+								method: 'POST',
+								headers: {
+									'Content-Type': 'application/json',
+									'X-CSRFToken': csrfToken
+								},
+								body: JSON.stringify({ 
+									username, 
+									email, 
+									password, 
+									confirm_password: confirmPassword,
+									agreement: true 
+								})
+							});
+
+							const result = await response.json();
+
+							if (result.success) {
+								Swal.fire({
+									icon: 'success',
+									title: 'Регистрация успешна!',
+									text: result.message,
+									timer: 1500,
+									showConfirmButton: false
+								}).then(() => {
+									window.location.reload();
+								});
+							} else {
+								Swal.fire({
+									icon: 'error',
+									title: 'Ошибка регистрации',
+									text: result.message || 'Не удалось зарегистрироваться'
+								});
+							}
+						} catch (error) {
+							Swal.fire({
+								icon: 'error',
+								title: 'Ошибка',
+								text: 'Что-то пошло не так. Попробуйте снова.'
+							});
+						}
+					});
+                }
+            });
+        };
+
+        // Сохраняем экземпляр функции в глобальной области видимости
+        window.authModalInstance = authModalInstance;
+
+        // Привязываем функцию showAuthModal к кнопкам входа
+        const authButtons = document.querySelectorAll('.auth-btn');
+        authButtons.forEach(button => {
+            button.addEventListener('click', showAuthModal);
+        });
+        
+        // Основные скрипты
+        {% block scripts %}{% endblock %}
+        
+        // Header scroll functionality
+        const header = document.querySelector('.header');
+        if (header) {
+            let lastScroll = 0;
+            
+            window.addEventListener('scroll', function() {
+                const currentScroll = window.pageYOffset;
+                
+                if (currentScroll > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+                
+                if (currentScroll > lastScroll && currentScroll > 150) {
+                    header.classList.add('header-hidden');
+                } else if (currentScroll < lastScroll) {
+                    header.classList.remove('header-hidden');
+                }
+                
+                lastScroll = currentScroll;
+            });
+        }
+        
+        // Scroll to top button visibility
+        const scrollTop = document.getElementById('scrollTop');
+        if (scrollTop) {
+            window.addEventListener('scroll', function() {
+                const currentScroll = window.pageYOffset;
+                
+                if (currentScroll > 300) {
+                    scrollTop.classList.add('active');
+                } else {
+                    scrollTop.classList.remove('active');
+                }
+            });
+            
+            // Scroll to top functionality
+            scrollTop.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+        
+        // Mobile menu toggle
+        const mobileToggle = document.querySelector('.mobile-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        
+        if (mobileToggle && navMenu) {
+            mobileToggle.addEventListener('click', function() {
+                this.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+        }
+        
+        // Dropdown functionality for mobile
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            const link = item.querySelector('.nav-link');
+            const dropdown = item.querySelector('.dropdown-menu');
+            
+            if (link && dropdown) {
+                link.addEventListener('click', function(e) {
+                    if (window.innerWidth < 992) {
+                        e.preventDefault();
+                        item.classList.toggle('active');
+                    }
+                });
+            }
+        });
+        
+        
+        // Notification functionality
+        window.showNotification = function(title, message, type = 'info') {
+            const notification = document.getElementById('notification');
+            if (!notification) return;
+            
+            const notificationTitle = notification.querySelector('.notification-title');
+            const notificationMessage = notification.querySelector('.notification-message');
+            const notificationIcon = notification.querySelector('.notification-icon');
+            const notificationProgressBar = notification.querySelector('.notification-progress-bar');
+            
+            if (!notificationTitle || !notificationMessage || !notificationIcon || !notificationProgressBar) return;
+            
+            // Set content
+            notificationTitle.textContent = title;
+            notificationMessage.innerHTML = message;
+            
+            // Set type-specific styles
+            notification.className = 'notification ' + type;
+            
+            // Set icon based on type
+            if (type === 'success') {
+                notificationIcon.className = 'notification-icon fas fa-check-circle';
+            } else if (type === 'error') {
+                notificationIcon.className = 'notification-icon fas fa-exclamation-circle';
+            } else {
+                notificationIcon.className = 'notification-icon fas fa-info-circle';
+            }
+            
+            // Show notification
+            notification.classList.add('active');
+            
+            // Reset animation
+            notificationProgressBar.style.animation = 'none';
+            void notificationProgressBar.offsetWidth; // Trigger reflow
+            notificationProgressBar.style.animation = 'progress 5s linear forwards';
+            
+            // Auto-hide after 5 seconds
+            const notificationTimeout = setTimeout(() => {
+                notification.classList.remove('active');
+            }, 5000);
+            
+            // Close button functionality
+            const closeButton = notification.querySelector('.notification-close');
+            if (closeButton) {
+                closeButton.addEventListener('click', function() {
+                    notification.classList.remove('active');
+                    clearTimeout(notificationTimeout);
+                });
+            }
+        };
+        
+        // Check for flash messages
+        const flashMessage = document.querySelector('.flash-message');
+        if (flashMessage) {
+            const messageType = flashMessage.getAttribute('data-type');
+            const messageText = flashMessage.textContent;
+            
+            if (typeof showNotification === 'function') {
+                showNotification(
+                    messageType === 'error' ? 'Ошибка' : 'Уведомление',
+                    messageText,
+                    messageType
+                );
+            }
+        }
+        
+        // Animation on scroll with AOS library
+        if (typeof AOS !== 'undefined') {
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true,
+                offset: 100
+            });
+        }
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            if (anchor.getAttribute('href') !== '#' && anchor.getAttribute('href') !== '#0') {
+                anchor.addEventListener('click', function(e) {
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        e.preventDefault();
+                        
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 100,
+                            behavior: 'smooth'
+                        });
+                        
+                        // Update URL
+                        history.pushState(null, null, targetId);
+                    }
+                });
+            }
+        });
+    });
+	
+// Упрощенная версия JavaScript для контактной панели без обращений к API мессенджера
+document.addEventListener('DOMContentLoaded', function() {
+    // Элементы интерфейса
+    const contactPanelButton = document.getElementById('contactPanelButton');
+    const contactPanelContent = document.getElementById('contactPanelContent');
+    const contactPanelClose = document.getElementById('contactPanelClose');
+    const contactFormContainer = document.getElementById('contactFormContainer');
+    const chatContainer = document.getElementById('chatContainer');
+    const contactForm = document.getElementById('contactForm');
+    const chatForm = document.getElementById('chatForm');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatMessageInput = document.getElementById('chatMessageInput');
+    const unreadBadge = document.getElementById('unreadBadge');
+    const unreadCount = document.getElementById('unreadCount');
+    
+    // Проверяем, есть ли сохраненные сообщения
+    const savedMessages = localStorage.getItem('chat_messages');
+    let messages = savedMessages ? JSON.parse(savedMessages) : [];
+    
+    // Функция для показа/скрытия панели
+    if (contactPanelButton && contactPanelContent && contactPanelClose) {
+        contactPanelButton.addEventListener('click', function() {
+            contactPanelContent.classList.add('active');
+            this.style.display = 'none';
+            
+            // При открытии панели сбрасываем счетчик непрочитанных сообщений
+            unreadBadge.style.display = 'none';
+            unreadCount.textContent = '0';
+            
+            // Если есть сохраненный чат, показываем его
+            if (messages.length > 0) {
+                contactFormContainer.style.display = 'none';
+                chatContainer.style.display = 'flex';
+                
+                // Загружаем сохраненные сообщения
+                renderSavedMessages();
+            }
+        });
+        
+        contactPanelClose.addEventListener('click', function() {
+            contactPanelContent.classList.remove('active');
+            contactPanelButton.style.display = 'flex';
+        });
+    }
+    
+    // Обработка отправки контактной формы
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Собираем данные формы
+            const formData = {
+                first_name: document.getElementById('firstName').value,
+                last_name: document.getElementById('lastName').value,
+                middle_name: document.getElementById('middleName').value || '',
+                contact_number: document.getElementById('contactNumber').value,
+                contact_email: document.getElementById('contactEmail').value,
+                content: document.getElementById('contactMessage').value
+            };
+            
+            // Сохраняем информацию о пользователе в localStorage
+            localStorage.setItem('user_info', JSON.stringify({
+                first_name: formData.first_name,
+                last_name: formData.last_name,
+                middle_name: formData.middle_name,
+                phone: formData.contact_number,
+                email: formData.contact_email
+            }));
+            
+            // Меняем вид кнопки при отправке
+            const submitBtn = this.querySelector('button[type="submit"]');
+            if (!submitBtn) return;
+            
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin me-2"></i>Отправка...';
+            submitBtn.disabled = true;
+            
+            // Получаем CSRF токен
+            const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+            const csrfToken = csrfMeta ? csrfMeta.getAttribute('content') : '';
+            
+            // Отправляем сообщение в базу данных
+            fetch('/send_message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                
+                if (data.success) {
+                    // Показываем чат и скрываем форму
+                    contactFormContainer.style.display = 'none';
+                    chatContainer.style.display = 'flex';
+                    
+                    // Добавляем системное приветственное сообщение
+                    const welcomeMessage = {
+                        id: Date.now() + 1,
+                        text: "Здравствуйте! Мы получили ваше сообщение. Оператор ответит вам в ближайшее время.",
+                        sender_id: 'admin',
+                        is_my_message: false,
+                        created_at: new Date().toISOString()
+                    };
+                    messages.push(welcomeMessage);
+                    
+                    // Добавляем сообщение пользователя
+                    const userMessage = {
+                        id: Date.now() + 2,
+                        text: formData.content,
+                        sender_id: 'user',
+                        is_my_message: true,
+                        created_at: new Date().toISOString()
+                    };
+                    messages.push(userMessage);
+                    
+                    // Сохраняем сообщения в localStorage
+                    localStorage.setItem('chat_messages', JSON.stringify(messages));
+                    
+                    // Отображаем сообщения
+                    renderSavedMessages();
+                    
+                    // Добавляем автоматический ответ от администратора через 2 секунды
+                    setTimeout(function() {
+                        const adminMessage = {
+                            id: Date.now() + 3,
+                            text: "Благодарим за обращение! Мы обрабатываем ваш запрос и скоро свяжемся с вами.",
+                            sender_id: 'admin',
+                            is_my_message: false,
+                            created_at: new Date().toISOString()
+                        };
+                        messages.push(adminMessage);
+                        localStorage.setItem('chat_messages', JSON.stringify(messages));
+                        
+                        // Добавляем сообщение в чат
+                        addMessageToChat(adminMessage);
+                        
+                        // Показываем уведомление о новом сообщении
+                        if (!contactPanelContent.classList.contains('active')) {
+                            unreadBadge.style.display = 'flex';
+                            unreadCount.textContent = '1';
+                        }
+                        
+                        // Прокручиваем чат вниз
+                        scrollChatToBottom();
+                    }, 2000);
+                    
+                    // Показываем уведомление
+                    if (typeof showNotification === 'function') {
+                        showNotification('Отправлено!', 'Ваше сообщение успешно отправлено. Мы свяжемся с вами в ближайшее время.', 'success');
+                    }
+                } else {
+                    let errorMessage = data.message || 'Произошла ошибка при отправке сообщения.';
+                    if (data.errors) {
+                        errorMessage = Object.values(data.errors).join('<br>');
+                    }
+                    if (typeof showNotification === 'function') {
+                        showNotification('Ошибка', errorMessage, 'error');
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                if (typeof showNotification === 'function') {
+                    showNotification('Ошибка соединения', 'Не удалось отправить сообщение. Пожалуйста, проверьте подключение к интернету и попробуйте снова.', 'error');
+                }
+            });
+        });
+    }
+    
+    // Обработка отправки сообщений в чате
+    if (chatForm) {
+        chatForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const messageText = chatMessageInput.value.trim();
+            if (!messageText) return;
+            
+            // Очищаем поле ввода
+            chatMessageInput.value = '';
+            
+            // Создаем новое сообщение
+            const newMessage = {
+                id: Date.now(),
+                text: messageText,
+                sender_id: 'user',
+                is_my_message: true,
+                created_at: new Date().toISOString()
+            };
+            
+            // Добавляем сообщение в массив и сохраняем в localStorage
+            messages.push(newMessage);
+            localStorage.setItem('chat_messages', JSON.stringify(messages));
+            
+            // Добавляем сообщение в чат
+            addMessageToChat(newMessage);
+            
+            // Прокручиваем чат вниз
+            scrollChatToBottom();
+            
+            // Имитируем ответ администратора через 1-3 секунды
+            const delay = Math.floor(Math.random() * 2000) + 1000; // 1-3 секунды
+            setTimeout(function() {
+                // Возможные ответы администратора
+                const adminResponses = [
+                    "Спасибо за ваше сообщение! Мы обрабатываем ваш запрос.",
+                    "Я передал ваш вопрос специалисту. Он скоро с вами свяжется.",
+                    "Благодарим за обращение! Мы свяжемся с вами в ближайшее время.",
+                    "Спасибо за ваше сообщение. Оператор ответит вам в течение рабочего дня.",
+                    "Ваш запрос принят. Мы ответим вам как можно скорее."
+                ];
+                
+                // Выбираем случайный ответ
+                const randomResponse = adminResponses[Math.floor(Math.random() * adminResponses.length)];
+                
+                // Создаем сообщение администратора
+                const adminMessage = {
+                    id: Date.now(),
+                    text: randomResponse,
+                    sender_id: 'admin',
+                    is_my_message: false,
+                    created_at: new Date().toISOString()
+                };
+                
+                // Добавляем сообщение в массив и сохраняем в localStorage
+                messages.push(adminMessage);
+                localStorage.setItem('chat_messages', JSON.stringify(messages));
+                
+                // Добавляем сообщение в чат
+                addMessageToChat(adminMessage);
+                
+                // Показываем уведомление о новом сообщении
+                if (!contactPanelContent.classList.contains('active')) {
+                    unreadBadge.style.display = 'flex';
+                    unreadCount.textContent = parseInt(unreadCount.textContent || '0') + 1;
+                }
+                
+                // Прокручиваем чат вниз
+                scrollChatToBottom();
+            }, delay);
+        });
+    }
+    
+    // Функция для добавления сообщения в UI чата
+    function addMessageToChat(message) {
+        const messageElement = document.createElement('div');
+        messageElement.className = message.is_my_message ? 'user-message mb-3' : 'admin-message mb-3';
+        
+        // Форматируем время
+        const messageDate = new Date(message.created_at);
+        const timeString = messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        messageElement.innerHTML = `
+            <div class="message-content">
+                <p>${message.text}</p>
+            </div>
+            <div class="message-time">
+                <small class="text-muted">${timeString}</small>
+            </div>
+        `;
+        
+        chatMessages.appendChild(messageElement);
+    }
+    
+    // Функция для отображения сохраненных сообщений
+    function renderSavedMessages() {
+        // Очищаем контейнер сообщений
+        chatMessages.innerHTML = '';
+        
+        // Добавляем системное сообщение с датой
+        const systemDateElement = document.createElement('div');
+        systemDateElement.className = 'system-message text-center my-3';
+        systemDateElement.innerHTML = `
+            <span class="badge bg-light text-dark">Сегодня</span>
+        `;
+        chatMessages.appendChild(systemDateElement);
+        
+        // Добавляем все сообщения
+        messages.forEach(message => {
+            addMessageToChat(message);
+        });
+        
+        // Прокручиваем чат вниз
+        scrollChatToBottom();
+    }
+    
+    // Функция для прокрутки чата вниз
+    function scrollChatToBottom() {
+        if (chatMessages) {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    }
+    
+    // При загрузке страницы проверяем, есть ли сохраненные сообщения
+    if (messages.length > 0) {
+        // Проверяем, есть ли непрочитанные сообщения (сообщения администратора)
+        const unreadMessages = messages.filter(message => !message.is_my_message);
+        if (unreadMessages.length > 0) {
+            unreadBadge.style.display = 'flex';
+            unreadCount.textContent = unreadMessages.length;
+        }
+    }
+    
+    // Предзаполняем форму, если есть сохраненная информация о пользователе
+    const savedUserInfo = localStorage.getItem('user_info');
+    if (savedUserInfo) {
+        const userInfo = JSON.parse(savedUserInfo);
+        
+        if (document.getElementById('firstName')) document.getElementById('firstName').value = userInfo.first_name || '';
+        if (document.getElementById('lastName')) document.getElementById('lastName').value = userInfo.last_name || '';
+        if (document.getElementById('middleName')) document.getElementById('middleName').value = userInfo.middle_name || '';
+        if (document.getElementById('contactNumber')) document.getElementById('contactNumber').value = userInfo.phone || '';
+        if (document.getElementById('contactEmail')) document.getElementById('contactEmail').value = userInfo.email || '';
+    }
+});
+    </script>
+    
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

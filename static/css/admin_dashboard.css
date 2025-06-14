@@ -1,0 +1,542 @@
+        *,
+        *:after,
+        *:before {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            line-height: 1.5;
+            display: flex;
+        }
+
+.sidebar {
+    position: fixed; /* Фиксируем позицию сайдбара */
+    top: 0; /* Располагаем у верхнего края страницы */
+    left: 0; /* Располагаем у левого края страницы */
+    width: 50px;
+    height: 100vh; /* Высота сайдбара равна высоте окна браузера */
+    background-color: #05043e;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 0 10px 10px 0; /* Скругляем только правые углы */
+    box-shadow: 0 10px 50px 0 rgba(5, 4, 62, 0.25);
+    z-index: 1000;
+}
+
+.sidebar .nav-item + .nav-item {
+    margin-top: 0.75rem;
+}
+
+.sidebar .nav-item a {
+    color: #FFF;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    border-radius: 8px;
+    position: relative;
+}
+
+.sidebar .nav-item a:hover,
+.sidebar .nav-item a:focus {
+    background-color: #30305a;
+    outline: 0;
+}
+
+.sidebar .nav-item a span {
+    position: absolute;
+    background-color: #30305a;
+    white-space: nowrap;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    left: calc(100% + 1.5rem);
+    transform-origin: center left;
+    transform: scale(0);
+    opacity: 0;
+    transition: 0.15s ease;
+    z-index: 1000; /* Чтобы всплывающие подсказки были поверх всего */
+}
+
+.sidebar .nav-item a:hover span,
+.sidebar .nav-item a:focus span {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.sidebar .nav-item a span:before {
+    content: "";
+    display: block;
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    background-color: #30305a;
+    left: -5px;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    border-radius: 3px;
+}
+
+.sidebar .nav-item img {
+    width: 30px; /* Размер иконок */
+    height: 30px;
+    flex-shrink: 0;
+    background-color: #FFFFFF; /* Белый фон */
+    border: 2px solid #05043e; /* Цвет рамки */
+    border-radius: 50%; /* Круглая рамка */
+    padding: 4px; /* Внутренний отступ для создания эффекта рамки */
+}
+
+
+
+        .main-content {
+            flex-grow: 1;
+            padding: 2rem;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 10px 50px 0 rgba(5, 4, 62, 0.1);
+        }
+
+        .footer {
+            margin-top: auto;
+        }
+
+        .modal {
+            position: fixed;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(31, 32, 41, 0.75);
+            z-index: 2000;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-wrap {
+            background-color: #fff;
+            border-radius: 4px;
+            padding: 20px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 12px 25px 0 rgba(199, 175, 189, 0.25);
+        }
+
+        .modal-header,
+        .modal-body,
+        .modal-footer {
+            padding: 1rem;
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #dee2e6;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #000;
+        }
+
+        .close:hover {
+            cursor: pointer;
+        }
+
+        .form-group img {
+            max-width: 100%;
+            margin-top: 10px;
+        }
+
+        main[role="main"] {
+            max-width: 1200px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .product {
+            background: #fff;
+            width: 300px;
+            height: 400px; /* Фиксированная высота карточки */
+            margin: 20px;
+            float: left;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+            border-radius: 5px; /* Скругленные углы */
+        }
+
+        .product:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .product img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .product-description {
+            padding: 15px;
+            color: #31353d;
+            height: 250px; /* Фиксированная высота описания */
+            overflow: hidden;
+        }
+
+        .product-description h1 {
+            font-size: 20px;
+            margin: 0 0 5px;
+            font-weight: bold;
+        }
+
+        .product-description p {
+            margin: 0 0 15px;
+            line-height: 1.3em;
+        }
+
+        .product-sidebar {
+            height: 100%;
+            background: #31353d;
+            width: 50px;
+            position: absolute;
+            top: 0;
+            right: -50px; /* Изначально скрыта за пределами карточки */
+            transition: right 0.3s ease;
+            border-radius: 0 2px 2px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .product-sidebar .icon {
+            height: 20px;
+            width: auto;
+            filter: invert(1); /* Инверсия цвета иконки */
+        }
+
+        .product:hover .product-sidebar {
+            right: 0; /* Панель появляется при наведении */
+        }
+
+        .product button {
+            border: 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+            color: #fff;
+            padding: 0.9em;
+            font-size: 0.8em;
+            width: 50px;
+            height: 50px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative; /* Добавлено для позиционирования текста */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column; /* Для вертикального расположения иконки и текста */
+        }
+
+        .product button:hover {
+            width: 250px;
+            background-color: #9bb6aa;
+            border-color: #9bb6aa;
+        }
+
+        .product button:hover span {
+            opacity: 1;
+            max-width: 100px; /* Устанавливаем ширину для текста */
+        }
+
+        .product button span {
+            display: block;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            white-space: nowrap;
+            position: absolute;
+            left: 0px;
+            top: 50%;
+            transform: translateY(-50%);
+            font: message-box;
+        }
+
+        .product button:hover span {
+            opacity: 1;
+        }
+
+        .card-id-watermark {
+            position: absolute;
+            bottom: 10px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        /* List view styles */
+        .list-view .product {
+            display: flex;
+            flex-direction: row;
+            height: 150px;
+            width: 100%;
+        }
+
+
+        .list-view .product-description {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 10px 15px;
+            height: auto;
+        }
+
+        .list-view .product-sidebar {
+            height: 50px;
+            width: auto;
+            top: 0;
+            right: 0;
+            flex-direction: row;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .list-view .product button {
+            width: auto;
+            height: 50px;
+            flex-direction: row;
+            padding: 0 15px;
+            border-bottom: none;
+            border-right: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
+        .list-view .product button:last-child {
+            border-right: none;
+        }
+
+        .list-view .product button span {
+            display: block;
+            opacity: 1;
+            position: static;
+            transform: none;
+            margin-left: 10px;
+        }
+
+        .list-view .product button:hover {
+            width: auto;
+        }
+
+/* Стили для JSON-редактора */
+.json-editor {
+    display: flex;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: #2d2d2d; /* Темный фон, как в Notepad++ */
+    color: #cccccc; /* Светлый текст */
+    height: 300px; /* Фиксированная высота для удобства */
+}
+
+.line-numbers {
+    background-color: #1e1e1e;
+    color: #858585;
+    padding: 10px;
+    text-align: right;
+    user-select: none;
+    font-family: monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    width: 40px; /* Ширина для номеров строк */
+    overflow: hidden;
+}
+
+.json-textarea {
+    flex: 1;
+    border: none;
+    padding: 10px;
+    background-color: #2d2d2d;
+    color: #cccccc;
+    font-family: monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: none;
+    overflow: auto;
+}
+
+/* Снимаем фокус с textarea, чтобы избежать двойной границы и сохранить стиль */
+.json-textarea:focus {
+    outline: none;
+    background-color: #2d2d2d;
+    color: #cccccc;
+}
+
+/* Стили для информации о JSON */
+.json-info {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #666666;
+}
+
+/* Скроллбар для номера строк */
+.line-numbers::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* скрываем скроллбар */
+}
+
+/* Скроллбар для textarea */
+.json-textarea::-webkit-scrollbar {
+    width: 8px;
+}
+
+.json-textarea::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 4px;
+}
+
+.tab-content {
+    margin-left: 60px; /* Отступ слева для всех вкладок */
+    padding: 20px; /* Внутренний отступ для вкладок */
+}
+
+/* email.css */
+
+/* Общие стили для контейнера Email */
+.email-container {
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Стилизация выпадающего списка */
+.custom-select {
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding-left: 35px; /* Для иконки */
+    background-image: none; /* Убираем стандартную стрелку */
+}
+
+.custom-select:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 5px rgba(0,123,255,.5);
+}
+
+/* Стилизация кнопок */
+.btn-success, .btn-secondary, .btn-primary {
+    border-radius: 20px;
+    padding: 8px 16px;
+}
+
+.btn-success:hover, .btn-secondary:hover, .btn-primary:hover {
+    opacity: 0.9;
+}
+
+/* Стилизация таблицы писем */
+.table-hover tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+.table thead th {
+    vertical-align: middle;
+    text-align: center;
+}
+
+/* Стилизация содержимого письма */
+#email-content {
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#email-content .card-header {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+#email-content th {
+    width: 150px;
+    color: #495057;
+}
+
+#email-content td {
+    color: #343a40;
+}
+
+/* Стилизация уведомлений */
+.notification {
+    background-color: #28a745;
+    color: #ffffff;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.notification i {
+    margin-right: 10px;
+}
+
+/* Анимация для новых писем */
+.table-success {
+    animation: highlight 3s ease-out;
+}
+
+@keyframes highlight {
+    from { background-color: #d4edda; }
+    to { background-color: transparent; }
+}
+
+        .thread-header {
+            background-color: #f8f9fa;
+            cursor: pointer;
+        }
+        .nested-email {
+            padding-left: 20px;
+            background-color: #ffffff;
+        }
+
+    .unread-header .fa-circle {
+        color: red;
+        margin-right: 5px;
+    }
+    .read-header .fa-circle {
+        color: green;
+        margin-right: 5px;
+    }
+	
+        /* Дополнительные стили для визуального разграничения */
+        .unread-header {
+            background-color: #f8d7da;
+        }
+        .read-header {
+            background-color: #d4edda;
+        }
+    /* Дополнительные стили для визуального разграничения */
+    .main-email {
+        border: 1px solid #ced4da;
+        padding: 15px;
+        border-radius: 5px;
+        background-color: #f8f9fa;
+    }
+    .child-emails {
+        margin-top: 20px;
+    }
+    .child-email-row td {
+        padding-left: 40px; /* Отступ для вложенных писем */
+    }

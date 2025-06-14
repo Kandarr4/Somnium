@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="author" content="ИП Somnium - Валентин Бортников">
+   <meta name="description" content="Контакты - ИП Somnium">
+   <title>Контакты - ИП Somnium</title>
+   <meta name="csrf-token" content="{{ csrf_token() }}">
+   <title>Somnium - контакты </title>
+   <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+   <link rel="stylesheet" href="/static/css/odometer.css">
+   <link rel="stylesheet" href="/static/css/owl.min.css">
+   <link rel="stylesheet" href="/static/css/owl.theme.default.min.css">
+   <link rel="stylesheet" href="/static/css/all.min.css">
+   <link rel="stylesheet" href="/static/css/animate.css">
+   <link rel="stylesheet" href="/static/css/nice-select.css">
+    <link rel="stylesheet" href="/static/css/magnific-popup.css">
+   <link rel="stylesheet" href="/static/css/main.css">
+   <link rel="icon" href="/static/img/favicon/favicon.ico" type="image/x-icon">
+	
+<style>
+/* Contact Section Styles */
+.contact__section {
+    background-color: #f8f9fa;
+    padding: 80px 0;
+}
+
+.section__header {
+    margin-bottom: 3rem;
+}
+
+.section__header h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.section__header .text-base {
+    color: #4a90e2;
+}
+
+.section__header p {
+    font-size: 1.1rem;
+    color: #6c757d;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Contact Cards */
+.contact__card__wrap {
+    margin-bottom: 4rem;
+}
+
+.contact__card {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    text-align: center;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.contact__card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.contact__card .icon {
+    width: 70px;
+    height: 70px;
+    background: #4a90e2;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+}
+
+.contact__card .icon i {
+    color: white;
+    font-size: 1.5rem;
+}
+
+.contact__card h6 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.contact__card a {
+    color: #6c757d;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.contact__card a:hover {
+    color: #4a90e2;
+}
+
+/* Form Styles */
+.form_area {
+    background: white;
+    padding: 3rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+.form-control {
+    margin-bottom: 1.5rem;
+}
+
+.form-control label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.form-control input,
+.form-control textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    color: #333; /* Устанавливаем черный цвет текста */
+}
+
+.form-control input:focus,
+.form-control textarea:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 3px rgba(74,144,226,0.1);
+    outline: none;
+}
+
+.form-control textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+	.floating-button {
+		position: fixed;
+		bottom: 20px;
+		right: 20px;
+		width: 100px;
+		height: 100px;
+		background-color: #28a745;
+		border-radius: 50%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		z-index: 1000;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+		text-align: center;
+	}
+
+	.floating-button i {
+		color: #fff;
+		font-size: 24px;
+	}
+
+	.floating-button p {
+		color: #fff;
+		font-size: 14px;
+		margin: 5px 0 0 0;
+	}
+
+
+        /* Панель с формой */
+        .floating-panel {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 300px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            display: none;
+            z-index: 999;
+        }
+
+        .floating-panel .form-group {
+            margin-bottom: 10px;
+        }
+
+        .floating-panel label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .floating-panel input, .floating-panel textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+			color: #333; /* Устанавливаем черный цвет текста */
+        }
+
+        .floating-panel button.submit-btn {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .floating-panel button.submit-btn:hover {
+            background-color: #218838;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: #333;
+            cursor: pointer;
+        }
+
+/* Стили для хедера */
+.header-wrapper {
+    display: flex;
+    flex-direction: row; /* Изменено с column на row */
+    align-items: center; /* Центрирование по вертикали */
+    justify-content: space-between; /* Распределение пространства между элементами */
+    padding: 20px 0;
+    flex-wrap: wrap; /* Позволяет элементам переноситься на новую строку при необходимости */
+}
+
+.navigation-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-grow: 1;
+}
+
+.main-menu {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* Стили для кнопки авторизации */
+.auth-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(45deg, #3b82f6, #2563eb);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.auth-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    filter: brightness(110%);
+    color: white;
+}
+
+/* Стили для профиля */
+.profile-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin: 0;
+}
+
+.profile-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.profile-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    flex-shrink: 0;
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.profile-info h5 {
+    color: #fff;
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.profile-btn, .logout-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.profile-btn {
+    background: rgba(59, 130, 246, 0.9);
+    color: white;
+}
+
+.logout-btn {
+    background: rgba(239, 68, 68, 0.9);
+    color: white;
+}
+
+.profile-btn:hover, .logout-btn:hover {
+    transform: translateY(-1px);
+    filter: brightness(110%);
+}
+
+.header-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Центрирование по горизонтали */
+    gap: 20px;
+    width: 100%; /* Чтобы центрировать относительно всей ширины */
+}
+
+.cmn--btn.border__trans {
+    background: transparent;
+    border: 2px solid #3b82f6;
+}
+
+.cmn--btn.border__trans:hover {
+    background: #3b82f6;
+    color: white;
+}
+
+@media (max-width: 1200px) {
+    .profile-info h5 {
+        font-size: 0.85rem;
+    }
+    
+    .profile-btn span, 
+    .logout-btn span,
+    .auth-btn span {
+        display: none;
+    }
+    
+    .profile-btn, 
+    .logout-btn {
+        padding: 4px 8px;
+    }
+    
+    .auth-btn {
+        padding: 8px;
+    }
+    
+    .profile-card {
+        min-width: auto;
+    }
+}
+
+@media (max-width: 992px) {
+    .navigation-section {
+        display: none;
+    }
+    
+    .header-bar {
+        display: block;
+    }
+    
+    .header-buttons {
+        flex-direction: column;
+        align-items: center; /* Центрирование по горизонтали */
+        gap: 10px;
+        margin-top: 10px;
+    }
+    
+    .cmn--btn.border__trans {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+
+</style>
+	
+</head>
+
+<body>
+
+
+<!--==== Scrool Top Bottom Here ======= -->
+<div id="progress">
+   <span id="valiu"><i class="fas fa-arrow-up"></i></span>
+</div>
+<!--==== Scrool Top Bottom End ======= -->
+
+
+<header class="header-section">
+   <div class="container">
+      <div class="header-wrapper">
+         <div class="logo-menu">
+            <a href="/" class="logo">
+               <img src="{{ url_for('static', filename='img/logo/logo_animation.gif') }}" alt="Логотип">
+            </a>
+         </div>
+         <div class="header-bar d-lg-none">
+            <span></span>
+            <span></span>
+            <span></span>
+         </div>
+         <ul class="main-menu">
+            <li class="active">
+               <a href="#0">Наши продукты<i class="fas fa-chevron-down"></i></a>
+               <ul class="sub-menu home__subs">
+                  <li class="subtwohober">
+                     <a href="index">
+                        <span><i class="fa-solid fa-house"></i></span>
+                        <span>Электронная очередь "quick queue"</span>
+                     </a>
+                  </li>
+                  <li class="subtwohober">
+                     <a href="home.html">
+                        <span><i class="fa-solid fa-house"></i></span>
+                        <span>Дом 2</span>
+                     </a>
+                  </li>
+                  <li class="subtwohober">
+                     <a href="sharp-home.html">
+                        <span><i class="fa-solid fa-house"></i></span>
+                        <span>Дом 3</span>
+                     </a>
+                  </li>
+               </ul>
+            </li>
+            <li>
+               <a href="about">О нас</a>
+            </li>
+            <li>
+               <a href="pricing.html">Стоимости</a>
+            </li>
+            <li>
+               <a href="resserler.html">Хостинг</a>
+            </li>
+            <li>
+               <a href="present">Подарки от SOMNIUM!</a>
+            </li>
+            <li>
+               <a href="#0">Далее<i class="fas fa-chevron-down"></i></a>
+               <ul class="sub-menu">
+                  <li class="subtwohober">
+                     <a href="resserler.html">
+                        <span class="icon"><i class="fa-brands fa-audible"></i></span>
+                        <span>Хостинг в аренду</span>
+                     </a>
+                  </li>
+                  <li class="subtwohober">
+                     <a href="sharehost.html">
+                        <span class="icon"><i class="fa-solid fa-server"></i></span>
+                        <span>Пространства в аренду</span>
+                     </a>
+                  </li>
+                  <li class="subtwohober">
+                     <a href="blog.html">
+                        <span class="icon"><i class="fa-solid fa-sitemap"></i></span>
+                        <span>Сервисы</span>
+                     </a>
+                  </li>
+               </ul>
+            </li>
+         </ul>
+         <!-- Новый контейнер для кнопок ниже меню -->
+         <div class="header-buttons">
+            {% if current_user.is_authenticated %}
+               <div class="profile-card">
+                  <div class="profile-content">
+                     <div class="profile-avatar">
+                        <img src="{{ url_for('static', filename=current_user.avatar) }}" alt="Аватарка">
+                     </div>
+                     <div class="profile-info">
+                        <h5>{{ current_user.first_name or current_user.username }}</h5>
+                        <div class="profile-actions">
+                           <a href="{{ url_for('profile') }}" class="profile-btn">
+                              <i class="fas fa-user"></i>
+                              <span>Профиль</span>
+                           </a>
+                           <a href="{{ url_for('logout') }}" class="logout-btn">
+                              <i class="fas fa-sign-out-alt"></i>
+                              <span>Выход</span>
+                           </a>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            {% else %}
+               <a href="#0" class="auth-btn" data-bs-toggle="modal" data-bs-target="#authModal">
+                  <i class="fas fa-sign-in-alt"></i>
+                  <span>Вход и регистрация</span>
+               </a>
+            {% endif %}
+            </a>
+         </div>
+      </div>
+   </div>
+</header>
+
+<!--Banner Start-->
+<section class="breadcumnd__banner">
+   <div class="container">
+      <div class="row align-items-center">
+         <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6">
+            <div class="banner__content">
+               <h4>
+                  Свяжитесь с нами в любое время
+               </h4>
+               <p class="b__space">
+                  Мы всегда готовы ответить на ваши вопросы и предоставить необходимую информацию. Свяжитесь с нами!
+               </p>
+               <ul class="ssd__list">
+                  <li>
+                    <span><i class="fa-solid fa-arrow-right"></i></span> <span>Быстрый отклик</span>
+                  </li>
+                  <li>
+                     <span><i class="fa-solid fa-arrow-right"></i></span> <span>Грамотная служба поддержки</span>
+                  </li>
+                  <li>
+                     <span><i class="fa-solid fa-arrow-right"></i></span> <span>Круглосуточная связь с нашей командой</span>
+                  </li>
+               </ul>
+				<a href="#contactSection" class="cmn--btn border__trans">
+				   <span>Связаться с нами</span>
+				</a>
+            </div>
+         </div>
+         <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6">
+            <div class="banner__Thumb">
+               <img src="static/img/hosting/contact.png" alt="контактное изображение">
+            </div>
+         </div>
+      </div>
+   </div>
+</section>
+
+
+<!--Contact Here-->
+<div id="contactSection" class="contact__section pt-80">
+   <div class="contact_inner">
+       <div class="container">
+         <div class="section__header center mb-5">
+            <h2 class="text-black wow fadeInDown" data-wow-delay="0.2s">
+               Свяжитесь с нашей <span class="text-base">командой</span>
+            </h2>
+            <p class="text-black wow fadeInDown" data-wow-delay="0.4s">
+               Мы всегда готовы помочь вам с любыми вопросами и предложениями.
+            </p>
+         </div>
+           <div class="row justify-content-between align-items-center">
+            <div class="col-lg-12">
+              <div class="contact__card__wrap">
+               <div class="row">
+                  <div class="col-xl-4">
+                     <div class="contact__card">
+                        <div class="icon">
+                           <i class="fas fa-envelope"></i>
+                        </div>
+                        <h6>
+                           Электронная почта
+                        </h6>
+                        <a href="mailto:kandarr4@gmail.com">
+                           kandarr4@gmail.com
+                        </a>
+                     </div>
+                  </div>
+                  <div class="col-xl-4">
+                     <div class="contact__card">
+                        <div class="icon">
+                           <i class="fas fa-phone"></i>
+                        </div>
+                        <h6>
+                           Телефон
+                        </h6>
+                        <a href="https://wa.me/+77081287246">
+                           +77081287246 
+                        </a>
+                     </div>
+                  </div>
+                  <div class="col-xl-4">
+                     <div class="contact__card">
+                        <div class="icon">
+                           <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <h6>
+                           Адрес
+                        </h6>
+                        <a href="#0">
+                           Казахстан, Карагандинская область, г. Темиртау
+                        </a>
+                     </div>
+                  </div>
+               </div>
+              </div>
+           </div>
+            <div class="col-lg-12">
+                  <div class="form_area">
+                     <form id="contactForm">
+                        <!-- Добавляем CSRF токен, если используете Flask-WTF -->
+                        {% if csrf_token %}
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        {% endif %}
+                        <div class="row">
+                              <div class="col-lg-6">
+                                 <div class="form-control">
+                                    <label for="contactFirstName">Имя</label>
+                                    <input type="text" name="first_name" id="contactFirstName" placeholder="Ваше имя..."
+                                           {% if current_user.is_authenticated and current_user.first_name %}
+                                               value="{{ current_user.first_name }}"
+                                           {% endif %}>
+                                 </div>
+                              </div>
+                              <div class="col-lg-6">
+                                 <div class="form-control">
+                                    <label for="contactLastName">Фамилия</label>
+                                    <input type="text" name="last_name" id="contactLastName" placeholder="Ваша фамилия..."
+                                           {% if current_user.is_authenticated and current_user.last_name %}
+                                               value="{{ current_user.last_name }}"
+                                           {% endif %}>
+                                 </div>
+                              </div>
+                              <div class="col-lg-6">
+                                 <div class="form-control form_control">
+                                    <label for="contactMiddleName">Отчество</label>
+                                    <input type="text" name="middle_name" id="contactMiddleName" placeholder="Ваше отчество..."
+                                           {% if current_user.is_authenticated and current_user.middle_name %}
+                                               value="{{ current_user.middle_name }}"
+                                           {% endif %}>
+                                 </div>
+                              </div>
+                              <div class="col-lg-6">
+                                 <div class="form-control form_control">
+                                    <label for="contactNumber">Телефон</label>
+                                    <input type="tel" name="contact_number" id="contactNumber" placeholder="Ваш телефон..."
+                                           {% if current_user.is_authenticated and current_user.phone %}
+                                               value="{{ current_user.phone }}"
+                                           {% endif %}>
+                                 </div>
+                              </div>
+                              <div class="col-lg-6">
+                                 <div class="form-control">
+                                    <label for="contactEmail">Электронная почта</label>
+                                    <input type="email" name="contact_email" id="contactEmail" placeholder="Ваш email..."
+                                           {% if current_user.is_authenticated and current_user.email %}
+                                               value="{{ current_user.email }}"
+                                           {% endif %}>
+                                 </div>
+                              </div>
+                              <div class="col-lg-6">
+                                 <!-- Можно оставить пустым или добавить дополнительные поля -->
+                              </div>
+                              <div class="col-lg-12">
+                                 <div class="form-control">
+                                    <label for="contactMessage">Сообщение</label>
+                                    <textarea name="content" id="contactMessage" cols="10" rows="5" placeholder="Введите ваше сообщение..."></textarea>
+                                 </div>
+                              </div>
+                        </div>
+                        <button type="submit" class="cmn--btn"><span>Запросить консультацию</span></button>
+                        <p class="form-message"></p>
+                     </form>
+                  </div>
+            </div>
+           </div>
+       </div>
+   </div>
+</div>
+<!--Contact End-->
+
+
+<!--Footer Here-->
+<footer class="footer-section section-bg pt-120">
+   <div class="container">
+      <div class="footer-top pb-120">
+         <div class="row g-4">
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 ">
+               <div class="widget-items">
+                  <div class="footer-head">
+                     <a href="index.html" class="footer-logo">
+                        <img src="static/img/logo/logo-black.png" alt="f-logo">
+                     </a>
+                  </div>
+                  <div class="content-area">
+                     <p>
+                        Вы можете задать вопрос или оставить заявку
+                     </p>
+                     <ul class="social">
+                        <li>
+                           <a href="#" class="icon">
+                              <i class="fa-brands fa-facebook-f"></i>
+                           </a>
+                        </li>
+                        <li>
+                           <a href="#" class="icon">
+                              <i class="fa-brands fa-instagram"></i>
+                           </a>
+                        </li>
+                        <li>
+                           <a href="#" class="icon">
+                              <i class="fa-brands fa-twitter"></i>
+                           </a>
+                        </li>
+                        <li>
+                           <a href="https://wa.me/+77081287246" class="icon">
+                              <i class="fa-brands fa-whatsapp"></i>
+                           </a>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+	<div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 ">
+	   <div class="widget-items">
+		  <div class="footer-head">
+			 <h5 class="title">
+				Услуги
+			 </h5>
+		  </div>
+		  <div class="content-area">
+			 <ul class="quick-link">
+				<li>
+				   <a href="#0">
+					  <i class="fas fa-caret-right"></i> Ремонт компьютерного оборудования
+				   </a>
+				</li>
+				<li>
+				   <a href="#0">
+					  <i class="fas fa-caret-right"></i> Создание сети и настройка оборудования
+				   </a>
+				</li>
+				<li>
+				   <a href="#0">
+					  <i class="fas fa-caret-right"></i> Установка слаботочных сетей
+				   </a>
+				</li>
+				<li>
+				   <a href="#0">
+					  <i class="fas fa-caret-right"></i> Планирование IT-инфраструктуры
+				   </a>
+				</li>
+				<li>
+				   <a href="#0">
+					  <i class="fas fa-caret-right"></i> Разработка и поддержка сайтов
+				   </a>
+				</li>
+				<li>
+				   <a href="#0">
+					  <i class="fas fa-caret-right"></i> Консультации по IT вопросам
+				   </a>
+				</li>
+			 </ul>
+		  </div>
+	   </div>
+	</div>
+	<div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 ">
+	   <div class="widget-items">
+		  <div class="footer-head">
+			 <h5 class="title">
+				Дополнительные Услуги
+			 </h5>
+		  </div>
+		  <div class="content-area">
+			 <ul class="quick-link">
+				<li>
+				   <a href="#0">
+					  <i class="fas fa-caret-right"></i> Настройка и ремонт периферийного оборудования
+				   </a>
+				</li>
+				<li>
+				   <a href="#0">
+					  <i class="fas fa-caret-right"></i> Оптимизация работы сетевых устройств
+				   </a>
+				</li>
+				<li>
+				   <a href="#0">
+					  <i class="fas fa-caret-right"></i> Сетевое и серверное администрирование
+				   </a>
+				</li>
+				<li>
+				   <a href="#0">
+					  <i class="fas fa-caret-right"></i> Настройка системы видеонаблюдения
+				   </a>
+				</li>
+				<li>
+				   <a href="#0">
+					  <i class="fas fa-caret-right"></i> Настройка резервного копирования
+				   </a>
+				</li>
+				<li>
+				   <a href="#0">
+					  <i class="fas fa-caret-right"></i> Консультации по защите данных
+				   </a>
+				</li>
+			 </ul>
+		  </div>
+	   </div>
+	</div>
+            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 ">
+               <div class="widget-items">
+                  <div class="footer-head">
+                     <h5 class="title">
+                        Наши контакты
+                     </h5>
+                  </div>
+                  <div class="content-area">
+                     <ul class="contact">
+                        <li>
+                           <div class="phone-icon">
+                              <img src="static/img/footer/email.png" alt="email">
+                           </div>
+                           <a href="#0" class="email-part">
+                              <span>Email:</span>
+                              kandarr4@gmail.com
+                           </a>
+                        </li>
+                        <li>
+                           <div class="phone-icon">
+                              <img src="static/img/footer/phone.png" alt="phone">
+                           </div>
+                           <a href="https://wa.me/+77081287246 class="email-part">
+                              <span>Вацап:</span>
+                              +7 708 128 7246
+                           </a>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="footer-bottom">
+         <p>
+            Copyright &copy; 2024 Somnium| Designed by <a href="#0">Bortnikov V.V</a>
+         </p>
+      </div>
+   </div>
+</footer>
+<!--Footer End-->
+
+<!-- Modal for Notification -->
+<div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="notificationModalLabel">Уведомление</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Сообщение будет вставлено сюда -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Register & Login Modal Start -->
+<div class="modal register__modal fade" id="authModal" tabindex="-1" aria-hidden="true">
+   <div class="modal-dialog modal-md">
+         <div class="modal-content">
+            <div class="modal-header">
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <div class="modal-body">
+               <div class="modal__right">
+                     <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                           <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#register-tab" type="button" role="tab" aria-controls="register-tab" aria-selected="true">Регистрация</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                           <button class="nav-link" data-bs-toggle="tab" data-bs-target="#login-tab" type="button" role="tab" aria-controls="login-tab" aria-selected="false">Вход</button>
+                        </li>
+                     </ul>
+                     <div class="tab-content">
+                        <!-- Форма регистрации -->
+                        <div class="tab-pane fade show active" id="register-tab" role="tabpanel">
+                           <div class="form__tabs__wrap">
+                                 <div class="focus__icon">
+                                    <img src="{{ url_for('static', filename='img/modal/flowers.png') }}" alt="f-img">
+                                 </div>
+                                 <form method="POST" action="{{ url_for('register') }}">
+                                    <input type="hidden" name="csrf_token" value="{{ register_form.csrf_token._value() }}" id="csrf_token_register">
+                                    
+                                    <!-- Имя пользователя -->
+                                    <div class="form__grp">
+                                       {{ register_form.username.label(class="form-label") }}
+                                       {{ register_form.username(class="form-control", id="username_register", placeholder="Ваше имя пользователя") }}
+                                       {% if register_form.username.errors %}
+                                           <div class="text-danger">
+                                               {% for error in register_form.username.errors %}
+                                                   {{ error }}
+                                               {% endfor %}
+                                           </div>
+                                       {% endif %}
+                                    </div>
+
+                                    <!-- Email -->
+                                    <div class="form__grp">
+                                       {{ register_form.email.label(class="form-label") }}
+                                       {{ register_form.email(class="form-control", id="email_register", placeholder="Ваш адрес электронной почты") }}
+                                       {% if register_form.email.errors %}
+                                           <div class="text-danger">
+                                               {% for error in register_form.email.errors %}
+                                                   {{ error }}
+                                               {% endfor %}
+                                           </div>
+                                       {% endif %}
+                                    </div>
+
+                                    <!-- Пароль -->
+                                    <div class="form__grp">
+                                       {{ register_form.password.label(class="form-label") }}
+                                       {{ register_form.password(class="form-control", id="password-field-register", placeholder="Введите пароль") }}
+                                       <span class="fa fa-fw fa-eye field-icon toggle-password-register" onclick="togglePassword('password-field-register')"></span>
+                                       {% if register_form.password.errors %}
+                                           <div class="text-danger">
+                                               {% for error in register_form.password.errors %}
+                                                   {{ error }}
+                                               {% endfor %}
+                                           </div>
+                                       {% endif %}
+                                    </div>
+
+                                    <!-- Подтверждение пароля -->
+                                    <div class="form__grp">
+                                       {{ register_form.confirm_password.label(class="form-label") }}
+                                       {{ register_form.confirm_password(class="form-control", id="password-field-confirm-register", placeholder="Подтвердите пароль") }}
+                                       <span class="fa fa-fw fa-eye field-icon toggle-password-confirm-register" onclick="togglePassword('password-field-confirm-register')"></span>
+                                       {% if register_form.confirm_password.errors %}
+                                           <div class="text-danger">
+                                               {% for error in register_form.confirm_password.errors %}
+                                                   {{ error }}
+                                               {% endfor %}
+                                           </div>
+                                       {% endif %}
+                                    </div>
+
+                                    <!-- Согласие с условиями -->
+                                    <div class="form-check form__check d-flex align-items-center">
+                                       {{ register_form.agreement(class="form-check-input", id="agreement_register") }}
+                                       <label class="form-check-label" for="agreement_register">
+                                             Я согласен с <a href="#">пользовательским соглашением</a> и подтверждаю, что мне не менее 18 лет!
+                                       </label>
+                                       {% if register_form.agreement.errors %}
+                                           <div class="text-danger">
+                                               {% for error in register_form.agreement.errors %}
+                                                   {{ error }}
+                                               {% endfor %}
+                                           </div>
+                                       {% endif %}
+                                    </div>       
+
+                                    <div class="create__btn">
+                                       {{ register_form.submit(class="cmn--btn", id="submit-register") }}
+                                    </div>
+                                 </form>
+                                 <div class="social__head">
+                                    <div class="border__static"></div>
+                                    <span>Или войдите через</span>
+                                    <ul class="social">
+                                       <li><a href="{{ url_for('login_google') }}"><i class="fab fa-google"></i></a></li>
+                                    </ul>
+                                 </div>
+                           </div>
+                        </div>
+                        
+                        <!-- Форма входа -->
+                        <div class="tab-pane fade" id="login-tab" role="tabpanel">
+                           <div class="form__tabs__wrap">
+                                 <div class="focus__icon">
+                                    <img src="{{ url_for('static', filename='img/modal/flowers.png') }}" alt="f-img">
+                                 </div>
+                                 <form method="POST" action="{{ url_for('login') }}">
+                                    <input type="hidden" name="csrf_token" value="{{ login_form.csrf_token._value() }}" id="csrf_token_login">
+                                    
+                                    <!-- Имя пользователя -->
+                                    <div class="form__grp">
+                                       {{ login_form.username.label(class="form-label") }}
+                                       {{ login_form.username(class="form-control", id="username_login", placeholder="Ваше имя пользователя") }}
+                                       {% if login_form.username.errors %}
+                                           <div class="text-danger">
+                                               {% for error in login_form.username.errors %}
+                                                   {{ error }}
+                                               {% endfor %}
+                                           </div>
+                                       {% endif %}
+                                    </div>
+
+                                    <!-- Пароль -->
+                                    <div class="form__grp">
+                                       {{ login_form.password.label(class="form-label") }}
+                                       {{ login_form.password(class="form-control", id="password-field-login", placeholder="Введите пароль") }}
+                                       <span class="fa fa-fw fa-eye field-icon toggle-password-login" onclick="togglePassword('password-field-login')"></span>
+                                       {% if login_form.password.errors %}
+                                           <div class="text-danger">
+                                               {% for error in login_form.password.errors %}
+                                                   {{ error }}
+                                               {% endfor %}
+                                           </div>
+                                       {% endif %}
+                                    </div>
+
+                                    <div class="form-check d-flex justify-content-between align-items-center">
+                                       <div class="form-check">
+                                          <input class="form-check-input" type="checkbox" id="remember_me">
+                                          <label class="form-check-label" for="remember_me">
+                                             Запомнить меня
+                                          </label>
+                                       </div>
+                                       <a href="#">Забыли пароль?</a>
+                                    </div>
+
+                                    <div class="create__btn">
+                                       {{ login_form.submit(class="cmn--btn", id="submit-login") }}
+                                    </div>
+                                 </form>
+                                 <div class="social__head">
+                                    <div class="border__static"></div>
+                                    <span>Или войдите через</span>
+                                    <ul class="social">
+                                       <li><a href="{{ url_for('login_google') }}"><i class="fab fa-google"></i></a></li>
+                                    </ul>
+                                 </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+    </div>
+</div>
+<!-- Register & Login Modal End -->
+
+   <!--Jquery 3 6 0 Min Js-->
+   <script src="static/js/jquery-3.6.0.min.js"></script>
+   <!--Bootstrap bundle Js-->
+   <script src="static/js/bootstrap.bundle.js"></script>
+   <!--Waypoint Jquery min Js-->
+   <script src="static/js/jquery.waypoints.min.js"></script>
+   <!--Viewport Jquery Js-->
+   <script src="static/js/viewport.jquery.js"></script>
+   <!--Wow min Js-->
+   <script src="static/js/wow.min.js"></script>
+   <!--Odometer Up min Js-->
+   <script src="static/js/odometer.min.js"></script>
+   <!--Owl Carousel min Js-->
+   <script src="static/js/owl.min.js"></script>
+   <!--Owl nice Jquery min Js-->
+   <script src="static/js/jquery.nice-select.min.js"></script> 
+   <script src="static/js/magnific-popup.js"></script> 
+   <!--main Js-->
+   <script src="static/js/main.js"></script>
+
+   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<script>
+
+document.getElementById("submit-register").addEventListener("click", function(event) {
+    event.preventDefault(); // Предотвращаем стандартную отправку формы
+    
+    var form = document.querySelector("#register-tab form");
+    var formData = new FormData(form);
+
+    fetch("{{ url_for('register') }}", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Показать уведомление об успешной регистрации
+            Swal.fire({
+                title: 'Успех!',
+                text: data.message,
+                icon: 'success',
+                confirmButtonText: 'Ок'
+            }).then((result) => {
+                // Перезагрузка страницы или переход на другую после закрытия уведомления
+                window.location.reload(); // или window.location.href = 'новый_URL';
+            });
+        } else {
+            // Показать уведомление с ошибками
+            Swal.fire({
+                title: 'Ошибка!',
+                html: data.message || Object.values(data.errors).join("<br>"),
+                icon: 'error',
+                confirmButtonText: 'Закрыть'
+            });
+        }
+    })
+    .catch(error => {
+        console.error("Ошибка:", error);
+        // Показать уведомление о сетевой ошибке
+        Swal.fire({
+            title: 'Ошибка сети',
+            text: 'Произошла ошибка на сервере. Пожалуйста, попробуйте позже.',
+            icon: 'error',
+            confirmButtonText: 'Закрыть'
+        });
+    });
+});
+
+        function togglePassword(fieldId) {
+            var x = document.getElementById(fieldId);
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+
+document.getElementById("submit-login").addEventListener("click", function(event) {
+    event.preventDefault(); // Предотвращаем стандартную отправку формы
+    
+    var form = document.querySelector("#login-tab form");
+    var formData = new FormData(form);
+
+    fetch("{{ url_for('login') }}", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Показать уведомление об успешном входе
+            Swal.fire({
+                title: 'Успех!',
+                text: data.message,
+                icon: 'success',
+                confirmButtonText: 'Ок'
+            }).then((result) => {
+                window.location.href = "{{ url_for('index') }}"; // перенаправляем на главную страницу
+            });
+        } else {
+            // Показать уведомление с ошибками
+            Swal.fire({
+                title: 'Ошибка!',
+                html: data.message || "Неверное имя пользователя, адрес электронной почты или пароль.",
+                icon: 'error',
+                confirmButtonText: 'Закрыть'
+            });
+        }
+    })
+    .catch(error => {
+        console.error("Ошибка:", error);
+        // Показать уведомление о сетевой ошибке
+        Swal.fire({
+            title: 'Ошибка сети',
+            text: 'Произошла ошибка на сервере. Пожалуйста, попробуйте позже.',
+            icon: 'error',
+            confirmButtonText: 'Закрыть'
+        });
+    });
+});
+
+
+        function togglePassword(fieldId) {
+            var x = document.getElementById(fieldId);
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+		
+    document.addEventListener('DOMContentLoaded', function() {
+        // Обработка формы отправки сообщений из contactForm
+        document.getElementById('contactForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Сбор данных формы
+            const formData = {
+                first_name: document.getElementById('contactFirstName').value,
+                last_name: document.getElementById('contactLastName').value,
+                middle_name: document.getElementById('contactMiddleName').value,
+                contact_number: document.getElementById('contactNumber').value,
+                contact_email: document.getElementById('contactEmail').value,
+                content: document.getElementById('contactMessage').value
+            };
+
+            // Отправка данных на сервер
+            fetch('{{ url_for("send_message") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token() }}'  // Если используете Flask-WTF для CSRF защиты
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Успешное уведомление через SweetAlert2
+                    Swal.fire({
+                        title: 'Успешно!',
+                        text: data.message,
+                        icon: 'success',
+                        confirmButtonText: 'ОК'
+                    });
+
+                    // Очистка формы
+                    document.getElementById('contactForm').reset();
+                } else {
+                    // Обработка ошибок и уведомление об ошибке
+                    let errorMessages = '';
+                    if (data.errors) {
+                        for (const field in data.errors) {
+                            errorMessages += `${data.errors[field]}\n`;
+                        }
+                        Swal.fire({
+                            title: 'Ошибка',
+                            text: 'Ошибки при отправке:\n' + errorMessages,
+                            icon: 'error',
+                            confirmButtonText: 'ОК'
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Ошибка',
+                            text: data.message,
+                            icon: 'error',
+                            confirmButtonText: 'ОК'
+                        });
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                // Показываем модальное окно Bootstrap при ошибке отправки
+                const modalBody = document.querySelector('#notificationModal .modal-body');
+                modalBody.textContent = 'Не удалось отправить сообщение. Попробуйте позже.';
+                const notificationModal = new bootstrap.Modal(document.getElementById('notificationModal'));
+                notificationModal.show();
+            });
+        });
+    });
+	
+
+</script>
+
+
+</body>
+
+</html>

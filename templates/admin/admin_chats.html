@@ -1,0 +1,2259 @@
+<!-- Содержимое вкладки чатов для админ-панели с фильтрами статусов -->
+<div class="chat-admin-container">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Чаты</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group me-2">
+                <button type="button" class="btn btn-sm btn-outline-secondary" id="refreshChatsBtn">
+                    <i class="fas fa-sync-alt"></i> Обновить
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Фильтры статусов чатов -->
+    <div class="chat-filters mb-3">
+        <div class="btn-group" role="group" aria-label="Фильтры статусов чатов">
+            <button type="button" class="btn btn-outline-secondary active" data-filter="all">
+                Все чаты
+            </button>
+            <button type="button" class="btn btn-outline-warning" data-filter="pending">
+                <span class="status-dot status-pending"></span> Ожидают ответа
+            </button>
+            <button type="button" class="btn btn-outline-success" data-filter="open">
+                <span class="status-dot status-open"></span> Открытые
+            </button>
+            <button type="button" class="btn btn-outline-secondary" data-filter="closed">
+                <span class="status-dot status-closed"></span> Закрытые
+            </button>
+            <button type="button" class="btn btn-outline-primary" data-filter="resolved">
+                <span class="status-dot status-resolved"></span> Решенные
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Список чатов -->
+        <div class="col-md-4 col-lg-3">
+            <div class="card chat-list-card">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Активные чаты</h5>
+                    <span id="chatCounter" class="badge bg-light text-dark">0</span>
+                </div>
+                <div class="list-group list-group-flush" id="chatList">
+                    <!-- Список чатов будет добавлен через JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Содержимое чата -->
+        <div class="col-md-8 col-lg-9">
+            <div class="card chat-content-card">
+                <div class="card-header d-flex justify-content-between align-items-center" id="chatHeader">
+                    <div class="d-flex align-items-center">
+                        <h5 class="mb-0 me-2">Выберите чат</h5>
+                        <span id="chatStatus" class="badge bg-secondary d-none">Статус</span>
+                    </div>
+                    <div class="chat-actions d-none">
+                        <button class="btn btn-success btn-sm mx-1" id="resolveChatBtn">
+                            <i class="fas fa-check"></i> Решено
+                        </button>
+                        <button class="btn btn-danger btn-sm mx-1" id="closeChatBtn">
+                            <i class="fas fa-times"></i> Закрыть
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body chat-messages-container" id="chatMessages">
+                    <div class="text-center text-muted my-5">
+                        <i class="fas fa-comments fa-3x mb-3"></i>
+                        <p>Выберите чат из списка слева или дождитесь нового сообщения</p>
+                    </div>
+                </div>
+                <div class="card-footer chat-input-area d-none">
+                    <form id="adminChatForm" class="d-flex">
+                        <input type="text" class="form-control me-2" id="adminMessageInput" placeholder="Введите сообщение...">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Информация о пользователе -->
+            <div class="card mt-3 user-info-card d-none">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">Информация о пользователе</h5>
+                </div>
+                <div class="card-body" id="userInfoContent">
+                    <!-- Информация о пользователе будет добавлена через JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CSS стили для админ-панели чатов -->
+<style>
+.chat-admin-container {
+    padding: 1rem;
+}
+
+.chat-list-card {
+    height: calc(100vh - 240px); /* Уменьшаем высоту для учета фильтров */
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.chat-content-card {
+    height: calc(100vh - 180px);
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-messages-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    background-color: #f8f9fa;
+}
+
+.chat-input-area {
+    border-top: 1px solid #e5e7eb;
+    padding: 0.75rem;
+    background-color: #fff;
+}
+
+.user-info-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.chat-item {
+    border-left: 3px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 0.75rem 1rem;
+}
+
+.chat-item:hover {
+    background-color: #f8f9fa;
+}
+
+.chat-item.active {
+    background-color: #e9ecef;
+    border-left-color: #6366f1;
+}
+
+.chat-item .chat-title {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    color: #1f2937;
+}
+
+.chat-item .chat-preview {
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin-bottom: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.chat-item .chat-time {
+    font-size: 0.7rem;
+    color: #9ca3af;
+}
+
+.chat-item .unread-badge {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background-color: #dc3545;
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
+.chat-item .status-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+/* Новые стили для статусов */
+.status-pending {
+    background-color: #ffc107;
+}
+
+.status-open {
+    background-color: #28a745;
+}
+
+.status-closed {
+    background-color: #6c757d;
+}
+
+.status-resolved {
+    background-color: #0d6efd;
+    border: 2px solid #0b5ed7;
+}
+
+/* Стили для точек в фильтрах */
+.status-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+/* Стили для бейджа статуса чата */
+#chatStatus {
+    font-size: 0.8rem;
+    padding: 0.35em 0.65em;
+}
+
+#chatStatus.status-pending {
+    background-color: #ffc107;
+    color: #000;
+}
+
+#chatStatus.status-open {
+    background-color: #28a745;
+    color: #fff;
+}
+
+#chatStatus.status-closed {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+#chatStatus.status-resolved {
+    background-color: #0d6efd;
+    color: #fff;
+}
+
+/* Стили для фильтров */
+.chat-filters {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 5px;
+}
+
+.chat-filters .btn-group {
+    display: flex;
+}
+
+.chat-filters .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Стили для сообщений */
+.message {
+    margin-bottom: 1rem;
+    max-width: 85%;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+.message-content {
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+    position: relative;
+}
+
+.message-content p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.message-time {
+    font-size: 0.7rem;
+    margin-top: 0.25rem;
+    text-align: right;
+    color: #9ca3af;
+}
+
+.system-message {
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.system-message .message-content {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    color: #6c757d;
+    border-radius: 1rem;
+}
+
+.admin-message {
+    margin-left: auto;
+}
+
+.admin-message .message-content {
+    background-color: #6366f1;
+    color: white;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.user-message {
+    margin-right: auto;
+}
+
+.user-message .message-content {
+    background-color: #f1f3f5;
+    color: #212529;
+    border-bottom-left-radius: 0.25rem;
+}
+
+.guest-message {
+    margin-right: auto;
+}
+
+.guest-message .message-content {
+    background-color: #f1f3f5;
+    color: #212529;
+    border-bottom-left-radius: 0.25rem;
+}
+
+/* Анимация появления сообщений */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Индикатор загрузки сообщений */
+.chat-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.chat-loading .spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+/* Стили для информации о пользователе */
+.user-info-table {
+    font-size: 0.9rem;
+}
+
+.user-info-table th {
+    width: 35%;
+    font-weight: 600;
+}
+
+/* Индикатор набора текста */
+.typing-indicator {
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    background-color: #f1f3f5;
+    color: #6c757d;
+    font-size: 0.8rem;
+    width: auto;
+    display: inline-block;
+    margin-right: auto;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+/* Стили для вложений в сообщениях */
+.message-attachment {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+}
+
+.message-attachment i {
+    margin-right: 0.5rem;
+}
+
+.message-attachment a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.message-attachment a:hover {
+    text-decoration: underline;
+}
+
+/* Адаптивность */
+@media (max-width: 767.98px) {
+    .chat-list-card, .chat-content-card {
+        height: auto;
+        max-height: 70vh;
+    }
+    
+    .message {
+        max-width: 90%;
+    }
+    
+    .chat-filters {
+        margin-bottom: 15px;
+    }
+    
+    .chat-filters .btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+}
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+
+
+<!-- JavaScript для админ-панели чатов -->
+<script>
+
+/**
+ * Улучшенная админ-панель чатов с двусторонней связью
+ * Решает проблемы с отображением печати и автоматическим обновлением сообщений
+ */
+
+// Обертка для инициализации чатов админ-панели
+function initializeAdminChats() {
+    // Проверяем, что jQuery загружен
+    if (typeof $ === 'undefined') {
+        console.warn('jQuery не загружен, повторная попытка через 100ms');
+        setTimeout(initializeAdminChats, 100);
+        return;
+    }
+
+    console.log('Инициализация админ-панели чатов...');
+
+    // Элементы интерфейса
+    const chatList = document.getElementById('chatList');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatHeader = document.getElementById('chatHeader');
+    const chatStatus = document.getElementById('chatStatus');
+    const chatCounter = document.getElementById('chatCounter');
+    const chatActions = document.querySelector('.chat-actions');
+    const adminChatForm = document.getElementById('adminChatForm');
+    const adminMessageInput = document.getElementById('adminMessageInput');
+    const chatInputArea = document.querySelector('.chat-input-area');
+    const userInfoCard = document.querySelector('.user-info-card');
+    const userInfoContent = document.getElementById('userInfoContent');
+    const refreshChatsBtn = document.getElementById('refreshChatsBtn');
+    const resolveChatBtn = document.getElementById('resolveChatBtn');
+    const closeChatBtn = document.getElementById('closeChatBtn');
+    const filterButtons = document.querySelectorAll('.chat-filters button');
+    
+    // Проверяем, что все элементы найдены
+    if (!chatList || !chatMessages) {
+        console.warn('Элементы чата не найдены, возможно вкладка не активна');
+        return;
+    }
+    
+    // Глобальные переменные
+    let currentChatId = null;
+    let socket = null;
+    let chats = [];
+    let currentFilter = 'all'; // Текущий фильтр чатов
+    let isTyping = false; // Флаг набора текста
+    let typingTimer = null; // Таймер для отслеживания набора текста
+    let autoRefreshInterval = null; // Интервал автоматического обновления
+    
+    // Добавляем элемент для отображения статуса соединения
+    function addConnectionStatusElement() {
+        if (!document.getElementById('connectionStatus')) {
+            const statusElement = document.createElement('div');
+            statusElement.id = 'connectionStatus';
+            statusElement.className = 'connection-status';
+            statusElement.style.cssText = `
+                position: fixed;
+                top: 10px;
+                right: 10px;
+                padding: 5px 10px;
+                border-radius: 4px;
+                font-size: 14px;
+                z-index: 1050;
+                display: none;
+            `;
+            document.body.appendChild(statusElement);
+        }
+    }
+    
+    // Инициализация Socket.IO с улучшенной обработкой ошибок
+    function initializeSocket() {
+        console.log('Инициализация Socket.IO...');
+        
+        if (typeof io === 'undefined') {
+            console.error('Socket.IO не найден. Проверьте подключение библиотеки.');
+            updateConnectionStatus('Socket.IO не найден', 'error');
+            
+            // Пробуем загрузить Socket.IO динамически
+            const script = document.createElement('script');
+            script.src = 'https://cdn.socket.io/4.6.0/socket.io.min.js';
+            script.integrity = 'sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+';
+            script.crossOrigin = 'anonymous';
+            script.onload = function() {
+                console.log('Socket.IO успешно загружен');
+                initializeSocket(); // Пробуем инициализировать снова
+            };
+            script.onerror = function() {
+                console.error('Не удалось загрузить Socket.IO');
+                updateConnectionStatus('Не удалось загрузить Socket.IO', 'error');
+            };
+            document.head.appendChild(script);
+            
+            return;
+        }
+        
+        // Отключаем существующее соединение, если оно есть
+        if (socket) {
+            socket.disconnect();
+        }
+        
+        // Создаем новое соединение с настройками переподключения
+        const socketURL = window.location.protocol + '//' + window.location.host;
+        console.log("Connecting to Socket.IO server at:", socketURL);
+        
+        socket = io(socketURL + '/messenger', {
+            path: '/socket.io/',
+            reconnection: true,
+            reconnectionAttempts: 5,
+            reconnectionDelay: 1000,
+            reconnectionDelayMax: 5000,
+            timeout: 20000,
+            transports: ['websocket', 'polling']
+        });
+        
+        // Логирование всех событий Socket.IO
+        const originalEmit = socket.emit;
+        socket.emit = function() {
+            console.log('Socket.IO EMIT:', arguments[0], JSON.stringify(Array.prototype.slice.call(arguments, 1)));
+            return originalEmit.apply(this, arguments);
+        };
+        
+        // Обработчики событий Socket.IO
+        socket.on('connect', function() {
+            console.log('Admin connected to Socket.IO server');
+            updateConnectionStatus('Подключено', 'success');
+            
+            // Присоединяемся к пространству имен мессенджера
+            socket.emit('join_room', { room: 'admin_room' });
+            
+            // Повторно подключаемся к комнате текущего чата, если он открыт
+            if (currentChatId) {
+                socket.emit('join_chat', { chat_id: currentChatId });
+            }
+            
+            // Сбрасываем интервал автообновления, т.к. теперь у нас есть реалтайм-соединение
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = null;
+            }
+        });
+        
+        socket.on('disconnect', function() {
+            console.log('Admin disconnected from Socket.IO server');
+            updateConnectionStatus('Соединение потеряно', 'warning');
+            
+            // Если соединение потеряно, устанавливаем интервал автообновления
+            if (!autoRefreshInterval) {
+                autoRefreshInterval = setInterval(() => {
+                    console.log('Автоматическое обновление чатов...');
+                    fetchChats();
+                    
+                    // Если открыт чат, обновляем его сообщения
+                    if (currentChatId) {
+                        fetchChatMessages(currentChatId);
+                    }
+                }, 10000); // Каждые 10 секунд
+            }
+        });
+        
+        socket.on('connect_error', function(error) {
+            console.error('Socket.IO connection error:', error);
+            updateConnectionStatus('Ошибка подключения', 'error');
+            
+            // Если соединение потеряно, устанавливаем интервал автообновления
+            if (!autoRefreshInterval) {
+                autoRefreshInterval = setInterval(() => {
+                    console.log('Автоматическое обновление чатов...');
+                    fetchChats();
+                    
+                    // Если открыт чат, обновляем его сообщения
+                    if (currentChatId) {
+                        fetchChatMessages(currentChatId);
+                    }
+                }, 10000); // Каждые 10 секунд
+            }
+        });
+        
+        socket.on('reconnect_attempt', function(attemptNumber) {
+            console.log(`Попытка переподключения #${attemptNumber}...`);
+            updateConnectionStatus(`Переподключение: попытка ${attemptNumber}`, 'warning');
+        });
+        
+        socket.on('reconnect', function(attemptNumber) {
+            console.log(`Успешное переподключение после ${attemptNumber} попыток`);
+            updateConnectionStatus('Подключено', 'success');
+            
+            // Присоединяемся к админской комнате
+            socket.emit('join_room', { room: 'admin_room' });
+            
+            // Если открыт чат, присоединяемся к его комнате
+            if (currentChatId) {
+                socket.emit('join_chat', { chat_id: currentChatId });
+                fetchChatMessages(currentChatId); // Обновляем сообщения
+            }
+            
+            // Сбрасываем интервал автообновления
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = null;
+            }
+        });
+        
+        socket.on('new_chat_notification', function(data) {
+            console.log('Получено уведомление о новом сообщении:', data);
+            
+            // Обновляем список чатов при получении нового сообщения
+            fetchChats();
+            
+            // Если это сообщение для текущего открытого чата, добавляем его
+            if (data.chat_id == currentChatId) {
+                fetchChatMessages(currentChatId);
+            } else {
+                // Иначе воспроизводим звук уведомления
+                playNotificationSound();
+            }
+        });
+        
+        socket.on('new_message', function(data) {
+            console.log('Получено новое сообщение:', data);
+            
+            // Если это сообщение для текущего открытого чата, добавляем его
+            if (data.chat_id == currentChatId) {
+                // Удаляем индикатор набора текста
+                removeTypingIndicator();
+                
+                // Добавляем новое сообщение
+                addMessageToChat(data);
+                scrollToBottom();
+                
+                // Отмечаем сообщение как прочитанное, если оно от пользователя/гостя
+                if (data.sender_type === 'user' || data.sender_type === 'guest') {
+                    socket.emit('read_messages', { chat_id: currentChatId });
+                }
+            } else {
+                // Обновляем список чатов, чтобы показать непрочитанное сообщение
+                fetchChats();
+                
+                // Воспроизводим звук уведомления
+                playNotificationSound();
+            }
+        });
+        
+        socket.on('typing', function(data) {
+            // Показываем индикатор набора текста только для текущего чата
+            if (data.chat_id == currentChatId && (data.sender_type === 'user' || data.sender_type === 'guest')) {
+                showTypingIndicator();
+            }
+        });
+        
+        socket.on('chat_status_updated', function(data) {
+            console.log('Получено обновление статуса чата:', data);
+            
+            // Обновляем статус чата в списке
+            updateChatStatus(data.chat_id, data.status);
+            
+            // Если это текущий открытый чат, обновляем его интерфейс
+            if (data.chat_id == currentChatId) {
+                updateChatStatusBadge(data.status);
+                
+                // Обновляем доступность поля ввода и кнопок в зависимости от статуса
+                if (data.status === 'resolved' || data.status === 'closed') {
+                    adminMessageInput.disabled = true;
+                    adminMessageInput.placeholder = data.status === 'resolved' ? 
+                        'Чат закрыт (решен)' : 'Чат закрыт (без решения)';
+                    
+                    resolveChatBtn.disabled = true;
+                    closeChatBtn.disabled = true;
+                }
+            }
+            
+            // Обновляем список чатов для отображения актуальных статусов
+            fetchChats();
+        });
+
+        return socket;
+    }
+    
+    // Обновление статуса соединения
+    function updateConnectionStatus(message, status) {
+        const statusElement = document.getElementById('connectionStatus');
+        if (!statusElement) return;
+        
+        statusElement.textContent = message;
+        statusElement.className = `connection-status ${status}`;
+        statusElement.style.display = 'block';
+        
+        if (status === 'error') {
+            statusElement.style.backgroundColor = '#f8d7da';
+            statusElement.style.color = '#721c24';
+            statusElement.style.border = '1px solid #f5c6cb';
+        } else if (status === 'warning') {
+            statusElement.style.backgroundColor = '#fff3cd';
+            statusElement.style.color = '#856404';
+            statusElement.style.border = '1px solid #ffeeba';
+        } else if (status === 'success') {
+            statusElement.style.backgroundColor = '#d4edda';
+            statusElement.style.color = '#155724';
+            statusElement.style.border = '1px solid #c3e6cb';
+        }
+        
+        // Автоматически скрываем уведомление об успешном подключении через 3 секунды
+        if (status === 'success') {
+            setTimeout(() => {
+                statusElement.style.display = 'none';
+            }, 3000);
+        }
+    }
+    
+    // Инициализация страницы
+    function initialize() {
+        console.log('Инициализация админ-панели...');
+        
+        // Добавляем элемент статуса соединения
+        addConnectionStatusElement();
+        
+        // Загружаем список чатов
+        fetchChats();
+        
+        // Инициализируем Socket.IO
+        socket = initializeSocket();
+        
+        // Обработчики событий
+        setupEventListeners();
+        
+        // Проверка на мобильное устройство
+        setupMobileMode();
+    }
+    
+    // Настройка обработчиков событий
+    function setupEventListeners() {
+        // Обновление списка чатов
+        if (refreshChatsBtn) {
+            refreshChatsBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                fetchChats();
+            });
+        }
+        
+        // Отправка сообщения
+        if (adminChatForm) {
+            adminChatForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                sendMessage();
+            });
+        }
+        
+        // Индикатор набора текста
+        if (adminMessageInput) {
+            adminMessageInput.addEventListener('input', function() {
+                // Отправляем уведомление о наборе текста только если статус не изменился
+                if (!isTyping) {
+                    isTyping = true;
+                    if (socket && socket.connected && currentChatId) {
+                        socket.emit('typing', { 
+                            chat_id: currentChatId,
+                            sender_type: 'admin'  // Явно указываем тип отправителя
+                        });
+                    }
+                }
+                
+                // Сбрасываем таймер при каждом вводе
+                clearTimeout(typingTimer);
+                
+                // Устанавливаем новый таймер
+                typingTimer = setTimeout(function() {
+                    isTyping = false;
+                }, 2000);
+            });
+        }
+        
+        // Кнопка "Решено"
+        if (resolveChatBtn) {
+            resolveChatBtn.addEventListener('click', function() {
+                if (currentChatId) {
+                    resolveChatConfirmation();
+                }
+            });
+        }
+        
+        // Кнопка "Закрыть"
+        if (closeChatBtn) {
+            closeChatBtn.addEventListener('click', function() {
+                if (currentChatId) {
+                    closeChatConfirmation();
+                }
+            });
+        }
+        
+        // Обработчики фильтров
+        if (filterButtons) {
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Удаляем активный класс со всех кнопок
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Добавляем активный класс на нажатую кнопку
+                    this.classList.add('active');
+                    
+                    // Устанавливаем текущий фильтр
+                    currentFilter = this.getAttribute('data-filter');
+                    
+                    // Применяем фильтр к списку чатов
+                    applyFilter(currentFilter);
+                });
+            });
+        }
+        
+        // Обработчик нажатия клавиши Enter для отправки сообщения
+        if (adminMessageInput) {
+            adminMessageInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    adminChatForm.dispatchEvent(new Event('submit'));
+                }
+            });
+        }
+    }
+    
+    // Функция для подтверждения разрешения чата
+    function resolveChatConfirmation() {
+        // Проверяем, доступен ли SweetAlert2
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: 'Пометить чат как решенный?',
+                text: 'Пользователь не сможет отправлять новые сообщения в этот чат',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Да, решено',
+                cancelButtonText: 'Отмена'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    resolveChat();
+                }
+            });
+        } else {
+            // Если SweetAlert2 недоступен, используем стандартное подтверждение
+            if (confirm('Пометить чат как решенный? Пользователь не сможет отправлять новые сообщения в этот чат')) {
+                resolveChat();
+            }
+        }
+    }
+    
+    // Функция для подтверждения закрытия чата
+    function closeChatConfirmation() {
+        // Проверяем, доступен ли SweetAlert2
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: 'Закрыть чат без решения?',
+                text: 'Пользователь не сможет отправлять новые сообщения в этот чат',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Закрыть',
+                cancelButtonText: 'Отмена'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    closeChat();
+                }
+            });
+        } else {
+            // Если SweetAlert2 недоступен, используем стандартное подтверждение
+            if (confirm('Закрыть чат без решения? Пользователь не сможет отправлять новые сообщения в этот чат')) {
+                closeChat();
+            }
+        }
+    }
+
+    // Применение фильтра к списку чатов
+    function applyFilter(filter) {
+        if (!chats || chats.length === 0) return;
+        
+        console.log(`Применяем фильтр: ${filter}`);
+        
+        // Если фильтр "все", просто отображаем все чаты
+        if (filter === 'all') {
+            renderChatList(chats);
+            return;
+        }
+        
+        // Иначе фильтруем чаты по статусу
+        const filteredChats = chats.filter(chatData => chatData.chat.status === filter);
+        renderChatList(filteredChats);
+        
+        // Обновляем счетчик чатов
+        chatCounter.textContent = filteredChats.length;
+    }
+    
+    // Обновление бейджа статуса чата
+    function updateChatStatusBadge(status) {
+        console.log(`Обновляем бейдж статуса чата: ${status}`);
+        
+        // Удаляем все классы статуса
+        chatStatus.classList.remove('d-none', 'status-pending', 'status-open', 'status-closed', 'status-resolved');
+        
+        // Добавляем соответствующий класс
+        chatStatus.classList.add('status-' + status);
+        
+        // Устанавливаем текст статуса
+        switch (status) {
+            case 'pending':
+                chatStatus.textContent = 'Ожидает ответа';
+                break;
+            case 'open':
+                chatStatus.textContent = 'Открыт';
+                break;
+            case 'closed':
+                chatStatus.textContent = 'Закрыт без решения';
+                break;
+            case 'resolved':
+                chatStatus.textContent = 'Решен';
+                break;
+            default:
+                chatStatus.textContent = 'Статус неизвестен';
+                break;
+        }
+        
+        // Показываем бейдж
+        chatStatus.classList.remove('d-none');
+    }
+
+    // Функция для разрешения чата
+    function resolveChat() {
+        if (!currentChatId) return;
+        
+        console.log(`Помечаем чат ${currentChatId} как решенный`);
+        
+        // Получаем CSRF токен
+        const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+        const csrfToken = csrfMeta ? csrfMeta.getAttribute('content') : '';
+        
+        // Отправляем запрос на обновление статуса чата
+        fetch(`/messenger/admin/resolve_chat/${currentChatId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': csrfToken
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Server responded with status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                // Сначала обновляем статус чата в интерфейсе
+                updateChatStatus(currentChatId, 'resolved');
+                
+                // Обновляем бейдж статуса чата
+                updateChatStatusBadge('resolved');
+                
+                // Затем отправляем системное сообщение
+                const resolveMessage = "Спасибо за обращение! Проблема решена. Если у вас возникнут новые вопросы, пожалуйста, создайте новый запрос.";
+                sendSystemMessage(resolveMessage);
+                
+                // Отключаем поле ввода
+                adminMessageInput.disabled = true;
+                adminMessageInput.placeholder = 'Чат закрыт (решен)';
+                
+                // Отключаем кнопки действий
+                resolveChatBtn.disabled = true;
+                closeChatBtn.disabled = true;
+                
+                // Обновляем список чатов
+                fetchChats();
+                
+                // Показываем уведомление об успехе
+                showToast('Успех', 'Чат успешно помечен как решенный', 'success');
+            } else {
+                console.error('Error resolving chat:', data.message);
+                showToast('Ошибка', data.message || 'Не удалось пометить чат как решённый', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('Ошибка соединения', 'Не удалось пометить чат как решённый', 'error');
+        });
+    }
+
+    // Функция для закрытия чата
+    function closeChat() {
+        if (!currentChatId) return;
+        
+        console.log(`Закрываем чат ${currentChatId}`);
+        
+        // Получаем CSRF токен
+        const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+        const csrfToken = csrfMeta ? csrfMeta.getAttribute('content') : '';
+        
+        // Отправляем запрос на закрытие чата
+        fetch(`/messenger/admin/close_chat/${currentChatId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': csrfToken
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Server responded with status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                // Сначала обновляем статус чата в интерфейсе
+                updateChatStatus(currentChatId, 'closed');
+                
+                // Обновляем бейдж статуса чата
+                updateChatStatusBadge('closed');
+                
+                // Затем отправляем системное сообщение о закрытии чата
+                sendSystemMessage('Чат закрыт администратором без решения проблемы');
+                
+                // Отключаем поле ввода
+                adminMessageInput.disabled = true;
+                adminMessageInput.placeholder = 'Чат закрыт (без решения)';
+                
+                // Отключаем кнопки действий
+                resolveChatBtn.disabled = true;
+                closeChatBtn.disabled = true;
+                
+                // Обновляем список чатов
+                fetchChats();
+                
+                // Показываем уведомление об успехе
+                showToast('Успех', 'Чат успешно закрыт', 'success');
+            } else {
+                console.error('Error closing chat:', data.message);
+                showToast('Ошибка', data.message || 'Не удалось закрыть чат', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('Ошибка соединения', 'Не удалось закрыть чат', 'error');
+        });
+    }
+    
+    // Загрузка списка чатов
+    function fetchChats() {
+        console.log('Загрузка списка чатов...');
+        showLoading(chatList);
+        
+        fetch('/messenger/admin/get_notifications', {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Server responded with status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                // Теперь загружаем список чатов
+                return fetch('/messenger/admin', {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                });
+            } else {
+                throw new Error(data.message || 'Не удалось загрузить уведомления');
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Server responded with status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                console.log(`Загружено ${data.chats.length} чатов`);
+                chats = data.chats;
+                
+                // Применяем текущий фильтр
+                applyFilter(currentFilter);
+                
+                // Обновляем общий счетчик чатов
+                if (currentFilter === 'all') {
+                    chatCounter.textContent = chats.length;
+                }
+            } else {
+                throw new Error(data.message || 'Не удалось загрузить список чатов');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching chats:', error);
+            chatList.innerHTML = `
+                <div class="text-center text-danger p-3">
+                    <i class="fas fa-exclamation-triangle mb-2"></i>
+                    <p>Ошибка загрузки чатов</p>
+                </div>
+            `;
+            showToast('Ошибка', 'Не удалось загрузить список чатов', 'error');
+        });
+    }
+    
+    // Отображение списка чатов
+    function renderChatList(chatsData) {
+        console.log(`Отрисовка ${chatsData.length} чатов`);
+        chatList.innerHTML = '';
+        
+        if (chatsData.length === 0) {
+            chatList.innerHTML = `
+                <div class="text-center text-muted p-3">
+                    <p>Нет активных чатов</p>
+                </div>
+            `;
+            return;
+        }
+        
+        chatsData.forEach(chatData => {
+            const chat = chatData.chat;
+            const unreadCount = chatData.unread_count;
+            
+            const chatItem = document.createElement('a');
+            chatItem.href = '#';
+            chatItem.className = `list-group-item list-group-item-action chat-item ${currentChatId == chat.id ? 'active' : ''}`;
+            chatItem.dataset.chatId = chat.id;
+            chatItem.dataset.status = chat.status;
+            
+            // Определяем класс статуса
+            let statusClass = '';
+            let statusText = '';
+            
+            switch (chat.status) {
+                case 'pending':
+                    statusClass = 'status-pending';
+                    statusText = 'Ожидает ответа';
+                    break;
+                case 'open':
+                    statusClass = 'status-open';
+                    statusText = 'Открыт';
+                    break;
+                case 'closed':
+                    statusClass = 'status-closed';
+                    statusText = 'Закрыт без решения';
+                    break;
+                case 'resolved':
+                    statusClass = 'status-resolved';
+                    statusText = 'Решен';
+                    break;
+                default:
+                    statusClass = 'status-pending';
+                    statusText = 'Новый';
+            }
+            
+            // Форматируем время
+            const updatedAt = new Date(chat.updated_at);
+            const now = new Date();
+            let timeText = '';
+            
+            if (updatedAt.toDateString() === now.toDateString()) {
+                // Сегодня - показываем только время
+                timeText = updatedAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            } else {
+                // Другой день - показываем дату
+                timeText = updatedAt.toLocaleDateString();
+            }
+            
+            // Находим последнее сообщение
+            let messagePreview = 'Нет сообщений';
+            if (chat.messages && chat.messages.length > 0) {
+                const lastMessage = chat.messages[chat.messages.length - 1];
+                messagePreview = lastMessage.content.substr(0, 40) + (lastMessage.content.length > 40 ? '...' : '');
+            }
+            
+            chatItem.innerHTML = `
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="chat-title">
+                            <span class="status-indicator ${statusClass}" title="${statusText}"></span>
+                            ${chat.title}
+                        </div>
+                        <p class="chat-preview">${messagePreview}</p>
+                        <small class="chat-status-text text-muted">${statusText}</small>
+                    </div>
+                    <small class="chat-time">${timeText}</small>
+                </div>
+                ${unreadCount > 0 ? `<span class="unread-badge">${unreadCount}</span>` : ''}
+            `;
+            
+            chatItem.addEventListener('click', function(e) {
+                e.preventDefault();
+                selectChat(chat.id);
+            });
+            
+            chatList.appendChild(chatItem);
+        });
+    }
+    
+    // Выбор чата
+    function selectChat(chatId) {
+        console.log(`Выбран чат с ID: ${chatId}`);
+        
+        // Снимаем активный класс со всех элементов
+        document.querySelectorAll('.chat-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        // Устанавливаем активный класс для выбранного чата
+        const selectedItem = document.querySelector(`.chat-item[data-chat-id="${chatId}"]`);
+        if (selectedItem) {
+            selectedItem.classList.add('active');
+            
+            // Удаляем индикатор непрочитанных сообщений
+            const unreadBadge = selectedItem.querySelector('.unread-badge');
+            if (unreadBadge) {
+                unreadBadge.remove();
+            }
+            
+            // Получаем статус чата и обновляем бейдж
+            const status = selectedItem.dataset.status;
+            if (status) {
+                updateChatStatusBadge(status);
+            }
+        }
+        
+        currentChatId = chatId;
+        
+        // Показываем действия для чата
+        chatActions.classList.remove('d-none');
+        chatInputArea.classList.remove('d-none');
+        
+        // Загружаем сообщения чата
+        fetchChatMessages(chatId);
+        
+        // Присоединяемся к комнате чата через Socket.IO
+        if (socket && socket.connected) {
+            socket.emit('join_chat', { chat_id: chatId });
+            
+            // Отмечаем сообщения как прочитанные
+            socket.emit('read_messages', { chat_id: chatId });
+        }
+        
+        // Для мобильного режима
+        if (isMobileDevice()) {
+            // Скрываем список чатов и показываем содержимое чата
+            const chatListCol = document.querySelector('.col-md-4');
+            const chatContentCol = document.querySelector('.col-md-8');
+            
+            if (chatListCol && chatContentCol) {
+                chatListCol.classList.add('d-none');
+                chatContentCol.classList.remove('d-none');
+                
+                // Показываем кнопку "назад"
+                const backBtn = document.getElementById('backToListBtn');
+                if (backBtn) {
+                    backBtn.classList.remove('d-none');
+                }
+            }
+        }
+    }
+    
+    // Загрузка сообщений чата
+    function fetchChatMessages(chatId) {
+        console.log(`Загрузка сообщений для чата ${chatId}`);
+        showLoading(chatMessages);
+        
+        fetch(`/messenger/admin/chat/${chatId}`, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Server responded with status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                console.log(`Загружено ${data.messages ? data.messages.length : 0} сообщений`);
+                
+                // Обновляем заголовок чата
+                updateChatHeader(data.chat);
+                
+                // Обновляем бейдж статуса
+                updateChatStatusBadge(data.chat.status);
+                
+                // Отображаем сообщения
+                renderChatMessages(data.messages);
+                
+                // Обновляем информацию о пользователе
+                if (data.user_info) {
+                    updateUserInfo(data.user_info);
+                } else {
+                    userInfoCard.classList.add('d-none');
+                }
+                
+                // Отмечаем сообщения как прочитанные через socket
+                if (socket && socket.connected) {
+                    socket.emit('read_messages', { chat_id: chatId });
+                }
+            } else {
+                throw new Error(data.message || 'Не удалось загрузить сообщения чата');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching chat messages:', error);
+            chatMessages.innerHTML = `
+                <div class="text-center text-danger p-3">
+                    <i class="fas fa-exclamation-triangle mb-2"></i>
+                    <p>Ошибка загрузки сообщений</p>
+                </div>
+            `;
+            showToast('Ошибка', 'Не удалось загрузить сообщения чата', 'error');
+        });
+    }
+    
+    // Обновление заголовка чата
+    function updateChatHeader(chat) {
+        console.log(`Обновление заголовка чата: ${chat.title}`);
+        
+        const headerTitle = chatHeader.querySelector('h5');
+        if (headerTitle) {
+            headerTitle.textContent = chat.title;
+        }
+        
+        // Обновляем статус кнопок и поля ввода в зависимости от статуса чата
+        if (chat.status === 'closed' || chat.status === 'resolved') {
+            resolveChatBtn.disabled = true;
+            closeChatBtn.disabled = true;
+            adminMessageInput.disabled = true;
+            
+            // Разные сообщения в зависимости от статуса
+            if (chat.status === 'resolved') {
+                adminMessageInput.placeholder = 'Чат закрыт (решен)';
+            } else {
+                adminMessageInput.placeholder = 'Чат закрыт (без решения)';
+            }
+        } else {
+            resolveChatBtn.disabled = false;
+            closeChatBtn.disabled = false;
+            adminMessageInput.disabled = false;
+            adminMessageInput.placeholder = 'Введите сообщение...';
+        }
+    }
+    
+    // Отображение сообщений чата
+    function renderChatMessages(messages) {
+        console.log('Отрисовка сообщений чата');
+        chatMessages.innerHTML = '';
+        
+        if (!messages || messages.length === 0) {
+            chatMessages.innerHTML = `
+                <div class="text-center text-muted my-5">
+                    <p>Сообщений пока нет</p>
+                </div>
+            `;
+            return;
+        }
+        
+        // Группируем сообщения по датам
+        const messagesByDate = groupMessagesByDate(messages);
+        
+        // Отображаем сообщения, сгруппированные по датам
+        Object.keys(messagesByDate).forEach(date => {
+            // Добавляем системное сообщение с датой
+            const systemDateElement = document.createElement('div');
+            systemDateElement.className = 'system-message';
+            systemDateElement.innerHTML = `
+                <div class="message-content">
+                    ${date}
+                </div>
+            `;
+            chatMessages.appendChild(systemDateElement);
+            
+            // Добавляем сообщения для этой даты
+            messagesByDate[date].forEach(message => {
+                addMessageToChat(message);
+            });
+        });
+        
+        // Прокручиваем к последнему сообщению
+        scrollToBottom();
+        
+        // Удаляем индикатор набора текста, если он есть
+        removeTypingIndicator();
+    }
+    
+    // Группировка сообщений по датам
+    function groupMessagesByDate(messages) {
+        const messagesByDate = {};
+        
+        messages.forEach(message => {
+            const messageDate = new Date(message.created_at);
+            const dateString = messageDate.toLocaleDateString();
+            
+            if (!messagesByDate[dateString]) {
+                messagesByDate[dateString] = [];
+            }
+            
+            messagesByDate[dateString].push(message);
+        });
+        
+        return messagesByDate;
+    }
+    
+    // Добавление сообщения в чат
+    function addMessageToChat(message) {
+        const messageElement = document.createElement('div');
+        
+        // Определяем класс сообщения в зависимости от отправителя
+        if (message.sender_type === 'admin') {
+            messageElement.className = 'admin-message message';
+        } else if (message.sender_type === 'user') {
+            messageElement.className = 'user-message message';
+        } else if (message.sender_type === 'guest') {
+            messageElement.className = 'guest-message message';
+        } else if (message.sender_type === 'system') {
+            messageElement.className = 'system-message message';
+        }
+        
+        // Форматируем время
+        let timeString = '';
+        if (message.created_at) {
+            const messageDate = new Date(message.created_at);
+            timeString = messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        } else {
+            timeString = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+        
+        // Проверяем на наличие вложений
+        let attachmentsHtml = '';
+        if (message.attachments && message.attachments.length > 0) {
+            attachmentsHtml = `
+                <div class="message-attachments">
+                    ${message.attachments.map(attachment => `
+                        <div class="message-attachment">
+                            <i class="fas fa-paperclip"></i>
+                            <a href="${attachment.filepath}" target="_blank" download>
+                                ${attachment.filename}
+                            </a>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+        
+        // Форматируем текст сообщения для безопасного отображения HTML
+        const messageContent = message.content || message.text || '';
+        
+        // Автоматически преобразуем URL в кликабельные ссылки
+        const formattedContent = messageContent.replace(
+            /(https?:\/\/[^\s]+)/g,
+            '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+        );
+        
+        messageElement.innerHTML = `
+            <div class="message-content">
+                <p>${formattedContent}</p>
+                ${attachmentsHtml}
+            </div>
+            <div class="message-time">
+                <small>${timeString}</small>
+            </div>
+        `;
+        
+        chatMessages.appendChild(messageElement);
+    }
+    
+    // Показать индикатор набора текста
+    function showTypingIndicator() {
+        // Удаляем старый индикатор, если есть
+        removeTypingIndicator();
+        
+        // Создаем новый индикатор
+        const indicator = document.createElement('div');
+        indicator.id = 'typingIndicator';
+        indicator.className = 'typing-indicator';
+        
+        // Добавляем анимированные точки и текст
+        indicator.innerHTML = `
+            <div class="typing-dots">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+            <span>Пользователь печатает...</span>
+        `;
+        
+        chatMessages.appendChild(indicator);
+        scrollToBottom();
+        
+        // Удаляем индикатор через 3 секунды
+        setTimeout(removeTypingIndicator, 3000);
+    }
+    
+    // Удалить индикатор набора текста
+    function removeTypingIndicator() {
+        const element = document.getElementById('typingIndicator');
+        if (element) element.remove();
+    }
+    
+    // Отправка сообщения
+    function sendMessage() {
+        const messageText = adminMessageInput.value.trim();
+        if (!messageText || !currentChatId) return;
+        
+        console.log(`Отправка сообщения в чат ${currentChatId}: ${messageText.substring(0, 30)}...`);
+        
+        // Очищаем поле ввода
+        adminMessageInput.value = '';
+        
+        // Сбрасываем флаг набора текста
+        isTyping = false;
+        clearTimeout(typingTimer);
+        
+        // Получаем CSRF токен
+        const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+        const csrfToken = csrfMeta ? csrfMeta.getAttribute('content') : '';
+        
+        // Отправляем сообщение на сервер
+        fetch('/messenger/send_message', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': csrfToken
+            },
+            body: new URLSearchParams({
+                'chat_id': currentChatId,
+                'content': messageText,
+                'force_send': 'true', // Админ может отправлять сообщения даже в закрытые чаты
+                'sender_type': 'admin' // Явно указываем тип отправителя
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Сообщение успешно отправлено');
+                
+                // Если используем Socket.IO, сообщение добавится автоматически
+                // Иначе добавляем его вручную
+                if (!socket || !socket.connected) {
+                    const newMessage = {
+                        text: messageText,
+                        sender_type: 'admin',
+                        created_at: data.created_at
+                    };
+                    addMessageToChat(newMessage);
+                    scrollToBottom();
+                }
+                
+                // Обновляем статус чата в списке
+                updateChatStatus(currentChatId, 'open');
+                
+                // Обновляем бейдж статуса
+                updateChatStatusBadge('open');
+                
+                // Снова включаем кнопки действий, если чат был закрыт
+                resolveChatBtn.disabled = false;
+                closeChatBtn.disabled = false;
+                adminMessageInput.disabled = false;
+                adminMessageInput.placeholder = 'Введите сообщение...';
+                
+                // Обновляем список чатов
+                fetchChats();
+            } else {
+                console.error('Error sending message:', data.message);
+                showToast('Ошибка', data.message || 'Не удалось отправить сообщение', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('Ошибка соединения', 'Не удалось отправить сообщение', 'error');
+        });
+    }
+    
+    // Отправка системного сообщения
+    function sendSystemMessage(text) {
+        if (!currentChatId) return;
+        
+        console.log(`Отправка системного сообщения в чат ${currentChatId}: ${text}`);
+        
+        // Получаем CSRF токен
+        const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+        const csrfToken = csrfMeta ? csrfMeta.getAttribute('content') : '';
+        
+        // Создаем системное сообщение локально
+        const systemMessage = {
+            text: text,
+            sender_type: 'system',
+            created_at: new Date().toISOString()
+        };
+        
+        // Добавляем сообщение в чат
+        addMessageToChat(systemMessage);
+        scrollToBottom();
+        
+        // Сообщаем пользователю, что проблема решена или чат закрыт
+        fetch('/messenger/send_message', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': csrfToken
+            },
+            body: new URLSearchParams({
+                'chat_id': currentChatId,
+                'content': text,
+                'sender_type': 'system',
+                'force_send': 'true' // Разрешаем отправку в закрытые чаты
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success) {
+                console.error('Error sending system message:', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+       
+    // Обновление статуса чата в списке
+    function updateChatStatus(chatId, status) {
+        console.log(`Обновление статуса чата ${chatId} на ${status}`);
+        
+        // Находим элемент чата в списке
+        const chatItem = document.querySelector(`.chat-item[data-chat-id="${chatId}"]`);
+        if (chatItem) {
+            // Обновляем атрибут data-status
+            chatItem.dataset.status = status;
+            
+            // Находим индикатор статуса
+            const statusIndicator = chatItem.querySelector('.status-indicator');
+            if (statusIndicator) {
+                // Удаляем все классы статуса
+                statusIndicator.classList.remove('status-pending', 'status-open', 'status-closed', 'status-resolved');
+                
+                // Устанавливаем новый класс и заголовок
+                switch (status) {
+                    case 'pending':
+                        statusIndicator.classList.add('status-pending');
+                        statusIndicator.title = 'Ожидает ответа';
+                        break;
+                    case 'open':
+                        statusIndicator.classList.add('status-open');
+                        statusIndicator.title = 'Открыт';
+                        break;
+                    case 'closed':
+                        statusIndicator.classList.add('status-closed');
+                        statusIndicator.title = 'Закрыт без решения';
+                        break;
+                    case 'resolved':
+                        statusIndicator.classList.add('status-resolved');
+                        statusIndicator.title = 'Решен';
+                        break;
+                }
+            }
+            
+            // Обновляем текст статуса
+            const statusText = chatItem.querySelector('.chat-status-text');
+            if (statusText) {
+                switch (status) {
+                    case 'pending':
+                        statusText.textContent = 'Ожидает ответа';
+                        break;
+                    case 'open':
+                        statusText.textContent = 'Открыт';
+                        break;
+                    case 'closed':
+                        statusText.textContent = 'Закрыт без решения';
+                        break;
+                    case 'resolved':
+                        statusText.textContent = 'Решен';
+                        break;
+                }
+            }
+        }
+        
+        // Обновляем статус в массиве чатов
+        const chatIndex = chats.findIndex(chatData => chatData.chat.id == chatId);
+        if (chatIndex !== -1) {
+            chats[chatIndex].chat.status = status;
+        }
+        
+        // Если статус "open", сделаем поле ввода снова активным
+        if (status === 'open' && currentChatId == chatId) {
+            adminMessageInput.disabled = false;
+            adminMessageInput.placeholder = 'Введите сообщение...';
+            
+            // Активируем кнопки действий
+            resolveChatBtn.disabled = false;
+            closeChatBtn.disabled = false;
+        }
+        
+        // Если текущий фильтр не "все" и статус чата не соответствует фильтру,
+        // скрываем этот чат из списка при следующем обновлении
+        if (currentFilter !== 'all' && currentFilter !== status && chatItem) {
+            chatItem.style.display = 'none';
+        }
+    }
+    
+    // Обновление информации о пользователе
+    function updateUserInfo(userInfo) {
+        console.log('Обновление информации о пользователе:', userInfo);
+        
+        if (!userInfo) {
+            userInfoCard.classList.add('d-none');
+            return;
+        }
+        
+        // Отображаем информацию о пользователе
+        userInfoCard.classList.remove('d-none');
+        userInfoContent.innerHTML = '';
+        
+        // Создаем таблицу с информацией
+        const infoTable = document.createElement('table');
+        infoTable.className = 'table table-sm user-info-table';
+        
+        // Добавляем строки с информацией
+        infoTable.innerHTML = `
+            <tbody>
+                <tr>
+                    <th>Имя пользователя:</th>
+                    <td>${userInfo.username || 'Не указано'}</td>
+                </tr>
+                <tr>
+                    <th>Имя:</th>
+                    <td>${userInfo.name || 'Не указано'}</td>
+                </tr>
+                <tr>
+                    <th>Email:</th>
+                    <td>${userInfo.email || 'Не указано'}</td>
+                </tr>
+                ${userInfo.phone ? `
+                <tr>
+                    <th>Телефон:</th>
+                    <td>${userInfo.phone}</td>
+                </tr>` : ''}
+            </tbody>
+        `;
+        
+        userInfoContent.appendChild(infoTable);
+        
+        // Если пользователь авторизован, добавляем ссылку на профиль
+        if (userInfo.id) {
+            const viewProfileLink = document.createElement('a');
+            viewProfileLink.href = `/admin/users/${userInfo.id}`;
+            viewProfileLink.className = 'btn btn-sm btn-outline-primary';
+            viewProfileLink.innerHTML = '<i class="fas fa-user"></i> Просмотреть профиль';
+            userInfoContent.appendChild(viewProfileLink);
+        }
+    }
+    
+    // Показать индикатор загрузки
+    function showLoading(container) {
+        container.innerHTML = `
+            <div class="chat-loading">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Загрузка...</span>
+                </div>
+            </div>
+        `;
+    }
+    
+    // Прокрутка чата вниз
+    function scrollToBottom() {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    // Воспроизведение звука уведомления
+    function playNotificationSound() {
+        const audio = document.getElementById('notificationSound');
+        if (audio) {
+            // Сбрасываем звук перед воспроизведением (чтобы можно было проигрывать несколько раз подряд)
+            audio.currentTime = 0;
+            
+            audio.play().catch(error => {
+                console.error('Error playing notification sound:', error);
+            });
+        } else {
+            console.warn('Звуковой элемент не найден, создаем новый');
+            
+            // Создаем элемент звука, если его нет
+            const audioElement = document.createElement('audio');
+            audioElement.id = 'notificationSound';
+            audioElement.preload = 'auto';
+            
+            // Добавляем источники звука для разных форматов
+            const mp3Source = document.createElement('source');
+            mp3Source.src = '/static/sounds/notification.mp3';
+            mp3Source.type = 'audio/mpeg';
+            
+            const oggSource = document.createElement('source');
+            oggSource.src = '/static/sounds/notification.ogg';
+            oggSource.type = 'audio/ogg';
+            
+            audioElement.appendChild(mp3Source);
+            audioElement.appendChild(oggSource);
+            
+            document.body.appendChild(audioElement);
+            
+            // Пробуем воспроизвести звук
+            audioElement.play().catch(error => {
+                console.error('Error playing newly created notification sound:', error);
+            });
+        }
+    }
+    
+    // Показать уведомление
+    function showToast(title, message, type = 'info') {
+        // Проверяем наличие функции уведомлений
+        if (typeof Swal !== 'undefined') {
+            // Показываем уведомление с помощью SweetAlert2
+            Swal.fire({
+                title: title,
+                text: message,
+                icon: type,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            });
+        } else {
+            // Если SweetAlert2 не найден, создаем свой toast
+            const toastContainer = document.getElementById('toast-container');
+            
+            // Если контейнера нет, создаем его
+            if (!toastContainer) {
+                const container = document.createElement('div');
+                container.id = 'toast-container';
+                container.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999;';
+                document.body.appendChild(container);
+            }
+            
+            // Создаем toast элемент
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.style.cssText = 'min-width: 250px; margin-bottom: 10px; padding: 15px; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); background-color: white; opacity: 0; transition: opacity 0.3s;';
+            
+            // Устанавливаем цвет в зависимости от типа
+            if (type === 'success') {
+                toast.style.borderLeft = '4px solid #28a745';
+            } else if (type === 'error') {
+                toast.style.borderLeft = '4px solid #dc3545';
+            } else if (type === 'warning') {
+                toast.style.borderLeft = '4px solid #ffc107';
+            } else {
+                toast.style.borderLeft = '4px solid #17a2b8';
+            }
+            
+            // Содержимое toast
+            toast.innerHTML = `
+                <strong>${title}</strong>
+                <p>${message}</p>
+            `;
+            
+            // Добавляем в контейнер
+            document.getElementById('toast-container').appendChild(toast);
+            
+            // Показываем toast
+            setTimeout(() => {
+                toast.style.opacity = '1';
+            }, 10);
+            
+            // Удаляем toast через 3 секунды
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 3000);
+        }
+    }
+    
+    // Функция для определения мобильного устройства
+    function isMobileDevice() {
+        return (window.innerWidth <= 768);
+    }
+    
+    // Добавление адаптивной логики для мобильных устройств
+    function setupMobileMode() {
+        if (isMobileDevice()) {
+            // Добавляем класс для мобильного режима
+            document.body.classList.add('mobile-view');
+            
+            // Изменяем расположение элементов для мобильного вида
+            const chatListCol = document.querySelector('.col-md-4');
+            const chatContentCol = document.querySelector('.col-md-8');
+            
+            if (chatListCol && chatContentCol) {
+                // Если чат не выбран, показываем только список
+                if (!currentChatId) {
+                    chatListCol.classList.remove('d-none');
+                    chatContentCol.classList.add('d-none');
+                }
+                
+                // Добавляем кнопку "назад" для возврата к списку
+                if (!document.getElementById('backToListBtn')) {
+                    const backBtn = document.createElement('button');
+                    backBtn.id = 'backToListBtn';
+                    backBtn.className = 'btn btn-sm btn-outline-secondary me-2 d-none';
+                    backBtn.innerHTML = '<i class="fas fa-arrow-left"></i>';
+                    
+                    backBtn.addEventListener('click', function() {
+                        chatListCol.classList.remove('d-none');
+                        chatContentCol.classList.add('d-none');
+                        this.classList.add('d-none');
+                    });
+                    
+                    const headerContainer = document.querySelector('.chat-header .d-flex');
+                    if (headerContainer) {
+                        headerContainer.prepend(backBtn);
+                    }
+                }
+            }
+        } else {
+            // Убираем класс мобильного режима
+            document.body.classList.remove('mobile-view');
+            
+            // Восстанавливаем стандартный вид
+            const chatListCol = document.querySelector('.col-md-4');
+            const chatContentCol = document.querySelector('.col-md-8');
+            
+            if (chatListCol && chatContentCol) {
+                chatListCol.classList.remove('d-none');
+                chatContentCol.classList.remove('d-none');
+            }
+            
+            // Скрываем кнопку "назад"
+            const backBtn = document.getElementById('backToListBtn');
+            if (backBtn) {
+                backBtn.classList.add('d-none');
+            }
+        }
+    }
+    
+    // Проверка статуса соединения и автоматическое переподключение
+    function checkConnection() {
+        // Если соединение разорвано, пытаемся переподключиться
+        if (socket && !socket.connected) {
+            console.log('Соединение разорвано, пытаемся переподключиться...');
+            
+            // Показываем уведомление о переподключении
+            updateConnectionStatus('Переподключение...', 'warning');
+            
+            // Пробуем переподключиться
+            socket.connect();
+        }
+    }
+    
+    // Периодическая проверка соединения
+    setInterval(checkConnection, 10000);
+    
+    // Функция для проверки сообщений на обновления
+    function pollNewMessages() {
+        if (!socket || !socket.connected) {
+            console.log('Нет соединения с Socket.IO, проверяем обновления HTTP-запросом');
+            
+            // Если открыт чат, обновляем его сообщения
+            if (currentChatId) {
+                fetchChatMessages(currentChatId);
+            }
+            
+            // Обновляем список чатов
+            fetchChats();
+        }
+    }
+    
+    // Установка интервала для опроса сообщений при отсутствии Socket.IO
+    if (!socket || !socket.connected) {
+        console.log('Socket.IO не доступен, устанавливаем интервал обновления');
+        setInterval(pollNewMessages, 10000); // Каждые 10 секунд
+    }
+    
+    // Обработчик события видимости страницы
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) {
+            console.log('Страница стала видимой, обновляем данные');
+            
+            // Обновляем список чатов
+            fetchChats();
+            
+            // Если открыт чат, обновляем его сообщения
+            if (currentChatId) {
+                fetchChatMessages(currentChatId);
+            }
+            
+            // Проверяем соединение
+            checkConnection();
+        }
+    });
+    
+    // Инициализация при загрузке страницы
+    document.addEventListener('DOMContentLoaded', initialize);
+    
+    // Публичные методы для доступа извне
+    return {
+        refreshChats: fetchChats,
+        selectChat: selectChat,
+        sendMessage: sendMessage,
+        resolveChat: resolveChat,
+        closeChat: closeChat,
+        checkConnection: checkConnection
+    };
+}
+
+// Автоматически инициализируем админ-панель чатов
+const adminChatApp = initializeAdminChats();
+
+// Улучшение: предзагрузка звуков и проверка поддержки форматов
+document.addEventListener('DOMContentLoaded', function() {
+    // Проверка поддержки аудио-форматов
+    function checkAudioSupport() {
+        const audio = document.createElement('audio');
+        
+        // Проверяем поддержку mp3
+        const canPlayMp3 = audio.canPlayType('audio/mpeg') !== '';
+        
+        // Проверяем поддержку ogg
+        const canPlayOgg = audio.canPlayType('audio/ogg') !== '';
+        
+        return {
+            mp3: canPlayMp3,
+            ogg: canPlayOgg
+        };
+    }
+    
+    // Создаем элемент для звука уведомлений
+    function createNotificationSound() {
+        if (!document.getElementById('notificationSound')) {
+            const audioSupport = checkAudioSupport();
+            const audioElement = document.createElement('audio');
+            audioElement.id = 'notificationSound';
+            audioElement.preload = 'auto';
+            
+            // Добавляем источники звука в зависимости от поддерживаемых форматов
+            if (audioSupport.mp3) {
+                const source = document.createElement('source');
+                source.src = '/static/sounds/notification.mp3';
+                source.type = 'audio/mpeg';
+                audioElement.appendChild(source);
+            }
+            
+            if (audioSupport.ogg) {
+                const source = document.createElement('source');
+                source.src = '/static/sounds/notification.ogg';
+                source.type = 'audio/ogg';
+                audioElement.appendChild(source);
+            }
+            
+            document.body.appendChild(audioElement);
+        }
+    }
+    
+    // Пробуем создать элемент звука
+    createNotificationSound();
+    
+    // Добавляем CSS стили для всех компонентов чата
+    function addChatStyles() {
+        if (!document.getElementById('adminChatStyles')) {
+            const styleElement = document.createElement('style');
+            styleElement.id = 'adminChatStyles';
+            styleElement.textContent = `
+                .status-pending {
+                    background-color: #ffc107;
+                }
+                
+                .status-open {
+                    background-color: #28a745;
+                }
+                
+                .status-closed {
+                    background-color: #6c757d;
+                }
+                
+                .status-resolved {
+                    background-color: #0d6efd;
+                    border: 2px solid #0b5ed7;
+                }
+                
+                .typing-indicator {
+                    padding: 8px 12px;
+                    border-radius: 1rem;
+                    margin-bottom: 1rem;
+                    background-color: #f1f3f5;
+                    color: #6c757d;
+                    font-size: 0.85rem;
+                    width: auto;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    animation: fadeIn 0.3s;
+                    max-width: 60%;
+                }
+                
+                .typing-dots {
+                    display: flex;
+                    align-items: center;
+                }
+                
+                .dot {
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 50%;
+                    background-color: #6c757d;
+                    margin-right: 3px;
+                    animation: typingAnimation 1.5s infinite;
+                }
+                
+                .dot:nth-child(2) {
+                    animation-delay: 0.2s;
+                }
+                
+                .dot:nth-child(3) {
+                    animation-delay: 0.4s;
+                    margin-right: 0;
+                }
+                
+                @keyframes typingAnimation {
+                    0% { transform: translateY(0); opacity: 0.6; }
+                    50% { transform: translateY(-3px); opacity: 1; }
+                    100% { transform: translateY(0); opacity: 0.6; }
+                }
+                
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                
+                .message.admin-message {
+                    animation: fadeInRight 0.3s;
+                }
+                
+                .message.user-message, .message.guest-message {
+                    animation: fadeInLeft 0.3s;
+                }
+                
+                @keyframes fadeInRight {
+                    from { opacity: 0; transform: translateX(20px); }
+                    to { opacity: 1; transform: translateX(0); }
+                }
+                
+                @keyframes fadeInLeft {
+                    from { opacity: 0; transform: translateX(-20px); }
+                    to { opacity: 1; transform: translateX(0); }
+                }
+            `;
+            document.head.appendChild(styleElement);
+        }
+    }
+    
+    // Добавляем стили
+    addChatStyles();
+    
+    // Проверяем доступность Socket.IO
+    if (typeof io === 'undefined') {
+        console.warn('Socket.IO не найден! Некоторые функции чата могут работать некорректно.');
+        
+        // Показываем уведомление в интерфейсе
+        const connectionStatus = document.getElementById('connectionStatus');
+        if (connectionStatus) {
+            connectionStatus.textContent = 'Socket.IO не найден! Реал-тайм обновления недоступны';
+            connectionStatus.className = 'connection-status error';
+            connectionStatus.style.display = 'block';
+        }
+        
+        // Пробуем загрузить Socket.IO динамически
+        const script = document.createElement('script');
+        script.src = 'https://cdn.socket.io/4.6.0/socket.io.min.js';
+        script.integrity = 'sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+';
+        script.crossOrigin = 'anonymous';
+        
+        script.onload = function() {
+            console.log('Socket.IO успешно загружен');
+            // Пробуем инициализировать сокет снова
+            if (adminChatApp && adminChatApp.checkConnection) {
+                adminChatApp.checkConnection();
+            }
+            
+            // Обновляем статус в интерфейсе
+            const connectionStatus = document.getElementById('connectionStatus');
+            if (connectionStatus) {
+                connectionStatus.textContent = 'Socket.IO загружен';
+                connectionStatus.className = 'connection-status success';
+                
+                // Скрываем через 3 секунды
+                setTimeout(() => {
+                    connectionStatus.style.display = 'none';
+                }, 3000);
+            }
+        };
+        
+        script.onerror = function() {
+            console.error('Не удалось загрузить Socket.IO');
+            // Обновляем статус в интерфейсе
+            const connectionStatus = document.getElementById('connectionStatus');
+            if (connectionStatus) {
+                connectionStatus.textContent = 'Не удалось загрузить Socket.IO. Обновление вручную.';
+                connectionStatus.className = 'connection-status error';
+            }
+        };
+        
+        document.head.appendChild(script);
+    }
+});
+
+</script>

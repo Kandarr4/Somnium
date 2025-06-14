@@ -1,0 +1,3496 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+   <title>Система опросов и тестов</title>
+   <meta name="description" content="Здесь можно создать свой опрос или тест>
+  <!-- Open Graph мета-теги -->
+  <meta property="og:title" content="Система онлайн опросов и тестов" />
+  <meta property="og:description" content="Система онлайн опросов и тестов" />
+  <meta property="og:url" content="https://somnium.kz/survey/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://somnium.kz/static\img\tab\create-survey.png" />
+
+  <!-- Дополнительные мета-теги (опционально) -->
+  <meta property="og:site_name" content="somnium.kz" />
+  <meta property="og:locale" content="ru_RU" />
+  
+    <title>Сервис опросов/тестов</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/odometer.css">
+    <link rel="stylesheet" href="/static/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/animate.css">
+    <link rel="stylesheet" href="/static/css/nice-select.css">
+    <link rel="stylesheet" href="/static/css/magnific-popup.css">
+	<link rel="stylesheet" href="https://unpkg.com/intro.js/minified/introjs.min.css">
+    <link rel="icon" href="/static/img/favicon/favicon.png" type="image/x-icon">
+
+</head>
+<style>
+
+/* Дополнительные стили для улучшения дизайна */
+.rounded-lg {
+    border-radius: 0.5rem;
+}
+
+.hover-shadow {
+    transition: all 0.3s ease;
+}
+
+.hover-shadow:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.hover-translate-up {
+    transition: all 0.3s ease;
+}
+
+.hover-translate-up:hover {
+    transform: translateY(-5px);
+}
+
+.transition-300 {
+    transition: all 0.3s ease;
+}
+
+.hover-bg-light:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+.hover-bg-primary-subtle:hover {
+    background-color: rgba(13, 110, 253, 0.1);
+}
+
+.bg-primary-subtle {
+    background-color: rgba(13, 110, 253, 0.1);
+}
+
+.bg-info-subtle {
+    background-color: rgba(13, 202, 240, 0.1);
+}
+
+.bg-success-subtle {
+    background-color: rgba(25, 135, 84, 0.1);
+}
+
+.opacity-10 {
+    opacity: 0.1;
+}
+
+/* Дополнительные стили для улучшения внешнего вида */
+.hover-shadow {
+    transition: all 0.3s ease;
+}
+.hover-shadow:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+.shadow {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05) !important;
+}
+.card {
+    border-radius: 10px;
+    overflow: hidden;
+}
+.btn {
+    border-radius: 5px;
+}
+.badge {
+    font-weight: 500;
+}
+
+.home__pricing {
+    background-color: #f9f9f9;
+}
+
+.pricing-card {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 30px 20px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.pricing-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+}
+
+.pricing-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.pricing-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #333333;
+}
+
+.pricing-price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #007bff;
+}
+
+.pricing-period {
+    font-size: 0.9rem;
+    color: #777777;
+    margin-top: 5px;
+}
+
+.pricing-features {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    flex-grow: 1;
+}
+
+.pricing-features li {
+    margin-bottom: 10px;
+    padding-left: 20px;
+    position: relative;
+    color: #555555;
+}
+
+.pricing-features li::before {
+    content: "✔";
+    position: absolute;
+    left: 0;
+    color: #28a745;
+}
+
+.cmn--btn {
+    display: inline-block;
+    padding: 10px 25px;
+    background-color: #007bff;
+    color: #ffffff;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.cmn--btn:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 992px) {
+    .pricing-card {
+        margin-bottom: 30px;
+    }
+}
+
+
+.sidebar {
+    position: fixed; /* Фиксируем позицию сайдбара */
+    top: 0; /* Располагаем у верхнего края страницы */
+    left: 0; /* Располагаем у левого края страницы */
+    width: 50px;
+    height: 100vh; /* Высота сайдбара равна высоте окна браузера */
+    background-color: #05043e;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 0 10px 10px 0; /* Скругляем только правые углы */
+    box-shadow: 0 10px 50px 0 rgba(5, 4, 62, 0.25);
+    z-index: 2000;
+}
+
+.sidebar .nav-item + .nav-item {
+    margin-top: 0.75rem;
+}
+
+.sidebar .nav-item a {
+    color: #FFF;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    border-radius: 8px;
+    position: relative;
+}
+
+.sidebar .nav-item a:hover,
+.sidebar .nav-item a:focus {
+    background-color: #30305a;
+    outline: 0;
+}
+
+.sidebar .nav-item a span  {
+    position: absolute;
+    background-color: #30305a;
+    white-space: nowrap;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    left: calc(100% + 1.5rem);
+    transform-origin: center left;
+    transform: scale(0);
+    opacity: 0;
+    transition: 0.15s ease;
+    z-index: 1000; /* Чтобы всплывающие подсказки были поверх всего */
+}
+
+.sidebar .nav-item a:hover span,
+.sidebar .nav-item a:focus span {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.sidebar .nav-item a span:before {
+    content: "";
+    display: block;
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    background-color: #30305a;
+    left: -5px;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    border-radius: 3px;
+}
+
+.sidebar .nav-item img {
+    width: 30px; /* Размер иконок */
+    height: 30px;
+    flex-shrink: 0;
+    background-color: #FFFFFF; /* Белый фон */
+    border: 2px solid #05043e; /* Цвет рамки */
+    border-radius: 50%; /* Круглая рамка */
+    padding: 4px; /* Внутренний отступ для создания эффекта рамки */
+}
+
+.tab-content {
+    margin-left: 60px; /* Отступ слева для всех вкладок */
+    padding: 20px; /* Внутренний отступ для вкладок */
+}
+
+
+
+/* Нижняя панель */
+.bottom-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #28a745;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1000;
+    padding: 15px 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
+    transition: height 0.3s ease;
+}
+
+/* Скрытая всплывающая панель */
+.panel-content {
+    position: fixed;
+    bottom: -400px; /* Скрыто за пределами экрана */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 400px;
+    background-color: #fff;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    z-index: 1001;
+    transition: bottom 0.3s ease;
+}
+
+/* Открытая панель */
+.bottom-panel.active + .panel-content {
+    bottom: 60px; /* Расстояние от нижней панели */
+}
+
+.hidden {
+    display: none;
+}
+
+/* Кнопка открытия панели */
+.panel-button {
+    display: flex;
+    align-items: center;
+}
+
+.panel-button i {
+    color: #fff;
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.panel-button span {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+/* Стили формы */
+.floating-panel .form-group {
+    margin-bottom: 10px;
+}
+
+.floating-panel label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.floating-panel input, .floating-panel textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #333; /* Устанавливаем черный цвет текста */
+}
+
+.floating-panel button.submit-btn {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.floating-panel button.submit-btn:hover {
+    background-color: #218838;
+}
+
+/* Кнопка закрытия */
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #333;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 15px; /* Отступ снизу для разделения полей */
+    display: flex;
+    flex-direction: column; /* Размещаем метку и поле ввода по вертикали */
+}
+
+.form-group label {
+    margin-bottom: 5px; /* Отступ снизу для отделения метки от поля ввода */
+    font-weight: bold; /* Жирный шрифт для метки */
+    color: #333; /* Цвет текста метки */
+    font-size: 14px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%; /* Ширина поля на 100% родителя */
+    padding: 10px; /* Внутренний отступ для удобства ввода */
+    border: 1px solid #ddd; /* Светло-серая рамка */
+    border-radius: 4px; /* Сглаженные углы */
+    font-size: 14px;
+    color: #333; /* Цвет текста поля */
+    outline: none; /* Убираем подсвечивание при фокусе */
+    transition: border-color 0.3s ease; /* Плавное изменение цвета рамки при фокусе */
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #28a745; /* Цвет рамки при фокусе */
+}
+
+.form-group textarea {
+    resize: vertical; /* Разрешаем изменение высоты только вертикально */
+    min-height: 100px; /* Минимальная высота для удобства написания текста */
+}
+
+/* Мобильная версия панели с прокруткой */
+@media (max-width: 600px) {
+    .panel-content {
+        max-width: 300px;
+        max-height: 60vh; /* Ограничиваем высоту панели 70% высоты экрана */
+        overflow-y: auto; /* Добавляем вертикальную прокрутку, если контент превышает высоту */
+        padding: 10px;
+    }
+
+    .bottom-panel {
+        padding: 10px 0;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 1px;
+        font-size: 11px;
+    }
+
+    .close-button {
+        font-size: 10px;
+        top: 8px;
+        right: 10px;
+    }
+
+    .panel-button i {
+        font-size: 12px;
+    }
+
+    .panel-button span {
+        font-size: 12px;
+    }
+
+    .floating-panel button.submit-btn {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    .form-group textarea {
+        min-height: 50px;
+    }
+}
+
+/* Стили для кнопок профиля и авторизации */
+.header-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.nav-item .auth-btn, 
+.nav-item .profile-link {
+    color: #FFF;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    border-radius: 8px;
+    position: relative;
+}
+
+.nav-item .auth-btn:hover, 
+.nav-item .profile-link:hover {
+    background-color: #30305a;
+}
+
+/* Иконка авторизации */
+.auth-icon {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+}
+
+
+/* Аватар профиля */
+.profile-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid #05043e;
+    background-color: #FFFFFF;
+    padding: 4px;
+}
+
+.profile-container {
+    position: relative;
+}
+
+.profile-actions {
+    display: none; /* Скрываем по умолчанию */
+    background-color: #30305a;
+    white-space: nowrap;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    position: absolute;
+    top: 0; /* Сместить вверх по необходимости */
+    left: 50px; /* Смещение влево от сайдбара */
+    z-index: 10000; /* Выше, чтобы быть на переднем плане */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.profile-link:hover + .profile-actions,
+.profile-container:hover .profile-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+
+.profile-btn, .logout-btn {
+    color: #FFF;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    width: 100%;
+}
+
+.profile-btn:hover, .logout-btn:hover {
+    background-color: #505070;
+    border-radius: 5px;
+}
+
+.profile-btn i, .logout-btn i {
+    margin-right: 8px;
+}
+
+    /* Общие стили для карточек опросов */
+    .survey-card {
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .survey-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Стили для динамического управления опросом */
+    .management-content {
+        margin-top: 15px;
+    }
+
+    /* Скрытие и показ блока управления */
+    .management-content.d-none {
+        display: none;
+    }
+
+    .management-content:not(.d-none) {
+        display: block;
+    }
+
+    /* Стили для счетчиков */
+    .counter .progress {
+        background-color: #e9ecef;
+    }
+
+    .counter .progress-bar {
+        background-color: #28a745;
+    }
+
+    /* Адаптивные стили при необходимости */
+    @media (max-width: 768px) {
+        .management-content h6 {
+            font-size: 1rem;
+        }
+
+        .management-content ul {
+            font-size: 0.9rem;
+        }
+
+        .management-content li {
+            margin-bottom: 5px;
+        }
+    }
+
+.d-flex.justify-content-between span {
+    color: #000; /* Черный цвет текста */
+    font-weight: bold; /* Жирный текст (опционально) */
+}
+
+#surveyTitle {
+    color: black;
+}
+
+#swal2-input {
+    color: black;
+}
+
+/* Стиль для чекбокса */
+.form-check-input {
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-right: 0.5rem;
+    cursor: pointer;
+}
+
+/* Стиль для текста рядом с чекбоксом */
+.form-check-label {
+    font-size: 1rem;
+    color: #000; /* Черный цвет текста */
+    cursor: pointer;
+}
+
+/* Добавление отступа между строками для удобства */
+.form-check {
+    margin-bottom: 0.8rem;
+}
+
+/* Общие стили для окна тура */
+.introjs-tooltip {
+    background-color: #2c3e50; /* Темный фон */
+    color: #ecf0f1; /* Светлый текст */
+    border-radius: 8px; /* Закругленные углы */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Тень */
+}
+
+/* Стили заголовка окна тура */
+.introjs-tooltipheader {
+    background-color: #34495e; /* Темнее для заголовка */
+    color: #ecf0f1;
+    font-size: 1.2em;
+    padding: 10px 20px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+/* Стили контента окна тура */
+.introjs-tooltiptext {
+    font-size: 1em;
+    line-height: 1.5;
+    padding: 15px 20px;
+}
+
+/* Стили для кнопок навигации */
+.introjs-button {
+    background-color: #e67e22; /* Оранжевая кнопка */
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s;
+}
+
+.introjs-button:hover {
+    background-color: #d35400; /* Темнее при наведении */
+}
+
+/* Стили для кнопки "Закрыть" */
+.introjs-skipbutton,
+.introjs-prevbutton,
+.introjs-nextbutton {
+    margin: 0 5px;
+}
+
+.introjs-skipbutton {
+    background-color: transparent;
+    color: #bdc3c7;
+    border: none;
+    font-size: 0.9em;
+    cursor: pointer;
+}
+
+.introjs-skipbutton:hover {
+    color: #95a5a6;
+}
+
+/* Стили индикатора прогресса */
+.introjs-progressbar {
+    background-color: #ecf0f1;
+    height: 4px;
+    border-radius: 2px;
+    overflow: hidden;
+    margin: 0 20px 10px 20px;
+}
+
+.introjs-progressbar .introjs-progress {
+    background-color: #e67e22;
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s;
+}
+
+/* Стили для стрелок-позиций */
+.introjs-helperLayer .introjs-arrow {
+    border-top-color: #2c3e50; /* Цвет стрелки */
+}
+
+.introjs-tooltip {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+</style>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();
+   for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+   k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(99157568, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true
+   });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/99157568" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+<body>
+    <!-- Register & Login Modal Start -->
+    <div class="modal register__modal fade" id="authModal" tabindex="-1" aria-hidden="true">
+       <div class="modal-dialog modal-md">
+             <div class="modal-content">
+                <div class="modal-header">
+                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                   <div class="modal__right">
+                         <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                               <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#register-tab" type="button" role="tab" aria-controls="register-tab" aria-selected="true">Регистрация</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                               <button class="nav-link" data-bs-toggle="tab" data-bs-target="#login-tab" type="button" role="tab" aria-controls="login-tab" aria-selected="false">Вход</button>
+                            </li>
+                         </ul>
+                         <div class="tab-content">
+                            <!-- Форма регистрации -->
+                            <div class="tab-pane fade show active" id="register-tab" role="tabpanel">
+                               <div class="form__tabs__wrap">
+                                     <div class="focus__icon">
+                                        <img src="{{ url_for('static', filename='img/modal/flowers.png') }}" alt="f-img">
+                                     </div>
+                                     <form method="POST" action="{{ url_for('register') }}">
+										<input type="hidden" name="csrf_token" value="{{ register_form.csrf_token._value() }}" id="csrf_token_register">
+                                        <!-- Скрытое поле для CSRF токена уже добавлено с помощью hidden_tag() -->
+                                        
+                                        <!-- Имя пользователя -->
+                                        <div class="form__grp">
+                                           {{ register_form.username.label(class="form-label") }}
+                                           {{ register_form.username(class="form-control", id="username_register", placeholder="Ваше имя пользователя") }}
+                                           {% if register_form.username.errors %}
+                                               <div class="text-danger">
+                                                   {% for error in register_form.username.errors %}
+                                                       {{ error }}
+                                                   {% endfor %}
+                                               </div>
+                                           {% endif %}
+                                        </div>
+
+                                        <!-- Email -->
+                                        <div class="form__grp">
+                                           {{ register_form.email.label(class="form-label") }}
+                                           {{ register_form.email(class="form-control", id="email_register", placeholder="Ваш адрес электронной почты") }}
+                                           {% if register_form.email.errors %}
+                                               <div class="text-danger">
+                                                   {% for error in register_form.email.errors %}
+                                                       {{ error }}
+                                                   {% endfor %}
+                                               </div>
+                                           {% endif %}
+                                        </div>
+
+                                        <!-- Пароль -->
+                                        <div class="form__grp">
+                                           {{ register_form.password.label(class="form-label") }}
+                                           {{ register_form.password(class="form-control", id="password-field-register", placeholder="Введите пароль") }}
+                                           <span class="fa fa-fw fa-eye field-icon toggle-password-register" onclick="togglePassword('password-field-register')"></span>
+                                           {% if register_form.password.errors %}
+                                               <div class="text-danger">
+                                                   {% for error in register_form.password.errors %}
+                                                       {{ error }}
+                                                   {% endfor %}
+                                               </div>
+                                           {% endif %}
+                                        </div>
+
+                                        <!-- Подтверждение пароля -->
+                                        <div class="form__grp">
+                                           {{ register_form.confirm_password.label(class="form-label") }}
+                                           {{ register_form.confirm_password(class="form-control", id="password-field-confirm-register", placeholder="Подтвердите пароль") }}
+                                           <span class="fa fa-fw fa-eye field-icon toggle-password-confirm-register" onclick="togglePassword('password-field-confirm-register')"></span>
+                                           {% if register_form.confirm_password.errors %}
+                                               <div class="text-danger">
+                                                   {% for error in register_form.confirm_password.errors %}
+                                                       {{ error }}
+                                                   {% endfor %}
+                                               </div>
+                                           {% endif %}
+                                        </div>
+
+                                        <!-- Согласие с условиями -->
+                                        <div class="form-check form__check d-flex align-items-center">
+                                           {{ register_form.agreement(class="form-check-input", id="agreement_register") }}
+                                           <label class="form-check-label" for="agreement_register">
+                                                 Я согласен с <a href="#">пользовательским соглашением</a> и подтверждаю, что мне не менее 18 лет!
+                                           </label>
+                                           {% if register_form.agreement.errors %}
+                                               <div class="text-danger">
+                                                   {% for error in register_form.agreement.errors %}
+                                                       {{ error }}
+                                                   {% endfor %}
+                                               </div>
+                                           {% endif %}
+                                        </div>       
+
+                                        <div class="create__btn">
+                                           {{ register_form.submit(class="cmn--btn", id="submit-register") }}
+                                        </div>
+                                     </form>
+                                     <div class="social__head">
+                                        <div class="border__static"></div>
+                                        <span>Или войдите через</span>
+                                        <ul class="social">
+										   <li><a href="{{ url_for('login_google', next=request.url) }}"><i class="fab fa-google"></i></a></li>
+                                        </ul>
+                                     </div>
+                               </div>
+                            </div>
+                            
+                            <!-- Форма входа -->
+                            <div class="tab-pane fade" id="login-tab" role="tabpanel">
+                               <div class="form__tabs__wrap">
+                                     <div class="focus__icon">
+                                        <img src="{{ url_for('static', filename='img/modal/flowers.png') }}" alt="f-img">
+                                     </div>
+                                     <form method="POST" action="{{ url_for('login') }}">
+										<input type="hidden" name="csrf_token" value="{{ login_form.csrf_token._value() }}" id="csrf_token_login">
+                                        <!-- Скрытое поле для CSRF токена уже добавлено с помощью hidden_tag() -->
+                                        <input type="hidden" name="next" value="" id="next-field-login">
+
+                                        <!-- Имя пользователя -->
+                                        <div class="form__grp">
+                                           {{ login_form.username.label(class="form-label") }}
+                                           {{ login_form.username(class="form-control", id="username_login", placeholder="Ваше имя пользователя") }}
+                                           {% if login_form.username.errors %}
+                                               <div class="text-danger">
+                                                   {% for error in login_form.username.errors %}
+                                                       {{ error }}
+                                                   {% endfor %}
+                                               </div>
+                                           {% endif %}
+                                        </div>
+
+                                        <!-- Пароль -->
+                                        <div class="form__grp">
+                                           {{ login_form.password.label(class="form-label") }}
+                                           {{ login_form.password(class="form-control", id="password-field-login", placeholder="Введите пароль") }}
+                                           <span class="fa fa-fw fa-eye field-icon toggle-password-login" onclick="togglePassword('password-field-login')"></span>
+                                           {% if login_form.password.errors %}
+                                               <div class="text-danger">
+                                                   {% for error in login_form.password.errors %}
+                                                       {{ error }}
+                                                   {% endfor %}
+                                               </div>
+                                           {% endif %}
+                                        </div>
+
+                                        <div class="form-check d-flex justify-content-between align-items-center">
+                                           <div class="form-check">
+                                              <input class="form-check-input" type="checkbox" id="remember_me">
+                                              <label class="form-check-label" for="remember_me">
+                                                 Запомнить меня
+                                              </label>
+                                           </div>
+                                           <a href="#">Забыли пароль?</a>
+                                        </div>
+
+                                        <div class="create__btn">
+                                           {{ login_form.submit(class="cmn--btn", id="submit-login") }}
+                                        </div>
+                                     </form>
+                                     <div class="social__head">
+                                        <div class="border__static"></div>
+                                        <span>Или войдите через</span>
+                                        <ul class="social">
+										   <li><a href="{{ url_for('login_google', next=request.url) }}"><i class="fab fa-google"></i></a></li>
+                                        </ul>
+                                     </div>
+                               </div>
+                            </div>
+                         </div>
+                      </div>
+                   </div>
+                </div>
+             </div>
+        </div>
+    </div>
+    <!-- Register & Login Modal End -->
+
+<!-- Modal for Notification -->
+<div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="notificationModalLabel">Уведомление</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Сообщение будет вставлено сюда -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sidebar">
+    <div class="sidebar-sticky pt-3">
+        <ul class="nav flex-column">
+			<li class="nav-item">
+				<a class="nav-link" id="services-menu-tab" data-bs-toggle="tab" href="#services-menu" role="tab">
+					<img src="{{ url_for('static', filename='img/icon/service-list.svg') }}" alt="Меню сервиса" class="tab-icon">
+					<span>Меню сервиса</span>
+				</a>
+			</li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#surveys" role="tab" id="surveys-tab">
+                    <img src="{{ url_for('static', filename='img/icon/Categories_product.svg') }}" alt="Мои опросы" class="tab-icon">
+                    <span>Мои опросы</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#users" role="tab">
+                    <img src="{{ url_for('static', filename='img/icon/users.svg') }}" alt="Пользователи" class="tab-icon">
+                    <span>Мои действия</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#messages" role="tab">
+                    <img src="{{ url_for('static', filename='img/icon/messages.svg') }}" alt="Сообщения" class="tab-icon" id="messagesTabIcon">
+                    <span>Статистика</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#settings" role="tab">
+                    <img src="{{ url_for('static', filename='img/icon/setting.svg') }}" alt="Настройки" class="tab-icon">
+                    <span>Настройки</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#Interactive_elements" role="tab">
+                    <img src="{{ url_for('static', filename='img/icon/Interactive.svg') }}" alt="Интерактивные элементы" class="tab-icon">
+                    <span>Интерактивные элементы</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#pages" role="tab">
+                    <img src="{{ url_for('static', filename='img/icon/pages.svg') }}" alt="Страницы" class="tab-icon">
+                    <span>Страницы</span>
+                </a>
+            </li>
+            <li class="nav-item">
+				<a class="nav-link" id="tariffs-tab" data-bs-toggle="tab" href="#tariffs" role="tab">
+                    <img src="{{ url_for('static', filename='img/icon/prices.svg') }}" alt="Тарифы" class="tab-icon">
+                    <span>Тарифные планы</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="footer">
+        <ul class="nav flex-column">        
+            <li class="nav-item">
+        {% if current_user.is_authenticated %}
+            <div class="profile-container">
+                <a class="nav-link profile-link" href="{{ url_for('profile') }}">
+                    <img src="{{ url_for('static', filename=current_user.avatar or 'img/avatar_placeholder.png') }}" alt="Аватарка" class="profile-avatar">
+                </a>
+                <div class="profile-actions">
+                    <h5>{{ current_user.first_name or current_user.username }}</h5>
+                    <a href="{{ url_for('profile') }}" class="profile-btn">
+                        <i class="fas fa-user"></i>
+                        <span>Профиль</span>
+                    </a>
+                    <a href="{{ url_for('logout') }}" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Выход</span>
+                    </a>
+                </div>
+            </div>
+        {% else %}
+            <a class="nav-link auth-btn" href="#authModal" data-bs-toggle="modal" data-bs-target="#authModal">
+                <img src="{{ url_for('static', filename='img/icon/login.svg') }}" alt="Вход" class="auth-icon">
+                <span>Вход и регистрация</span>
+            </a>
+        {% endif %}
+    </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='img/icon/home.svg') }}" alt="Главная" class="tab-icon">
+                    <span>Главная</span>
+                </a>
+            </li>
+        </ul>
+    </div>  
+</div>
+
+{% macro render_counter(label, value, icon_class, color_class) %}
+    <div class="card text-white bg-{{ color_class }} mb-3" style="max-width: 18rem;">
+        <div class="card-body d-flex align-items-center">
+            <i class="{{ icon_class }} me-3" style="font-size: 2.5rem;"></i>
+            <div>
+                <h5 class="card-title mb-0">{{ value }}</h5>
+                <p class="card-text">{{ label }}</p>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+
+<div class="tab-content">
+	<!-- Вкладка Меню сервиса -->
+		<div class="tab-pane fade show active" id="services-menu" role="tabpanel">
+			<div class="container-fluid py-4">
+				{% if current_user.is_authenticated %}
+					<div class="row g-4">
+						<!-- Первая колонка: Таблица статистики и информации о тарифе -->
+						<div class="col-lg-3 col-md-4 col-sm-12">
+							<div class="bg-white p-4 rounded-lg shadow-sm h-100 position-relative overflow-hidden">
+								<div class="position-absolute opacity-10" style="top: -30px; right: -30px; width: 150px; height: 150px;">
+									<i class="fas fa-chart-pie text-primary fa-6x"></i>
+								</div>
+								<div id="tariff-info-details">
+									<h4 class="mb-4 fw-bold text-primary d-flex align-items-center">
+										<i class="fas fa-crown me-2"></i>Ваш тарифный план
+									</h4>
+									{% if user_tariff and user_tariff_tariff %}
+										<div class="card border-0 bg-light mb-3 hover-shadow transition-300">
+											<div class="card-body">
+												<div class="d-flex align-items-center mb-2">
+													<div class="me-3 bg-primary text-white rounded-circle p-2">
+														<i class="fas fa-star"></i>
+													</div>
+													<h5 class="mb-0 fw-bold">{{ user_tariff_tariff.name }}</h5>
+												</div>
+												<p class="text-muted ms-5 mb-0">{{ user_tariff_tariff.description }}</p>
+											</div>
+										</div>
+										<hr class="my-4 opacity-25">
+										
+										<!-- Таблица информации о тарифе -->
+										<div class="mb-4">
+											<div class="d-flex justify-content-between align-items-center mb-3 p-2 rounded hover-bg-light transition-300">
+												<div class="d-flex align-items-center">
+													<i class="fas fa-calendar-alt me-3 text-primary"></i>
+													<span>Дата активации</span>
+												</div>
+												<span class="fw-bold">{{ activation_date or '—' }}</span>
+											</div>
+											<div class="d-flex justify-content-between align-items-center mb-3 p-2 rounded hover-bg-light transition-300">
+												<div class="d-flex align-items-center">
+													<i class="fas fa-hourglass-half me-3 text-primary"></i>
+													<span>Дней до окончания</span>
+												</div>
+												<div>
+													{% if days_until_next_update == 'Бессрочно' %}
+														<span class="badge bg-success rounded-pill px-3 py-2">Бессрочно</span>
+													{% elif days_until_next_update > 0 %}
+														<span class="badge bg-info rounded-pill px-3 py-2">{{ days_until_next_update }}</span>
+													{% else %}
+														<span class="badge bg-danger rounded-pill px-3 py-2">Истек</span>
+													{% endif %}
+												</div>
+											</div>
+										</div>
+										
+										<hr class="my-4 opacity-25">
+										<!-- Таблица общей статистики -->
+										<h5 class="mb-4 fw-bold text-primary d-flex align-items-center">
+											<i class="fas fa-chart-line me-2"></i>Статистика
+										</h5>
+										<div class="row row-cols-1 row-cols-md-3 g-3 text-center">
+											<div class="col">
+												<div class="card h-100 border-0 bg-light hover-shadow transition-300">
+													<div class="card-body d-flex flex-column align-items-center py-4">
+														<div class="rounded-circle bg-primary-subtle p-3 mb-3">
+															<i class="fas fa-clipboard-list text-primary fs-4"></i>
+														</div>
+														<h2 class="fw-bold mb-0">{{ total_surveys }}</h2>
+														<p class="text-muted mb-0 small">Опросов</p>
+													</div>
+												</div>
+											</div>
+											<div class="col">
+												<div class="card h-100 border-0 bg-light hover-shadow transition-300">
+													<div class="card-body d-flex flex-column align-items-center py-4">
+														<div class="rounded-circle bg-info-subtle p-3 mb-3">
+															<i class="fas fa-question-circle text-info fs-4"></i>
+														</div>
+														<h2 class="fw-bold mb-0">{{ total_questions }}</h2>
+														<p class="text-muted mb-0 small">Вопросов</p>
+													</div>
+												</div>
+											</div>
+											<div class="col">
+												<div class="card h-100 border-0 bg-light hover-shadow transition-300">
+													<div class="card-body d-flex flex-column align-items-center py-4">
+														<div class="rounded-circle bg-success-subtle p-3 mb-3">
+															<i class="fas fa-comment-dots text-success fs-4"></i>
+														</div>
+														<h2 class="fw-bold mb-0">{{ total_answers }}</h2>
+														<p class="text-muted mb-0 small">Ответов</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									{% else %}
+										<div class="card border-0 bg-light border-start border-danger border-4">
+											<div class="card-body text-center p-4">
+												<i class="fas fa-exclamation-circle text-warning fs-1 mb-3"></i>
+												<p class="fs-5 mb-4">У вас не назначен тарифный план.</p>
+												<a href="#tariffs" class="btn btn-primary btn-lg w-100 mt-2 choose-tariff-link" role="button"
+												   data-intro="Нажмите сюда, чтобы выбрать подходящий тариф."
+												   data-step="2">
+													<i class="fas fa-shopping-cart me-2"></i>Выбрать тариф
+												</a>
+											</div>
+										</div>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+
+						<!-- Вторая колонка: Основная область -->
+						<div class="col-lg-6 col-md-4 col-sm-12">
+							<div id="main-content" class="bg-white p-4 rounded-lg shadow-sm h-100">
+								<!-- Здесь будет динамически обновляемый контент -->
+								<div id="survey-list">
+									<div class="d-flex justify-content-between align-items-center mb-4">
+										<h4 class="fw-bold text-primary mb-0 d-flex align-items-center">
+											<i class="fas fa-poll me-2"></i>Мои Опросы/Тесты
+										</h4>
+										<button class="btn btn-success btn-sm px-3 py-2 d-flex align-items-center" onclick="addSurvey()">
+											<i class="fas fa-plus me-2"></i>Новый опрос
+										</button>
+									</div>
+									<div class="row g-4">
+										{% for survey in surveys %}
+											<div class="col-md-6">
+												<div class="card h-100 border-0 shadow-sm hover-translate-up transition-300">
+													<div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center px-4 pt-4 pb-2">
+														<h5 class="card-title mb-0 fw-bold text-truncate" title="{{ survey.title }}">{{ survey.title }}</h5>
+														<div class="form-check form-switch">
+															<input 
+																class="form-check-input" 
+																type="checkbox" 
+																{% if survey.is_active %}checked{% endif %} 
+																onchange="toggleActive({{ survey.id }}, '{{ survey.is_active | lower }}')"
+															>
+														</div>
+													</div>
+													<div class="card-body d-flex flex-column px-4 pt-2">
+														<p class="card-text text-muted small">{{ survey.description }}</p>
+														<div class="d-flex align-items-center mb-2 flex-wrap gap-2">
+															<span class="badge {% if survey.survey_type.startswith('anon_') %}bg-info{% else %}bg-secondary{% endif %} rounded-pill px-3 py-2 me-2">
+																{% if survey.survey_type.startswith('anon_') %}
+																	<i class="fas fa-user-secret me-1"></i>Анонимный
+																{% else %}
+																	<i class="fas fa-user me-1"></i>Публичный
+																{% endif %}
+															</span>
+															<span class="badge {% if survey.survey_type.endswith('_test') %}bg-warning{% else %}bg-primary{% endif %} rounded-pill px-3 py-2">
+																{% if survey.survey_type.endswith('_test') %}
+																	<i class="fas fa-tasks me-1"></i>Тест
+																{% elif survey.survey_type.endswith('_survey') %}
+																	<i class="fas fa-poll me-1"></i>Опрос
+																{% endif %}
+															</span>
+															{% if survey.password %}
+																<span class="badge bg-dark rounded-pill px-3 py-2 ms-2">
+																	<i class="fas fa-lock me-1"></i>Защищен
+																</span>
+															{% endif %}
+														</div>
+														<div class="d-flex justify-content-start text-muted small mb-3 gap-4">
+															<div class="d-flex align-items-center">
+																<i class="fas fa-question-circle me-2 text-primary"></i>{{ survey.questions_count }}
+															</div>
+															<div class="d-flex align-items-center">
+																<i class="fas fa-comment-dots me-2 text-success"></i>{{ survey.total_choices }}
+															</div>
+														</div>
+														<div class="mt-auto">
+															<div class="d-flex justify-content-between mb-3">
+																<small class="text-muted d-flex align-items-center">
+																	<i class="far fa-calendar-alt me-2 text-primary"></i>{{ survey.created_at }}
+																</small>
+																<small class="text-muted d-flex align-items-center">
+																	<i class="far fa-edit me-2 text-primary"></i>{{ survey.updated_at }}
+																</small>
+															</div>
+															<div class="btn-group w-100 mb-2">
+																<button class="btn btn-primary py-2" onclick="openSurvey({{ survey.id }}, '{{ survey.title }}')">
+																	<i class="fas fa-cog me-2"></i>Управление
+																</button>
+																<button class="btn btn-info py-2" onclick="viewResults({{ survey.id }}, '{{ survey.url | safe }}')">
+																	<i class="fas fa-chart-bar me-2"></i>Результаты
+																</button>
+															</div>
+															<div class="d-flex gap-2 w-100 mb-1">
+																<button class="btn btn-outline-primary btn-sm flex-grow-1 d-flex align-items-center justify-content-center py-2" onclick="createLink({{ survey.id }})">
+																	<i class="fas fa-link me-2"></i>Ссылка
+																</button>
+																<button class="btn btn-outline-warning btn-sm flex-grow-1 d-flex align-items-center justify-content-center py-2" onclick='managePassword({{ survey.id }}, {{ survey.password | tojson | safe }})'>
+																	<i class="fas {% if survey.password %}fa-lock{% else %}fa-unlock{% endif %} me-2"></i>Пароль
+																</button>
+															</div>
+															<div class="d-flex gap-2 w-100">
+																<button class="btn btn-outline-secondary btn-sm flex-grow-1 d-flex align-items-center justify-content-center py-2" onclick="editSurvey({{ survey.id }}, '{{ survey.title }}', '{{ survey.description }}', '{{ survey.survey_type }}')">
+																	<i class="fas fa-edit me-2"></i>Редактировать
+																</button>
+																<button class="btn btn-outline-danger btn-sm flex-grow-0 d-flex align-items-center justify-content-center py-2 px-3" onclick="deleteSurvey('{{ survey.id }}')">
+																	<i class="fas fa-trash-alt"></i>
+																</button>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										{% else %}
+											<div class="col-12">
+												<div class="card border-0 bg-light text-center p-5 rounded-lg border-start border-primary border-4">
+													<div class="card-body">
+														<i class="fas fa-clipboard-list text-primary fs-1 mb-3 opacity-50"></i>
+														<h5 class="fs-4 mb-3">Нет созданных опросов</h5>
+														<p class="text-muted mb-4">Создайте свой первый опрос или тест, нажав на кнопку ниже</p>
+														<button class="btn btn-primary btn-lg px-4 py-2" onclick="addSurvey()">
+															<i class="fas fa-plus me-2"></i>Создать первый опрос
+														</button>
+													</div>
+												</div>
+											</div>
+										{% endfor %}
+									</div>
+								</div>
+								<!-- Контейнер для управления опросом -->
+								<div id="survey-management" class="d-none">
+									<!-- Здесь будет динамически загруженный контент управления опросом -->
+								</div>
+							</div>
+						</div>
+
+						<!-- Третья колонка: Меню управления -->
+						<div class="col-lg-3 col-md-4 col-sm-12">
+							<div id="management-menu" class="bg-white p-4 rounded-lg shadow-sm h-100">
+								<h4 class="mb-4 fw-bold text-primary d-flex align-items-center">
+									<i class="fas fa-tools me-2"></i>Инструменты
+								</h4>
+								
+								<div class="d-grid gap-3">
+									<button class="btn btn-success w-100 py-3 d-flex align-items-center justify-content-center" onclick="addSurvey()">
+										<i class="fas fa-plus-circle me-2 fs-5"></i>
+										<span class="fs-5">Новый опрос</span>
+									</button>
+									
+									<div class="card border-0 bg-light border-start border-info border-4 hover-shadow transition-300">
+										<div class="card-body p-4">
+											<h5 class="card-title fw-bold mb-3 d-flex align-items-center">
+												<i class="fas fa-exchange-alt me-2 text-info"></i>Импорт/Экспорт
+											</h5>
+											<div class="d-grid gap-2">
+												<button class="btn btn-info w-100 py-2 mb-1 d-flex align-items-center" onclick="exportSurveys()">
+													<i class="fas fa-file-export me-2"></i>Экспорт опросов
+												</button>
+												<button class="btn btn-warning w-100 py-2 d-flex align-items-center" onclick="importSurveys()">
+													<i class="fas fa-file-import me-2"></i>Импорт опросов
+												</button>
+											</div>
+										</div>
+									</div>
+									
+									<div class="card border-0 bg-light border-start border-success border-4 hover-shadow transition-300">
+										<div class="card-body p-4">
+											<h5 class="card-title fw-bold mb-3 d-flex align-items-center">
+												<i class="fas fa-bolt me-2 text-success"></i>Быстрые действия
+											</h5>
+											<div class="list-group">
+												<a href="#" class="list-group-item list-group-item-action border-0 bg-transparent rounded mb-2 py-3 ps-3 hover-bg-primary-subtle transition-300">
+													<i class="fas fa-book me-3 text-primary"></i>Инструкция по работе
+												</a>
+												<a href="#" class="list-group-item list-group-item-action border-0 bg-transparent rounded mb-2 py-3 ps-3 hover-bg-primary-subtle transition-300">
+													<i class="fas fa-question-circle me-3 text-primary"></i>Часто задаваемые вопросы
+												</a>
+												<a href="#" class="list-group-item list-group-item-action border-0 bg-transparent rounded py-3 ps-3 hover-bg-primary-subtle transition-300">
+													<i class="fas fa-headset me-3 text-primary"></i>Связаться с поддержкой
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% else %}
+					<div class="row justify-content-center">
+						<div class="col-md-6">
+							<div class="card border-0 shadow-lg text-center p-5 rounded-lg border-top border-primary border-4">
+								<div class="card-body py-5">
+									<i class="fas fa-user-lock fs-1 text-primary mb-4"></i>
+									<h4 class="mb-3 fs-2">Требуется авторизация</h4>
+									<p class="text-muted mb-4 fs-5">Для доступа к этому разделу необходимо войти в систему или создать новый аккаунт.</p>
+									<div class="d-grid gap-3 col-md-8 mx-auto">
+										<button class="btn btn-primary btn-lg py-3" data-bs-toggle="modal" data-bs-target="#authModal">
+											<i class="fas fa-sign-in-alt me-2"></i>Войти
+										</button>
+										<button class="btn btn-outline-secondary btn-lg py-3" data-bs-toggle="modal" data-bs-target="#authModal">
+											<i class="fas fa-user-plus me-2"></i>Зарегистрироваться
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	
+    <div class="tab-pane fade" id="surveys" role="tabpanel">
+        <p>Содержимое для Мои опросы будет здесь.</p>
+    </div>
+	
+    <div class="tab-pane fade" id="users" role="tabpanel">
+        <p>Содержимое для мои действия будет здесь.</p>
+    </div>
+	
+    <div class="tab-pane fade" id="messages" role="tabpanel">
+        <p>Содержимое для сообщения.</p>
+    </div>	
+	
+    <div class="tab-pane fade" id="settings" role="tabpanel">
+        <p>Содержимое для настройки.</p>
+    </div>	
+	
+    <div class="tab-pane fade" id="Interactive_elements" role="tabpanel">
+        <p>Содержимое для Interactive_elements.</p>
+    </div>	
+	
+    <div class="tab-pane fade" id="pages" role="tabpanel">
+        <p>Содержимое для pages.</p>
+    </div>		
+
+	<!-- tariffs -->
+	<div class="tab-pane fade" id="tariffs" role="tabpanel">
+		<section class="home__pricing pt-80 pb-120">
+			<div class="container">
+				<div class="domain__head max-700 mb-4 text-center">
+					<h4 class="text-black animate__animated animate__fadeInDown">
+						Выберите подходящий <span class="text-base">тариф</span> для ваших нужд
+					</h4>
+					<p>
+						Мы предлагаем различные тарифные планы, которые идеально подойдут для индивидуальных пользователей, малых и средних предприятий, а также крупных организаций.
+					</p>
+				</div>
+
+				<div class="row justify-content-center">
+					<!-- Бесплатный тариф -->
+					<div class="col-lg-3 col-md-6 mb-4">
+						<div class="pricing-card animate__animated animate__fadeInUp">
+							<div class="pricing-header">
+								<h5 class="pricing-title">30 дней</h5>
+								<span class="pricing-price">Бесплатно</span>
+								<p class="pricing-period">База очищается каждые 2 недели</p>
+							</div>
+							<ul class="pricing-features">
+								<li>Полный доступ ко всем возможностям</li>
+								<li>Безлимитное создание опросов, тестов, вопросов и ответов</li>
+								<li>Безлимитное количество пользователей</li>
+								<li>Экспорт данных во всех доступных форматах</li>
+								<li>Вывод результатов ответов</li>
+							</ul>
+							<div class="text-center">
+								<!-- Изменено: перенаправление на страницу оплаты -->
+								<a href="{{ url_for('payment_bp.payment') }}?tariff_id=1" class="cmn--btn choose-btn">
+									Выбрать
+								</a>
+							</div>
+						</div>
+					</div>
+
+					<!-- Тариф 90 дней -->
+					<div class="col-lg-3 col-md-6 mb-4">
+						<div class="pricing-card animate__animated animate__fadeInUp" data-wow-delay="0.2s">
+							<div class="pricing-header">
+								<h5 class="pricing-title">90 дней</h5>
+								<span class="pricing-price">5 000 тг</span>
+								<p class="pricing-period">На 3 месяца</p>
+							</div>
+							<ul class="pricing-features">
+								<li>Полный доступ ко всем возможностям</li>
+								<li>Безлимитное создание опросов, тестов, вопросов и ответов</li>
+								<li>Безлимитное количество пользователей</li>
+								<li>Экспорт данных во всех доступных форматах</li>
+								<li>Вывод результатов ответов</li>
+							</ul>
+							<div class="text-center">
+								<a href="{{ url_for('payment_bp.payment') }}?tariff_id=2" class="cmn--btn choose-btn">
+									Выбрать
+								</a>
+							</div>
+						</div>
+					</div>
+
+					<!-- Тариф 180 дней -->
+					<div class="col-lg-3 col-md-6 mb-4">
+						<div class="pricing-card animate__animated animate__fadeInUp" data-wow-delay="0.4s">
+							<div class="pricing-header">
+								<h5 class="pricing-title">180 дней</h5>
+								<span class="pricing-price">10 000 тг</span>
+								<p class="pricing-period">На 6 месяцев</p>
+							</div>
+							<ul class="pricing-features">
+								<li>Полный доступ ко всем возможностям</li>
+								<li>Безлимитное создание опросов, тестов, вопросов и ответов</li>
+								<li>Безлимитное количество пользователей</li>
+								<li>Экспорт данных во всех доступных форматах</li>
+								<li>Вывод результатов ответов</li>
+							</ul>
+							<div class="text-center">
+								<a href="{{ url_for('payment_bp.payment') }}?tariff_id=3" class="cmn--btn choose-btn">
+									Выбрать
+								</a>
+							</div>
+						</div>
+					</div>
+
+					<!-- Тариф 365 дней -->
+					<div class="col-lg-3 col-md-6 mb-4">
+						<div class="pricing-card animate__animated animate__fadeInUp" data-wow-delay="0.6s">
+							<div class="pricing-header">
+								<h5 class="pricing-title">365 дней</h5>
+								<span class="pricing-price">15 000 тг</span>
+								<p class="pricing-period">На 1 год</p>
+							</div>
+							<ul class="pricing-features">
+								<li>Полный доступ ко всем возможностям</li>
+								<li>Безлимитное создание опросов, тестов, вопросов и ответов</li>
+								<li>Безлимитное количество пользователей</li>
+								<li>Экспорт данных во всех доступных форматах</li>
+								<li>Вывод результатов ответов</li>
+							</ul>
+							<div class="text-center">
+								<a href="{{ url_for('payment_bp.payment') }}?tariff_id=4" class="cmn--btn choose-btn">
+									Выбрать
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+
+
+</div>
+
+<!-- Нижняя панель "Задать вопрос" -->
+<div class="bottom-panel" id="bottomPanel">
+	<div class="panel-content hidden" id="panelContent">
+        <button class="close-button" id="closePanel">&times;</button>
+        <form id="messageForm">
+            <div class="form-group">
+                <label for="firstName">Имя</label>
+                <input type="text" id="firstName" name="first_name" placeholder="Введите имя"
+                       {% if current_user.is_authenticated and current_user.first_name %}
+                           value="{{ current_user.first_name }}"
+                       {% endif %}>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Фамилия</label>
+                <input type="text" id="lastName" name="last_name" placeholder="Введите фамилию"
+                       {% if current_user.is_authenticated and current_user.last_name %}
+                           value="{{ current_user.last_name }}"
+                       {% endif %}>
+            </div>
+            <div class="form-group">
+                <label for="middleName">Отчество</label>
+                <input type="text" id="middleName" name="middle_name" placeholder="Введите отчество"
+                       {% if current_user.is_authenticated and current_user.middle_name %}
+                           value="{{ current_user.middle_name }}"
+                       {% endif %}>
+            </div>
+            <div class="form-group">
+                <label for="contactNumber">Номер телефона</label>
+                <input type="text" id="contactNumber" name="contact_number" placeholder="Введите номер телефона"
+                       {% if current_user.is_authenticated and current_user.phone %}
+                           value="{{ current_user.phone }}"
+                       {% endif %}>
+            </div>
+            <div class="form-group">
+                <label for="contactEmail">Email</label>
+                <input type="email" id="contactEmail" name="contact_email" placeholder="Введите email"
+                       {% if current_user.is_authenticated and current_user.email %}
+                           value="{{ current_user.email }}"
+                       {% endif %}>
+            </div>
+            <div class="form-group">
+                <label for="content">Сообщение</label>
+                <textarea id="content" name="content" placeholder="Введите ваше сообщение..."></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Отправить</button>
+        </form>
+    </div>
+    <div class="panel-button" id="openPanel">
+        <i class="fas fa-phone-alt"></i>
+        <span>Задать вопрос</span>
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/viewport-units-buggyfill/0.6.2/viewport.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/odometer.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.32/sweetalert2.all.min.js"></script>
+<!-- Intro.js JS -->
+<script src="https://unpkg.com/intro.js/minified/intro.min.js"></script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Получаем переменные из шаблона
+    const isAuthenticated = {{ is_authenticated|tojson }};
+    const showTour = {{ show_tour|tojson }};
+    const showTariffTour = {{ show_tariff_tour|tojson }};
+
+    let tourInstance; // Объявляем переменную 'tourInstance' в глобальной области видимости
+
+    // Функция для запуска тура без тарифа
+    function startNoTariffTour() {
+        // Ваш существующий код для тура без тарифа
+    }
+
+    // Функция для запуска тура с тарифом
+    function startTariffTour() {
+        tourInstance = introJs(); // Инициализируем 'tourInstance'
+
+        tourInstance.setOptions({
+            steps: [
+                {
+                    intro: "С возвращаением! Продолжим?"
+                },
+                {
+                    element: document.querySelector('#tariff-info-details'),
+                    intro: "Здесь отображается информация о вашем тарифе, включая дату активации и оставшиеся дни.",
+                    position: 'right'
+                },
+                {
+                    element: document.querySelector('table.table-hover'), // Таблица статистики
+                    intro: "Эта таблица показывает вашу общую статистику по опросам, вопросам и ответам.",
+                    position: 'left'
+                },
+                {
+                    element: document.querySelector('#survey-list'), // Список опросов
+                    intro: "Здесь будет список созданных Вами опросов.",
+                    position: 'left'
+                },
+                {
+                    element: document.querySelector('#management-menu'),
+                    intro: "В этой колонке будут функциональные кнопки.",
+                    position: 'left'
+                },
+                {
+                    element: document.querySelector('.btn.btn-success.w-100.mb-3'),
+                    intro: "Давайте создадим новый опрос/тест",
+                    position: 'left'
+                },
+                {
+                    intro: "Здесь вы можете выбрать тип опроса, ввести его название и описание, которое будут видеть участники.",
+                    position: 'bottom'
+                }
+            ],
+            showStepNumbers: true,
+            showBullets: false,
+            exitOnOverlayClick: false,
+            showProgress: true,
+            nextLabel: 'Далее',
+            prevLabel: 'Назад',
+            skipLabel: 'Пропустить',
+            doneLabel: 'Готово'
+        });
+
+        // Переопределяем функцию addSurvey, чтобы продолжить тур после открытия модального окна
+        const originalAddSurvey = window.addSurvey;
+        window.addSurvey = function () {
+            if (originalAddSurvey) {
+                originalAddSurvey.apply(this, arguments);
+            }
+
+            // Проверяем, активен ли тур и находится ли он на шаге 5 (индекс 5)
+            if (tourInstance && tourInstance._currentStep === 5) {
+                // Устанавливаем MutationObserver для отслеживания появления модального окна
+                const observer = new MutationObserver(function(mutationsList, observer) {
+                    for (let mutation of mutationsList) {
+                        if (mutation.type === 'childList') {
+                            for (let node of mutation.addedNodes) {
+                                if (node.classList && node.classList.contains('swal2-popup')) {
+                                    // Модальное окно открыто, переходим к следующему шагу
+                                    tourInstance.nextStep();
+                                    // Останавливаем наблюдение
+                                    observer.disconnect();
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Начинаем наблюдение за всем документом
+                observer.observe(document.body, { childList: true, subtree: true });
+            }
+        }
+
+        // Обработчик событий, когда тур меняет шаг
+        tourInstance.onafterchange(function (targetElement) {
+            const currentStep = tourInstance._currentStep;
+
+            if (currentStep === 5) { // Шаг с индексом 5 - кнопка "Добавить опрос"
+                const addSurveyButton = document.querySelector('.btn.btn-success.w-100.mb-3');
+
+                if (addSurveyButton) {
+                    // Добавляем слушатель для перехода к следующему шагу при нажатии
+                    function handleAddSurveyClick() {
+                        console.log("Кнопка 'Добавить опрос' нажата.");
+                        // Переходим к следующему шагу
+                        tourInstance.nextStep();
+                        // Удаляем обработчик после нажатия
+                        addSurveyButton.removeEventListener('click', handleAddSurveyClick);
+                    }
+
+                    addSurveyButton.addEventListener('click', handleAddSurveyClick);
+                    
+                    // Нажимаем кнопку автоматически
+                    addSurveyButton.click();
+                }
+            }
+        });
+
+        // Запускаем тур
+        tourInstance.start();
+    }
+
+    // Проверяем, авторизован ли пользователь
+    if (!isAuthenticated) {
+        console.log("Пользователь не авторизован. Тур не будет запущен.");
+        return; // Останавливаем выполнение, если пользователь не авторизован
+    }
+
+    // Проверяем, нужно ли показывать тур без тарифа
+    if (showTour) {
+        console.log("Показываем тур для пользователей без тарифа.");
+        startNoTariffTour();
+        return; // Предотвращаем запуск второго тура
+    }
+
+    // Проверяем, нужно ли показывать тур с тарифом
+    if (showTariffTour) {
+        console.log("Показываем тур для пользователей с тарифом.");
+        startTariffTour();
+        return;
+    }
+
+    console.log("Нет условий для запуска тура.");
+});
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Выбираем все ссылки с классом 'choose-tariff-link'
+        const chooseTariffLinks = document.querySelectorAll('.choose-tariff-link');
+
+        chooseTariffLinks.forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault(); // Отменяем стандартное поведение ссылки
+
+                // Находим основную ссылку на вкладку "tariffs"
+                const tariffsTabLink = document.getElementById('tariffs-tab');
+                if (tariffsTabLink) {
+                    const tariffsTab = new bootstrap.Tab(tariffsTabLink);
+                    tariffsTab.show(); // Переключаемся на вкладку "tariffs"
+                }
+
+                // Опционально: Закрываем модальное окно после переключения вкладки
+                const authModalEl = document.getElementById('authModal');
+                if (authModalEl) {
+                    const authModal = bootstrap.Modal.getInstance(authModalEl);
+                    if (authModal) {
+                        authModal.hide();
+                    }
+                }
+            });
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function(){
+        const chooseButtons = document.querySelectorAll('.choose-btn');
+        chooseButtons.forEach(button => {
+            button.addEventListener('click', function(){
+                const tariffId = this.getAttribute('data-tariff-id');
+                if(tariffId){
+                    window.location.href = `/payment/?tariff_id=${tariffId}`;
+                }
+            });
+        });
+    });
+
+    // Получаем CSRF токен из мета-тега
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    /**
+     * Функция для просмотра результатов опроса.
+     * Если ссылка уже существует, перенаправляет на страницу результатов.
+     * Если нет, создает ссылку и затем перенаправляет.
+     * 
+     * @param {int} surveyId - ID опроса
+     * @param {string|null} surveyUrl - существующая ссылка опроса
+     */
+    function viewResults(surveyId, surveyUrl) {
+        if (surveyUrl) {
+            // Если ссылка уже существует, перенаправляем на страницу результатов
+            window.location.href = `/survey/result/${surveyUrl}`;
+        } else {
+            // Если ссылки нет, создаем ее
+            fetch(`/survey/create_link/${surveyId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken  // Передаем CSRF токен
+                },
+                body: JSON.stringify({action: 'create'})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Перенаправляем на страницу результатов с новой ссылкой
+                    window.location.href = `/survey/result/${data.url}`;
+                } else {
+                    // Показываем ошибку пользователю
+                    alert(data.message || 'Не удалось создать ссылку для опроса.');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при попытке просмотреть результаты.');
+            });
+        }
+    }
+
+document.addEventListener("DOMContentLoaded", function() {
+    const servicesMenuTab = document.getElementById("services-menu");
+    if (servicesMenuTab) {
+        servicesMenuTab.classList.add("show", "active");
+    }
+});
+
+    // Функция для раскрытия и сворачивания управления опросом
+    function toggleSurveyManagement(button) {
+        const card = button.closest('.card');
+        const managementContent = card.querySelector('.management-content');
+        managementContent.classList.toggle('d-none');
+    }
+
+    // Функция для получения CSRF-токена из мета-тега
+    function getCsrfToken() {
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        return token;
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var isAuthenticated = {{ 'true' if is_authenticated else 'false' }};
+
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('show_login_modal') === 'true') {
+            var authModal = new bootstrap.Modal(document.getElementById('authModal'));
+            authModal.show();
+        }
+
+        $('#authModal').on('show.bs.modal', function (e) {
+            var currentUrl = window.location.href;
+            $('#next-field-login').val(currentUrl);
+            $('#next-value').text(currentUrl); // Для отладки
+        });
+
+        // Переменная для хранения выбранного тарифного плана
+        var selectedTariffId = null;
+
+        // Функция для перенаправления на страницу оплаты
+        function redirectToPayment(tariffId) {
+            window.location.href = `/payment?tariff_id=${tariffId}`;
+        }
+
+        // Обработчик клика по кнопкам "Выбрать тариф"
+        var chooseButtons = document.querySelectorAll(".choose-btn");
+        chooseButtons.forEach(function(button) {
+            button.addEventListener("click", function(event) {
+                var tariffId = this.getAttribute("data-tariff-id");
+                // Если тариф бесплатный (id=1), можно сразу назначить без оплаты
+                if (tariffId === "1") {
+                    // Назначение бесплатного тарифа
+                    if (isAuthenticated === true) {
+                        fetch(`/assign_tariff`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRFToken": getCsrfToken()
+                            },
+                            body: JSON.stringify({
+                                tariff_id: tariffId,
+                                service_id: 1 // Предполагается, что service_id=1 для survey
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire({
+                                    title: 'Успех!',
+                                    text: data.message,
+                                    icon: 'success',
+                                    confirmButtonText: 'Ок'
+                                }).then((result) => {
+                                    location.reload(); // Обновляем страницу после назначения тарифа
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Ошибка!',
+                                    text: data.message,
+                                    icon: 'error',
+                                    confirmButtonText: 'Закрыть'
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Ошибка:", error);
+                            Swal.fire({
+                                title: 'Ошибка сети',
+                                text: 'Произошла ошибка на сервере. Пожалуйста, попробуйте позже.',
+                                icon: 'error',
+                                confirmButtonText: 'Закрыть'
+                            });
+                        });
+                    } else {
+                        // Если пользователь не авторизован, открыть модальное окно
+                        selectedTariffId = tariffId;
+                        var authModal = new bootstrap.Modal(document.getElementById('authModal'));
+                        authModal.show();
+                    }
+                } else {
+                    // Для платных тарифов
+                    if (isAuthenticated === true) {
+                        redirectToPayment(tariffId);
+                    } else {
+                        // Открыть модальное окно аутентификации
+                        selectedTariffId = tariffId;
+                        var authModal = new bootstrap.Modal(document.getElementById('authModal'));
+                        authModal.show();
+                    }
+                }
+            });
+        });
+
+        // После успешной аутентификации, перенаправить на страницу оплаты, если тариф был выбран
+        function handleAuthSuccess() {
+            if (selectedTariffId !== null && isAuthenticated === true) {
+                redirectToPayment(selectedTariffId);
+            }
+        }
+
+        // Обработчик регистрации
+        document.getElementById("submit-register").addEventListener("click", function(event) {
+            event.preventDefault(); // Предотвращаем стандартную отправку формы
+
+            var form = document.querySelector("#register-tab form");
+            var formData = new FormData(form);
+
+            fetch("/register", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-CSRFToken": getCsrfToken(),
+                    "X-Requested-With": "XMLHttpRequest"  // Устанавливаем заголовок для AJAX-запроса
+                },
+                credentials: 'same-origin'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка сети или сервер вернул неверный ответ');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Успех!',
+                        text: data.message,
+                        icon: 'success',
+                        confirmButtonText: 'Ок'
+                    }).then(() => {
+                        // Обновляем состояние аутентификации
+                        isAuthenticated = true;
+                        handleAuthSuccess();
+                        location.reload(); // Перезагружаем страницу для обновления CSRF-токена
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Ошибка!',
+                        html: data.message || Object.values(data.errors).join("<br>"),
+                        icon: 'error',
+                        confirmButtonText: 'Закрыть'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("Ошибка:", error);
+                Swal.fire({
+                    title: 'Ошибка сети',
+                    text: 'Произошла ошибка на сервере. Пожалуйста, попробуйте позже.',
+                    icon: 'error',
+                    confirmButtonText: 'Закрыть'
+                });
+            });
+        });
+
+        // Обработчик входа
+        document.getElementById("submit-login").addEventListener("click", function(event) {
+            event.preventDefault(); // Предотвращаем стандартную отправку формы
+
+            var form = document.querySelector("#login-tab form");
+            var formData = new FormData(form);
+
+            fetch("/login", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-CSRFToken": getCsrfToken(),
+                    "X-Requested-With": "XMLHttpRequest"  // Устанавливаем заголовок для AJAX-запроса
+                },
+                credentials: 'same-origin'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка сети или сервер вернул неверный ответ');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Успех!',
+                        text: data.message,
+                        icon: 'success',
+                        confirmButtonText: 'Ок'
+                    }).then(() => {
+                        // Обновляем состояние аутентификации
+                        isAuthenticated = true;
+                        handleAuthSuccess();
+                        location.reload(); // Перезагружаем страницу для обновления CSRF-токена
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Ошибка!',
+                        html: data.message || "Неверное имя пользователя, адрес электронной почты или пароль.",
+                        icon: 'error',
+                        confirmButtonText: 'Закрыть'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("Ошибка:", error);
+                Swal.fire({
+                    title: 'Ошибка сети',
+                    text: 'Произошла ошибка на сервере. Пожалуйста, попробуйте позже.',
+                    icon: 'error',
+                    confirmButtonText: 'Закрыть'
+                });
+            });
+        });
+
+    // Функция для открытия управления опросом
+    window.openSurvey = function(surveyId, surveyTitle) {
+        // Скрываем список опросов
+        document.getElementById('survey-list').classList.add('d-none');
+        // Показываем контейнер управления опросом
+        document.getElementById('survey-management').classList.remove('d-none');
+
+        // Обновляем меню управления
+        updateManagementMenu(surveyId);
+
+        // Получаем детали опроса
+        fetch(`/survey/${surveyId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCsrfToken()
+            },
+            credentials: 'same-origin'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.survey) {
+                renderSurveyManagement(data.survey);
+            } else {
+                Swal.fire('Ошибка', 'Не удалось загрузить данные опроса.', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка при получении данных опроса:', error);
+            Swal.fire('Ошибка', 'Произошла ошибка при загрузке опроса.', 'error');
+        });
+    };
+
+
+
+	function renderSurveyManagement(survey) {
+		let content = `
+			<h4 class="mb-4">Опрос: ${encodeHTML(survey.title)}</h4>
+			<h5 class="mb-4">Описание: ${encodeHTML(survey.description)}</h5>
+			<div id="question-list" data-survey-type="${encodeHTML(survey.survey_type || '')}" data-survey-id="${survey.id}">
+		`;
+
+		if (survey.questions && survey.questions.length > 0) {
+			survey.questions.forEach(question => {
+				content += `
+					<div class="card mb-3">
+						<div class="card-body">
+							<h5 class="card-title" data-question-id="${question.id}">Вопрос: ${encodeHTML(question.text)}</h5>
+							<div class="d-flex align-items-center justify-content-between">
+								<div class="form-check d-flex align-items-center">
+									<!-- Используем уникальный ID для чекбокса -->
+									<input class="form-check-input me-2" type="checkbox" id="multiAnswer-${question.id}" 
+										   ${question.question_type === 'multiple' ? 'checked' : ''} 
+										   onchange="toggleMultipleAnswer(${question.id}, this.checked)">
+									<label class="form-check-label" for="multiAnswer-${question.id}">
+										Множественный выбор
+									</label>
+								</div>
+								<div>
+									<button class="btn btn-primary btn-sm me-2" onclick="addEmptyAnswer(${question.id}, ${survey.id})">Добавить ответ</button>
+									<button class="btn btn-primary btn-sm me-2" onclick="addTextFieldAnswer(${question.id}, ${survey.id})">Добавить текстовое поле</button>
+									<button class="btn btn-secondary btn-sm me-2" onclick="editQuestion(${question.id}, ${survey.id})">Редактировать</button>
+									<button class="btn btn-danger btn-sm" onclick="deleteQuestion(${question.id}, ${survey.id})">Удалить вопрос</button>
+								</div>
+							</div>
+							<div class="mt-3">
+								<h6>Ответы:</h6>
+								<ul class="list-group sortable-list" data-question-id="${question.id}">
+									${question.choices && question.choices.length > 0 
+										? question.choices.map(choice => `
+											<li class="list-group-item d-flex justify-content-between align-items-center" data-choice-id="${choice.id}">
+												<span class="order">${choice.order}.</span> 
+												${choice.icon ? `<img src="${choice.icon}" alt="Иконка" class="me-2" style="height: 32px; width: 32px;">` : ''}
+												${encodeHTML(choice.text || 'Текстовое поле')}
+												<div class="d-flex align-items-center">
+													${survey.survey_type.endsWith('_test') ? `
+														<div class="form-check me-3">
+															<input class="form-check-input" type="checkbox" ${choice.is_correct ? 'checked' : ''} onchange="toggleCorrectAnswer(${choice.id}, this.checked)">
+															<label class="form-check-label">Правильный ответ</label>
+														</div>
+													` : ''}
+													<button class="btn btn-sm btn-secondary me-2" onclick="editAnswer(${choice.id}, ${question.id}, ${survey.id})">Редактировать</button>
+													<button class="btn btn-sm btn-danger" onclick="deleteAnswer(${choice.id}, ${question.id}, ${survey.id})">Удалить</button>
+												</div>
+											</li>
+										`).join('')
+										: `<li class="list-group-item">Нет ответов</li>`}
+								</ul>
+							</div>
+						</div>
+					</div>
+				`;
+			});
+		} else {
+			content += `<p>Нет вопросов</p>`;
+		}
+
+		content += `</div>`;
+		document.getElementById('survey-management').innerHTML = content;
+	}
+
+
+
+	window.toggleCorrectAnswer = function(choiceId, isChecked) {
+		fetch(`/survey/choices/${choiceId}/update-correct-answer`, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-CSRFToken': getCsrfToken()
+			},
+			credentials: 'same-origin',
+			body: JSON.stringify({ is_correct: isChecked })
+		})
+		.then(response => response.json())
+		.then(data => {
+			if (!data.success) {
+				console.error('Ошибка при обновлении правильного ответа:', data.message);
+			}
+		})
+		.catch(error => {
+			console.error('Ошибка сети:', error);
+		});
+	};
+
+
+
+    function updateManagementMenu(surveyId) {
+        const managementMenu = document.getElementById('management-menu');
+        managementMenu.innerHTML = `
+            <h4 class="mb-4">Управление опросом</h4>
+            <button class="btn btn-success w-100 mb-3" onclick="addQuestion(${surveyId})">Добавить вопрос</button>
+            <button class="btn btn-secondary w-100 mb-3" onclick="goBack()">Назад</button>
+        `;
+    }
+
+    window.goBack = function() {
+        // Показываем список опросов
+        document.getElementById('survey-list').classList.remove('d-none');
+        // Скрываем управление опросом
+        document.getElementById('survey-management').classList.add('d-none');
+        // Восстанавливаем меню управления
+        const managementMenu = document.getElementById('management-menu');
+        managementMenu.innerHTML = `
+            <h4 class="mb-4">Управление</h4>
+            <button class="btn btn-success w-100 mb-3" onclick="addSurvey()">Добавить опрос</button>
+            <button class="btn btn-info w-100 mb-3" onclick="exportSurveys()">Экспорт опросов</button>
+            <button class="btn btn-warning w-100 mb-3" onclick="importSurveys()">Импорт опросов</button>
+        `;
+    };
+
+	window.toggleCorrectAnswer = function(choiceId, isChecked) {
+		fetch(`/survey/choices/${choiceId}/update-correct-answer`, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-CSRFToken': getCsrfToken()
+			},
+			credentials: 'same-origin',
+			body: JSON.stringify({ is_correct: isChecked })
+		})
+		.then(response => response.json())
+		.then(data => {
+			if (data.success) {
+				Swal.fire({
+					icon: 'success',
+					title: 'Успех!',
+					text: `Ответ успешно обновлён как ${isChecked ? 'правильный' : 'неправильный'}.`,
+					timer: 2000,
+					showConfirmButton: false
+				});
+			} else {
+				console.error('Ошибка при обновлении правильного ответа:', data.message);
+				Swal.fire({
+					icon: 'error',
+					title: 'Ошибка!',
+					text: 'Не удалось обновить статус правильного ответа.',
+					timer: 2000,
+					showConfirmButton: false
+				});
+			}
+		})
+		.catch(error => {
+			console.error('Ошибка сети:', error);
+			Swal.fire({
+				icon: 'error',
+				title: 'Ошибка сети!',
+				text: 'Произошла ошибка при подключении к серверу.',
+				timer: 2000,
+				showConfirmButton: false
+			});
+		});
+	};
+
+
+		
+	window.editSurvey = function(surveyId, currentTitle, currentDescription, currentType) {
+		const csrfToken = getCsrfToken(); // Получаем CSRF-токен из мета-тега
+
+		Swal.fire({
+			title: 'Редактировать опрос',
+			html: `
+				<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+					<div style="display: flex; align-items: center;">
+						<input type="checkbox" id="isAnonymous" ${currentType.startsWith('anon_') ? 'checked' : ''} style="margin-right: 8px;">
+						<label for="isAnonymous">Анонимный</label>
+					</div>
+					<select id="surveyType" class="swal2-input" style="width: auto; flex-grow: 1; margin-left: 15px;">
+						<option value="test" ${currentType.endsWith('_test') ? 'selected' : ''}>Тест</option>
+						<option value="survey" ${currentType.endsWith('_survey') ? 'selected' : ''}>Опрос</option>
+					</select>
+				</div>
+				<input id="surveyTitle" class="swal2-input" placeholder="Название опроса" value="${encodeHTML(currentTitle)}">
+				<textarea id="surveyDescription" class="swal2-textarea" placeholder="Описание опроса">${encodeHTML(currentDescription)}</textarea>
+			`,
+			focusConfirm: false,
+			preConfirm: () => {
+				const title = document.getElementById('surveyTitle').value.trim();
+				const description = document.getElementById('surveyDescription').value.trim();
+				const surveyType = document.getElementById('surveyType').value;
+				const isAnonymous = document.getElementById('isAnonymous').checked;
+
+				if (!title) {
+					Swal.showValidationMessage('Название опроса обязательно');
+					return false;
+				}
+				return { title, description, survey_type: `${isAnonymous ? 'anon_' : 'id_'}${surveyType}` };
+			},
+			confirmButtonText: 'Сохранить',
+			showCancelButton: true,
+			cancelButtonText: 'Отмена',
+		}).then((result) => {
+			if (result.isConfirmed) {
+				const { title, description, survey_type } = result.value;
+
+				fetch(`/survey/${surveyId}`, {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json',
+						'X-CSRFToken': csrfToken
+					},
+					credentials: 'same-origin',
+					body: JSON.stringify({
+						title: title,
+						description: description,
+						survey_type: survey_type
+					})
+				})
+				.then(response => {
+					if (response.status === 403) {
+						return response.json().then(data => {
+							throw new Error(data.message || 'Доступ запрещен.');
+						});
+					}
+					return response.json();
+				})
+				.then(data => {
+					if (data.message === "Survey updated") {
+						Swal.fire('Успех!', 'Опрос успешно обновлен.', 'success').then(() => location.reload());
+					} else if (data.message === "Достигнут лимит создания опросов.") {
+						Swal.fire({
+							title: 'Лимит достигнут',
+							text: 'Вы достигли максимального количества опросов.',
+							icon: 'warning',
+							confirmButtonText: 'ОК'
+						});
+					} else {
+						Swal.fire('Ошибка!', data.message, 'error');
+					}
+				})
+				.catch(error => {
+					console.error("Ошибка:", error);
+					if (error.message === "Достигнут лимит создания опросов.") {
+						Swal.fire({
+							title: 'Лимит достигнут',
+							text: 'Вы достигли максимального количества опросов.',
+							icon: 'warning',
+							confirmButtonText: 'ОК'
+						});
+					} else {
+						Swal.fire('Ошибка сети', 'Произошла ошибка на сервере. Пожалуйста, попробуйте позже.', 'error');
+					}
+				});
+			}
+		});
+	};
+		
+
+
+	// Функция для экранирования HTML
+	function encodeHTML(str) {
+		return String(str)
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/"/g, '&quot;')
+			.replace(/'/g, '&#039;');
+	}
+
+
+	// Функция для редактирования вопроса
+	window.editQuestion = function(questionId, surveyId) {
+		// Получаем текущий текст вопроса из DOM
+		const questionCard = document.querySelector(`.card-body h5.card-title[data-question-id="${questionId}"]`);
+		const currentText = questionCard ? questionCard.textContent.replace('Вопрос: ', '') : '';
+
+		Swal.fire({
+			title: 'Редактировать вопрос',
+			input: 'text',
+			inputLabel: 'Текст вопроса',
+			inputValue: currentText,
+			showCancelButton: true,
+			confirmButtonText: 'Сохранить',
+			preConfirm: (newText) => {
+				if (!newText.trim()) {
+					Swal.showValidationMessage('Текст вопроса обязателен');
+				}
+				return newText.trim();
+			}
+		}).then((result) => {
+			if (result.isConfirmed) {
+				const newText = result.value;
+
+				fetch(`/survey/${surveyId}/questions/${questionId}/edit`, {
+					method: "PUT",
+					headers: {
+						"Content-Type": "application/json",
+						"X-CSRFToken": getCsrfToken()
+					},
+					credentials: 'same-origin',
+					body: JSON.stringify({
+						text: newText
+					})
+				})
+
+
+				.then(response => {
+					if (response.status === 403) {
+						throw new Error('CSRF-токен недействителен или отсутствует.');
+					}
+					return response.json();
+				})
+				.then(data => {
+					if (data.success) {
+						Swal.fire('Успех!', 'Вопрос успешно обновлен.', 'success').then(() => {
+							// Обновляем текст вопроса в DOM
+							if (questionCard) {
+								questionCard.textContent = `Вопрос: ${newText}`;
+							}
+						});
+					} else {
+						Swal.fire('Ошибка!', data.message, 'error');
+					}
+				})
+				.catch(error => {
+					console.error("Ошибка:", error);
+					Swal.fire('Ошибка сети', 'Произошла ошибка на сервере. Пожалуйста, попробуйте позже.', 'error');
+				});
+			}
+		});
+	};
+
+
+
+	window.deleteAnswer = function(choiceId, questionId, surveyId) {
+		Swal.fire({
+			title: 'Вы уверены?',
+			text: "Вы собираетесь удалить этот ответ. Это действие необратимо.",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#d33',
+			cancelButtonColor: '#3085d6',
+			confirmButtonText: 'Да, удалить!'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				fetch(`/survey/choices/${choiceId}/delete`, {
+					method: "DELETE",
+					headers: {
+						"X-CSRFToken": getCsrfToken()
+					},
+					credentials: 'same-origin'
+				})
+				.then(response => response.json())
+				.then(data => {
+					if (data.success) {
+						// Удаляем ответ из DOM
+						const choiceItem = document.querySelector(`[data-choice-id="${choiceId}"]`);
+						if (choiceItem) {
+							choiceItem.remove();
+						}
+						Swal.fire('Удалено!', 'Ответ был успешно удален.', 'success');
+					} else {
+						Swal.fire('Ошибка!', data.message, 'error');
+					}
+				})
+				.catch(error => {
+					console.error("Ошибка:", error);
+					Swal.fire('Ошибка сети', 'Произошла ошибка на сервере. Пожалуйста, попробуйте позже.', 'error');
+				});
+			}
+		});
+	};
+
+
+	window.editAnswer = function(choiceId, questionId, surveyId) {
+		const questionCard = document.querySelector(`[data-question-id="${questionId}"]`).closest('.card-body');
+		const choiceItem = questionCard.querySelector(`[data-choice-id="${choiceId}"]`);
+		const surveyType = document.getElementById('survey-management')?.dataset.surveyType || '';
+
+		if (!choiceItem) {
+			console.error("Ответ не найден в DOM.");
+			return;
+		}
+
+		// Извлекаем текущий текст ответа
+		const currentText = choiceItem.querySelector('.answer-text')?.textContent || '';
+
+		// Заменяем текст ответа на поле ввода
+		choiceItem.innerHTML = `
+			<input class="form-control me-3" type="text" placeholder="Введите текст ответа" value="${encodeHTML(currentText)}" id="editAnswerText">
+			<div class="d-flex align-items-center">
+				${surveyType.endsWith('_test') ? `
+					<div class="form-check me-3">
+						<input class="form-check-input" type="checkbox" id="editIsCorrect" ${choiceItem.querySelector('.form-check-input')?.checked ? 'checked' : ''}>
+						<label class="form-check-label">Правильный ответ</label>
+					</div>
+				` : ''}
+				<button class="btn btn-sm btn-success me-2" onclick="saveEditedAnswer(${choiceId}, ${questionId}, ${surveyId})">Сохранить</button>
+				<button class="btn btn-sm btn-danger" onclick="cancelEditAnswer(${choiceId}, '${encodeHTML(currentText)}', ${questionId}, ${surveyId})">Отмена</button>
+			</div>
+		`;
+	};
+
+	window.saveEditedAnswer = function(choiceId, questionId, surveyId) {
+		const choiceItem = document.querySelector(`[data-choice-id="${choiceId}"]`);
+		const newText = document.getElementById('editAnswerText').value.trim();
+		const isCorrect = document.getElementById('editIsCorrect')?.checked || false;
+
+		if (!newText) {
+			Swal.fire('Ошибка', 'Текст ответа не может быть пустым.', 'error');
+			return;
+		}
+
+		fetch(`/survey/choices/${choiceId}/update`, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-CSRFToken': getCsrfToken()
+			},
+			credentials: 'same-origin',
+			body: JSON.stringify({
+				text: newText,
+				is_correct: isCorrect
+			})
+		})
+		.then(response => response.json())
+		.then(data => {
+			if (data.success) {
+				Swal.fire('Успех!', 'Ответ успешно обновлен.', 'success');
+				fetch(`/survey/${surveyId}`, {
+					method: "GET",
+					headers: { "Content-Type": "application/json" },
+					credentials: 'same-origin'
+				})
+				.then(response => response.json())
+				.then(data => {
+					if (data.survey) {
+						renderSurveyManagement(data.survey);
+					} else {
+						Swal.fire('Ошибка', 'Не удалось обновить данные опроса.', 'error');
+					}
+				});
+			} else {
+				Swal.fire('Ошибка!', data.message, 'error');
+			}
+		})
+		.catch(error => {
+			console.error("Ошибка сети:", error);
+			Swal.fire('Ошибка сети', 'Произошла ошибка на сервере. Пожалуйста, попробуйте позже.', 'error');
+		});
+	};
+
+	window.cancelEditAnswer = function(choiceId, previousText, questionId, surveyId) {
+		// Запрашиваем обновленные данные с сервера
+		fetch(`/survey/${surveyId}/questions/${questionId}/choices`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'same-origin'
+		})
+		.then(response => response.json())
+		.then(data => {
+			if (data.success && data.choices) {
+				// Рендерим список ответов заново
+				const questionCard = document.querySelector(`[data-question-id="${questionId}"]`).closest('.card-body');
+				const choiceList = questionCard.querySelector('ul.list-group');
+				choiceList.innerHTML = data.choices
+					.sort((a, b) => a.order - b.order)
+					.map(choice => `
+						<li class="list-group-item d-flex justify-content-between align-items-center" data-choice-id="${choice.id}">
+							<span class="order">${choice.order}.</span> ${encodeHTML(choice.text || 'Текстовое поле')}
+							<div class="d-flex align-items-center">
+								${data.survey_type.endsWith('_test') ? `
+									<div class="form-check me-3">
+										<input class="form-check-input" type="checkbox" ${choice.is_correct ? 'checked' : ''} onchange="toggleCorrectAnswer(${choice.id}, this.checked)">
+										<label class="form-check-label">Правильный ответ</label>
+									</div>
+								` : ''}
+								<button class="btn btn-sm btn-secondary me-2" onclick="editAnswer(${choice.id}, ${questionId}, ${surveyId})">Редактировать</button>
+								<button class="btn btn-sm btn-danger" onclick="deleteAnswer(${choice.id}, ${questionId}, ${surveyId})">Удалить</button>
+							</div>
+						</li>
+					`).join('');
+			} else {
+				console.error('Ошибка при загрузке данных ответов:', data.message || 'Неизвестная ошибка');
+			}
+		})
+		.catch(error => {
+			console.error('Ошибка сети при отмене редактирования:', error);
+		});
+	};
+
+
+
+    // Функция для удаления вопроса
+    window.deleteQuestion = function(questionId, surveyId) {
+        Swal.fire({
+            title: 'Вы уверены?',
+            text: "Вы собираетесь удалить этот вопрос и все связанные с ним ответы. Это действие необратимо.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Да, удалить!',
+            cancelButtonText: 'Отмена'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`/survey/questions/${questionId}`, {
+                    method: "DELETE",
+                    headers: {
+                        "X-CSRFToken": getCsrfToken()
+                    },
+                    credentials: 'same-origin'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire('Удалено!', 'Вопрос был успешно удален.', 'success').then(() => {
+                            // Обновляем управление опросом
+                            openSurvey(surveyId);
+                        });
+                    } else {
+                        Swal.fire('Ошибка!', data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error("Ошибка:", error);
+                    Swal.fire('Ошибка сети', 'Произошла ошибка на сервере. Пожалуйста, попробуйте позже.', 'error');
+                });
+            }
+        });
+    };
+	
+	window.addSurvey = function () {
+		const csrfToken = getCsrfToken(); // Получаем CSRF-токен из мета-тега
+
+		Swal.fire({
+			title: 'Добавить новый опрос',
+			html: `
+				<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+					<div style="display: flex; align-items: center;">
+						<input type="checkbox" id="isAnonymous" style="margin-right: 8px;">
+						<label for="isAnonymous">Анонимный</label>
+					</div>
+					<select id="surveyType" class="swal2-input" style="width: auto; flex-grow: 1; margin-left: 15px;">
+						<option value="test">Тест</option>
+						<option value="survey">Опрос</option>
+					</select>
+				</div>
+				<input id="surveyTitle" class="swal2-input" placeholder="Название опроса">
+				<textarea id="surveyDescription" class="swal2-textarea" placeholder="Описание опроса"></textarea>
+			`,
+			focusConfirm: false,
+			preConfirm: () => {
+				const title = document.getElementById('surveyTitle').value.trim();
+				const description = document.getElementById('surveyDescription').value.trim();
+				const surveyType = document.getElementById('surveyType').value;
+				const isAnonymous = document.getElementById('isAnonymous').checked;
+
+				if (!title) {
+					Swal.showValidationMessage('Название опроса обязательно');
+					return false;
+				}
+				return { title, description, survey_type: `${isAnonymous ? 'anon_' : 'id_'}${surveyType}` };
+			},
+			confirmButtonText: 'Создать',
+			showCancelButton: true,
+			cancelButtonText: 'Отмена',
+		}).then((result) => {
+			if (result.isConfirmed) {
+				const { title, description, survey_type } = result.value;
+
+				fetch('/survey/create', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'X-CSRFToken': csrfToken  // Отправляем CSRF-токен через заголовок
+					},
+					credentials: 'same-origin',
+					body: JSON.stringify({
+						title: title,
+						description: description,
+						survey_type: survey_type  // Передаем полный тип опроса на сервер
+					})
+				})
+					.then(async (response) => {
+						const data = await response.json(); // Парсим JSON
+						if (!response.ok) {
+							// Если статус не OK, выбрасываем сообщение
+							throw new Error(data.message || 'Произошла ошибка.');
+						}
+						return data;
+					})
+					.then((data) => {
+						if (data.success) {
+							Swal.fire('Успех!', 'Опрос успешно добавлен.', 'success')
+								.then(() => location.reload());
+						} else {
+							// Если success = false
+							Swal.fire('Ошибка!', data.message, 'error');
+						}
+					})
+					.catch((error) => {
+						// Локализация ошибок
+						console.error('Достигнут лимит:', error.message);
+						if (error.message === 'Достигнут лимит создания опросов.') {
+							Swal.fire({
+								title: 'Лимит достигнут',
+								text: 'Вы достигли максимального количества опросов.',
+								icon: 'warning',
+								confirmButtonText: 'ОК',
+							});
+						} else {
+							Swal.fire('Достигнут лимит', error.message, 'error');
+						}
+					});
+			}
+		});
+	};
+
+
+	window.addQuestion = function (surveyId) {
+		Swal.fire({
+			title: 'Добавить вопрос',
+			input: 'text',
+			inputLabel: 'Текст вопроса',
+			inputPlaceholder: 'Введите текст вопроса',
+			showCancelButton: true,
+			confirmButtonText: 'Добавить',
+			preConfirm: (questionText) => {
+				if (!questionText.trim()) {
+					Swal.showValidationMessage('Текст вопроса обязателен');
+				}
+				return questionText.trim();
+			}
+		}).then((result) => {
+			if (result.isConfirmed) {
+				const questionText = result.value;
+
+				fetch(`/survey/${surveyId}/questions`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						"X-CSRFToken": getCsrfToken()
+					},
+					credentials: 'same-origin',
+					body: JSON.stringify({
+						text: questionText
+					})
+				})
+					.then(response => {
+						if (!response.ok) {
+							throw new Error('Ошибка при добавлении вопроса');
+						}
+						return response.json();
+					})
+					.then(data => {
+						if (data.success) {
+							// Динамическое добавление вопроса в список
+							const questionList = document.getElementById('question-list');
+							const newQuestionHTML = `
+								<div class="card mb-3">
+									<div class="card-body">
+										<h5 class="card-title" data-question-id="${data.question.id}">Вопрос: ${encodeHTML(data.question.text)}</h5>
+										<div class="d-flex align-items-center justify-content-between">
+											<div class="form-check d-flex align-items-center">
+												<!-- Используем уникальный ID для чекбокса -->
+												<input class="form-check-input me-2" type="checkbox" id="multiAnswer-${data.question.id}" 
+													   ${data.question.question_type === 'multiple' ? 'checked' : ''} 
+													   onchange="toggleMultipleAnswer(${data.question.id}, this.checked)">
+												<label class="form-check-label" for="multiAnswer-${data.question.id}">
+													Множественный выбор
+												</label>
+											</div>
+											<div>
+												<button class="btn btn-primary btn-sm me-2" onclick="addEmptyAnswer(${data.question.id}, ${surveyId})">Добавить ответ</button>
+												<button class="btn btn-primary btn-sm me-2" onclick="addTextFieldAnswer(${data.question.id}, ${surveyId})">Добавить текстовое поле</button>
+												<button class="btn btn-secondary btn-sm me-2" onclick="editQuestion(${data.question.id}, ${surveyId})">Редактировать</button>
+												<button class="btn btn-danger btn-sm" onclick="deleteQuestion(${data.question.id}, ${surveyId})">Удалить вопрос</button>
+											</div>
+										</div>
+										<div class="mt-3">
+											<h6>Ответы:</h6>
+											<ul class="list-group">
+												<li class="list-group-item">Нет ответов</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							`;
+
+							questionList.insertAdjacentHTML('beforeend', newQuestionHTML);
+							Swal.fire('Успех!', data.message, 'success');
+						} else {
+							Swal.fire('Ошибка!', data.message, 'error');
+						}
+					})
+					.catch(error => {
+						console.error("Ошибка:", error);
+						Swal.fire({
+							title: 'Ошибка сети',
+							text: 'Произошла ошибка на сервере. Пожалуйста, попробуйте позже.',
+							icon: 'error',
+							confirmButtonText: 'ОК'
+						});
+					});
+			}
+		});
+	};
+
+
+		window.addEmptyAnswer = function(questionId, surveyId) {
+			const questionCard = document.querySelector(`[data-question-id="${questionId}"]`).closest('.card-body');
+			const choiceList = questionCard.querySelector('ul.list-group');
+
+			// Получаем тип опроса из атрибута data-survey-type
+			const surveyType = document.getElementById('survey-management')?.dataset.surveyType || '';
+
+			// Добавляем новую пустую форму
+			const newChoiceHTML = `
+				<li class="list-group-item d-flex justify-content-between align-items-center new-choice-form">
+					<input class="form-control me-3" type="text" placeholder="Введите текст ответа" id="newAnswerText">
+					<div class="d-flex align-items-center">
+						${surveyType.endsWith('_test') ? `
+							<div class="form-check me-3">
+								<input class="form-check-input" type="checkbox" id="newIsCorrect">
+								<label class="form-check-label">Правильный ответ</label>
+							</div>
+						` : ''}
+						<button class="btn btn-sm btn-success me-2" onclick="saveAnswer(${questionId}, ${surveyId})">Сохранить</button>
+						<button class="btn btn-sm btn-danger" onclick="cancelAddAnswer()">Отмена</button>
+					</div>
+				</li>
+			`;
+			choiceList.insertAdjacentHTML('beforeend', newChoiceHTML);
+		};
+
+
+		window.cancelAddAnswer = function() {
+			const newChoiceForm = document.querySelector('.new-choice-form');
+			if (newChoiceForm) newChoiceForm.remove();
+		};
+
+		window.saveAnswer = function(questionId, surveyId) {
+			const newAnswerText = document.getElementById('newAnswerText').value.trim();
+			const newIsCorrect = document.getElementById('newIsCorrect') ? document.getElementById('newIsCorrect').checked : false;
+
+			if (!newAnswerText) {
+				Swal.fire('Ошибка', 'Текст ответа обязателен.', 'error');
+				return;
+			}
+
+			fetch(`/survey/${surveyId}/questions/${questionId}/answers`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-CSRFToken': getCsrfToken()
+				},
+				credentials: 'same-origin',
+				body: JSON.stringify({
+					text: newAnswerText,
+					is_correct: newIsCorrect,
+					answer_type: 'choice'
+				})
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+					Swal.fire('Успех', 'Ответ успешно добавлен.', 'success');
+					// Полная перерисовка вопроса
+					fetch(`/survey/${surveyId}`, {
+						method: 'GET',
+						headers: { 'Content-Type': 'application/json' },
+						credentials: 'same-origin'
+					})
+					.then(response => response.json())
+					.then(data => {
+						if (data.survey) {
+							renderSurveyManagement(data.survey);
+						} else {
+							Swal.fire('Ошибка', 'Не удалось обновить данные опроса.', 'error');
+						}
+					});
+				} else {
+					Swal.fire('Ошибка', data.message, 'error');
+				}
+			})
+			.catch(error => {
+				console.error('Ошибка сети:', error);
+				Swal.fire('Ошибка сети', 'Произошла ошибка на сервере. Пожалуйста, попробуйте позже.', 'error');
+			});
+		};
+
+		window.addTextFieldAnswer = function(questionId, surveyId) {
+			const choiceList = document.querySelector(`ul[data-question-id="${questionId}"]`);
+
+			// Создаём пустую форму для ввода текста
+			const newChoiceForm = document.createElement('li');
+			newChoiceForm.className = 'list-group-item d-flex justify-content-between align-items-center';
+			newChoiceForm.innerHTML = `
+				<input type="text" class="form-control me-2" placeholder="Введите текст для текстового поля" id="newTextField-${Date.now()}">
+				<div>
+					<button class="btn btn-sm btn-success me-2" onclick="saveTextFieldAnswer(this, ${questionId}, ${surveyId})">Сохранить</button>
+					<button class="btn btn-sm btn-danger" onclick="cancelAddTextField(this)">Отмена</button>
+				</div>
+			`;
+
+			choiceList.appendChild(newChoiceForm);
+		};
+
+		// Функция сохранения текстового поля
+		window.saveTextFieldAnswer = function(button, questionId, surveyId) {
+			const listItem = button.closest('li');
+			const inputField = listItem.querySelector('input');
+			const text = inputField.value.trim();
+
+			if (!text) {
+				Swal.fire('Ошибка', 'Текст не может быть пустым.', 'error');
+				return;
+			}
+
+			// Отправка на сервер
+			fetch(`/survey/${surveyId}/questions/${questionId}/answers`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-CSRFToken': getCsrfToken()
+				},
+				credentials: 'same-origin',
+				body: JSON.stringify({
+					text: text,
+					is_correct: false,
+					answer_type: 'text_field'
+				})
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+					Swal.fire('Успех', 'Текстовое поле успешно добавлено.', 'success');
+					// Перерисовка вопроса
+					fetch(`/survey/${surveyId}`, {
+						method: 'GET',
+						headers: { 'Content-Type': 'application/json' },
+						credentials: 'same-origin'
+					})
+					.then(response => response.json())
+					.then(data => {
+						if (data.survey) {
+							renderSurveyManagement(data.survey);
+						} else {
+							Swal.fire('Ошибка', 'Не удалось обновить данные опроса.', 'error');
+						}
+					});
+				} else {
+					Swal.fire('Ошибка', data.message, 'error');
+				}
+			})
+			.catch(error => {
+				console.error('Ошибка сети:', error);
+				Swal.fire('Ошибка сети', 'Произошла ошибка на сервере. Пожалуйста, попробуйте позже.', 'error');
+			});
+		};
+
+		// Функция отмены добавления текстового поля
+		window.cancelAddTextField = function(button) {
+			const listItem = button.closest('li');
+			listItem.remove();
+		};
+
+
+		window.moveAnswer = function(choiceId, direction) {
+			const choiceItem = document.querySelector(`[data-choice-id="${choiceId}"]`);
+			if (!choiceItem) {
+				console.error('Ответ не найден в DOM.');
+				return;
+			}
+
+			let adjacentChoiceId;
+
+			if (direction === 'up') {
+				const previousSibling = choiceItem.previousElementSibling;
+				if (previousSibling) {
+					adjacentChoiceId = previousSibling.dataset.choiceId;
+				} else {
+					return; // Ничего не делаем, если это первый элемент
+				}
+			} else if (direction === 'down') {
+				const nextSibling = choiceItem.nextElementSibling;
+				if (nextSibling) {
+					adjacentChoiceId = nextSibling.dataset.choiceId;
+				} else {
+					return; // Ничего не делаем, если это последний элемент
+				}
+			}
+
+			// Получаем surveyId из data-атрибута
+			const surveyManagement = document.getElementById('question-list');
+			const surveyId = surveyManagement ? surveyManagement.dataset.surveyId : undefined;
+
+			if (!surveyId) {
+				console.error('Survey ID is undefined.');
+				return;
+			}
+
+			// Получаем questionId из data-атрибута
+			const questionId = choiceItem.closest('.card-body').querySelector('[data-question-id]').dataset.questionId;
+
+			// Обновляем порядок в базе данных
+			updateOrder(choiceId, adjacentChoiceId)
+				.then(success => {
+					if (success) {
+						// После обновления данных, повторно рендерим список ответов
+						reloadChoices(questionId, surveyId);
+					}
+				})
+				.catch(error => {
+					console.error('Ошибка при обновлении порядка:', error);
+				});
+		};
+
+		function updateOrder(currentChoiceId, adjacentChoiceId) {
+			return fetch(`/survey/choices/${currentChoiceId}/swap-order/${adjacentChoiceId}`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-CSRFToken': getCsrfToken()
+				},
+				credentials: 'same-origin'
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+					return true;
+				} else {
+					console.error('Ошибка при обновлении порядка ответов:', data.message);
+					return false;
+				}
+			})
+			.catch(error => {
+				console.error("Ошибка сети:", error);
+				return false;
+			});
+		}
+
+		function reloadChoices(questionId, surveyId) {
+			console.log(`Загрузка ответов для вопроса ${questionId} в опросе ${surveyId}`);
+			fetch(`/survey/${surveyId}/questions/${questionId}/choices`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-CSRFToken': getCsrfToken()
+				},
+				credentials: 'same-origin'
+			})
+			.then(response => response.json())
+			.then(data => {
+				console.log('Полученные данные:', data);
+				if (data.success) {
+					const questionCard = document.querySelector(`[data-question-id="${questionId}"]`).closest('.card-body');
+					const choiceList = questionCard.querySelector('ul.list-group');
+
+					// Очищаем список
+					choiceList.innerHTML = '';
+
+					// Рендерим обновлённые данные
+					data.choices.forEach((choice) => {
+						const newChoiceHTML = `
+							<li class="list-group-item d-flex justify-content-between align-items-center" data-choice-id="${choice.id}">
+								<span class="order">${choice.order}.</span> ${encodeHTML(choice.text || 'Текстовое поле')}
+								<div class="d-flex align-items-center">
+									${data.survey_type && data.survey_type.endsWith('_test') ? `
+										<div class="form-check me-3">
+											<input class="form-check-input" type="checkbox" disabled ${choice.is_correct ? 'checked' : ''}>
+											<label class="form-check-label">
+												Правильный ответ
+											</label>
+										</div>
+									` : ''}
+									<button class="btn btn-sm btn-secondary me-2" onclick="editAnswer(${choice.id}, ${questionId}, ${surveyId})">Редактировать</button>
+									<button class="btn btn-sm btn-danger me-2" onclick="deleteAnswer(${choice.id}, ${questionId}, ${surveyId})">Удалить</button>
+									<button class="btn btn-sm btn-outline-secondary" onclick="moveAnswer(${choice.id}, 'up')">↑</button>
+									<button class="btn btn-sm btn-outline-secondary" onclick="moveAnswer(${choice.id}, 'down')">↓</button>
+								</div>
+							</li>
+						`;
+						choiceList.insertAdjacentHTML('beforeend', newChoiceHTML);
+					});
+				} else {
+					console.error('Ошибка при загрузке обновлённых ответов:', data.message);
+				}
+			})
+			.catch(error => {
+				console.error('Ошибка при загрузке данных для рендеринга списка ответов:', error);
+			});
+		}
+
+        window.addOptionAnswer = function(surveyId) {
+            Swal.fire({
+                title: 'Добавить вариант ответа',
+                input: 'text',
+                inputLabel: 'Текст варианта ответа',
+                inputPlaceholder: 'Введите текст варианта ответа',
+                showCancelButton: true,
+                confirmButtonText: 'Добавить',
+                preConfirm: (optionText) => {
+                    if (!optionText) {
+                        Swal.showValidationMessage('Текст варианта ответа обязателен');
+                    }
+                    return optionText;
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/survey/${surveyId}/options`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": getCsrfToken()
+                        },
+                        credentials: 'same-origin',
+                        body: JSON.stringify({
+                            text: result.value,
+                            is_correct: false  // По умолчанию не правильный
+                        })
+                    })
+                    .then(response => {
+                        if (response.status === 403) {
+                            throw new Error('CSRF токен недействителен или отсутствует.');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire('Успех!', 'Вариант ответа успешно добавлен.', 'success').then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire('Ошибка!', data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Ошибка:", error);
+                        Swal.fire('Ошибка сети', 'Произошла ошибка на сервере. Пожалуйста, попробуйте позже.', 'error');
+                    });
+                }
+            });
+        };
+
+        // Функция для удаления опроса
+        window.deleteSurvey = function(surveyId) {
+            Swal.fire({
+                title: 'Вы уверены?',
+                text: "Вы собираетесь удалить этот опрос. Это действие необратимо.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Да, удалить!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/survey/${surveyId}`, {
+                        method: "DELETE",
+                        headers: {
+                            "X-CSRFToken": getCsrfToken()
+                        },
+                        credentials: 'same-origin'
+                    })
+                    .then(response => {
+                        if (response.status === 403) {
+                            throw new Error('CSRF токен недействителен или отсутствует.');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire('Удалено!', 'Опрос был успешно удален.', 'success').then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire('Ошибка!', data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Ошибка:", error);
+                        Swal.fire('Ошибка сети', 'Произошла ошибка на сервере. Пожалуйста, попробуйте позже.', 'error');
+                    });
+                }
+            });
+        };
+		
+		window.toggleActive = function (surveyId, currentStatus) {
+			// Приводим currentStatus к булевому значению
+			const isActive = currentStatus === 'true';
+
+			fetch(`/survey/toggle_active/${surveyId}`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-CSRFToken': getCsrfToken()
+				},
+				credentials: 'same-origin'
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+					Swal.fire('Успех!', data.message, 'success').then(() => {
+						location.reload();
+					});
+				} else {
+					Swal.fire('Ошибка!', data.message, 'error');
+				}
+			})
+			.catch(error => {
+				Swal.fire('Ошибка сети', 'Не удалось обновить состояние опроса.', 'error');
+			});
+		};
+
+		window.createLink = function (surveyId, action = 'create') {
+			fetch(`/survey/create_link/${surveyId}`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-CSRFToken': getCsrfToken()
+				},
+				credentials: 'same-origin',
+				body: JSON.stringify({ action: action })
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+					Swal.fire({
+						title: 'Ссылка опроса',
+						text: `Ссылка: ${window.location.origin}/survey/${data.url}`,
+						icon: 'info',
+						showCancelButton: true,
+						confirmButtonText: 'Копировать',
+						cancelButtonText: 'Пере генерировать'
+					}).then((result) => {
+						if (result.isConfirmed) {
+							// Копирование ссылки в буфер обмена
+							navigator.clipboard.writeText(`${window.location.origin}/survey/${data.url}`)
+								.then(() => {
+									Swal.fire('Скопировано!', 'Ссылка скопирована в буфер обмена.', 'success');
+								});
+						} else if (result.dismiss === Swal.DismissReason.cancel) {
+							// Если пользователь нажал "Пере генерировать"
+							window.createLink(surveyId, 'regenerate');
+						}
+					});
+				} else {
+					Swal.fire('Ошибка!', data.message, 'error');
+				}
+			})
+			.catch(error => {
+				Swal.fire('Ошибка сети', 'Не удалось создать ссылку.', 'error');
+			});
+		};
+
+		window.managePassword = function (surveyId, currentPassword) {
+			if (!currentPassword) {
+				// Если пароль отсутствует, открываем модальное окно для добавления
+				Swal.fire({
+					title: 'Добавить пароль',
+					input: 'password',
+					inputLabel: 'Введите пароль',
+					inputPlaceholder: 'Пароль',
+					showCancelButton: true,
+					confirmButtonText: 'Сохранить',
+					cancelButtonText: 'Отмена',
+					preConfirm: (password) => {
+						if (!password) {
+							Swal.showValidationMessage('Пароль не может быть пустым.');
+						}
+						return password;
+					}
+				}).then((result) => {
+					if (result.isConfirmed) {
+						fetch(`/survey/add_password/${surveyId}`, {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json',
+								'X-CSRFToken': getCsrfToken()
+							},
+							credentials: 'same-origin',
+							body: JSON.stringify({ password: result.value })
+						})
+						.then(response => response.json())
+						.then(data => {
+							if (data.success) {
+								Swal.fire('Успех!', data.message, 'success').then(() => location.reload());
+							} else {
+								Swal.fire('Ошибка!', data.message, 'error');
+							}
+						})
+						.catch(() => {
+							Swal.fire('Ошибка сети', 'Не удалось добавить пароль.', 'error');
+						});
+					}
+				});
+			} else {
+				// Если пароль существует, открываем модальное окно редактирования
+				let isPasswordVisible = false;
+				let passwordDisplay = "******";
+			
+				Swal.fire({
+					title: 'Редактировать пароль',
+					html: `
+						<input id="passwordInput" class="swal2-input" type="password" value="${passwordDisplay}" disabled>
+						<button id="togglePassword" class="swal2-styled swal2-default-btn" style="margin-top: 10px;">Увидеть пароль</button>
+						<button id="deletePassword" class="swal2-styled swal2-cancel-btn" style="margin-top: 10px;">Удалить пароль</button>
+					`,
+					showCancelButton: true,
+					confirmButtonText: 'Сохранить',
+					cancelButtonText: 'Отмена',
+					preConfirm: () => {
+						const newPassword = document.getElementById('passwordInput').value;
+						if (newPassword === passwordDisplay) {
+							return currentPassword; // Если поле не изменено, оставляем текущий пароль
+						}
+						return newPassword;
+					},
+					didRender: () => {
+						const togglePassword = document.getElementById('togglePassword');
+						const deletePassword = document.getElementById('deletePassword');
+						const passwordInputEl = document.getElementById('passwordInput');
+			
+						togglePassword.addEventListener('click', () => {
+							if (!isPasswordVisible) {
+								passwordInputEl.type = 'text';
+								passwordInputEl.value = currentPassword || '';
+								togglePassword.textContent = 'Скрыть пароль';
+							} else {
+								passwordInputEl.type = 'password';
+								passwordInputEl.value = passwordDisplay;
+								togglePassword.textContent = 'Увидеть пароль';
+							}
+							isPasswordVisible = !isPasswordVisible;
+						});
+			
+						deletePassword.addEventListener('click', () => {
+							Swal.fire({
+								title: 'Удалить пароль?',
+								text: "Вы уверены, что хотите удалить пароль для этого опроса?",
+								icon: 'warning',
+								showCancelButton: true,
+								confirmButtonText: 'Да, удалить',
+								cancelButtonText: 'Отмена'
+							}).then((result) => {
+								if (result.isConfirmed) {
+									fetch(`/survey/delete_password/${surveyId}`, {
+										method: 'POST',
+										headers: {
+											'Content-Type': 'application/json',
+											'X-CSRFToken': getCsrfToken()
+										},
+										credentials: 'same-origin'
+									})
+									.then(response => response.json())
+									.then(data => {
+										if (data.success) {
+											Swal.fire('Успех!', data.message, 'success').then(() => location.reload());
+										} else {
+											Swal.fire('Ошибка!', data.message, 'error');
+										}
+									})
+									.catch(() => {
+										Swal.fire('Ошибка сети', 'Не удалось удалить пароль.', 'error');
+									});
+								}
+							});
+						});
+					}
+				}).then((result) => {
+					if (result.isConfirmed) {
+						fetch(`/survey/add_password/${surveyId}`, {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json',
+								'X-CSRFToken': getCsrfToken()
+							},
+							credentials: 'same-origin',
+							body: JSON.stringify({ password: result.value })
+						})
+						.then(response => response.json())
+						.then(data => {
+							if (data.success) {
+								Swal.fire('Успех!', data.message, 'success').then(() => location.reload());
+							} else {
+								Swal.fire('Ошибка!', data.message, 'error');
+							}
+						})
+						.catch(() => {
+							Swal.fire('Ошибка сети', 'Не удалось сохранить пароль.', 'error');
+						});
+					}
+				});
+			};
+		};
+		
+		window.toggleMultipleAnswer = function(questionId, isMultiple) {
+			const csrfToken = getCsrfToken(); // Получаем CSRF-токен
+
+			fetch(`/survey/questions/${questionId}/toggle-multiple`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-CSRFToken': csrfToken
+				},
+				credentials: 'same-origin',
+				body: JSON.stringify({ is_multiple: isMultiple })
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+					Swal.fire({
+						icon: 'success',
+						title: 'Успех!',
+						text: isMultiple ? 'Множественный выбор включён.' : 'Множественный выбор отключён.',
+						timer: 2000,
+						showConfirmButton: false
+					});
+				} else {
+					Swal.fire({
+						icon: 'error',
+						title: 'Ошибка!',
+						text: data.message || 'Не удалось изменить настройку.',
+						timer: 2000,
+						showConfirmButton: false
+					});
+				}
+			})
+			.catch(error => {
+				console.error('Ошибка сети:', error);
+				Swal.fire({
+					icon: 'error',
+					title: 'Ошибка сети!',
+					text: 'Произошла ошибка при подключении к серверу.',
+					timer: 2000,
+					showConfirmButton: false
+				});
+			});
+		};
+
+		
+    });
+	
+	
+document.addEventListener('DOMContentLoaded', function () {
+    const bottomPanel = document.getElementById('bottomPanel');
+    const panelContent = document.getElementById('panelContent');
+    const openPanelButton = document.getElementById('openPanel');
+    const closePanelButton = document.getElementById('closePanel');
+
+    // Скрываем панель по умолчанию
+    panelContent.classList.add('hidden');
+
+    // Открытие панели при нажатии на кнопку "Задать вопрос"
+    openPanelButton.addEventListener('click', function (e) {
+        e.stopPropagation();
+        panelContent.classList.remove('hidden'); // Убираем класс hidden для отображения
+        panelContent.style.bottom = '60px'; // Поднимаем панель
+        bottomPanel.classList.add('active');
+    });
+
+    // Закрытие панели при нажатии на кнопку "X"
+    closePanelButton.addEventListener('click', function (e) {
+        e.stopPropagation();
+        panelContent.style.bottom = '-400px'; // Скрываем панель
+        bottomPanel.classList.remove('active');
+        panelContent.classList.add('hidden'); // Добавляем класс hidden, чтобы скрыть панель
+    });
+
+    // Закрытие панели при клике вне ее
+    document.addEventListener('click', function (e) {
+        if (!panelContent.contains(e.target) && !openPanelButton.contains(e.target)) {
+            panelContent.style.bottom = '-400px';
+            bottomPanel.classList.remove('active');
+            panelContent.classList.add('hidden'); // Добавляем класс hidden, чтобы скрыть панель
+        }
+    });
+
+    // Обработка формы отправки сообщений
+    document.getElementById('messageForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        // Сбор данных формы
+        const formData = {
+            first_name: document.getElementById('firstName').value,
+            last_name: document.getElementById('lastName').value,
+            middle_name: document.getElementById('middleName').value,
+            contact_number: document.getElementById('contactNumber').value,
+            contact_email: document.getElementById('contactEmail').value,
+            content: document.getElementById('content').value
+        };
+
+        // Получение CSRF токена, если используете Flask-WTF
+        const csrfToken = "{{ csrf_token() }}";  // Убедитесь, что csrf_token передается в шаблон
+
+        // Отправка данных на сервер
+        fetch('{{ url_for("send_message") }}', {  // Используем url_for для динамического пути
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken  // Добавляем CSRF токен в заголовки
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Успешное уведомление через SweetAlert2
+                Swal.fire({
+                    title: 'Успешно!',
+                    text: data.message,
+                    icon: 'success',
+                    confirmButtonText: 'ОК'
+                });
+
+                // Закрытие панели
+                panelContent.style.bottom = '-400px';
+                bottomPanel.classList.remove('active');
+                panelContent.classList.add('hidden'); // Добавляем класс hidden, чтобы скрыть панель
+
+                // Очистка формы
+                document.getElementById('messageForm').reset();
+            } else {
+                // Обработка ошибок и уведомление об ошибке
+                let errorMessages = '';
+                if (data.errors) {
+                    for (const field in data.errors) {
+                        errorMessages += `${data.errors[field]}\n`;
+                    }
+                    Swal.fire({
+                        title: 'Ошибка',
+                        text: 'Ошибки при отправке:\n' + errorMessages,
+                        icon: 'error',
+                        confirmButtonText: 'ОК'
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Ошибка',
+                        text: 'Ошибка при отправке сообщения: ' + data.message,
+                        icon: 'error',
+                        confirmButtonText: 'ОК'
+                    });
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            // Показываем модальное окно Bootstrap при ошибке отправки
+            const modalBody = document.querySelector('#notificationModal .modal-body');
+            modalBody.textContent = 'Не удалось отправить сообщение. Попробуйте позже.';
+            const notificationModal = new bootstrap.Modal(document.getElementById('notificationModal'));
+            notificationModal.show();
+        });
+    });
+});
+	
+</script>
+</body>
+</html>

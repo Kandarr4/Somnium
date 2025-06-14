@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="133" height="133" viewBox="0 0 133 133">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 61.297px;
+        font-family: "Myriad Pro";
+      }
+
+      .cls-2 {
+        font-size: 66.667px;
+        font-family: "Times New Roman";
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+    </style>
+  </defs>
+  <text id="a" class="cls-1" transform="translate(30.161 130.411) scale(2.269 2.447)">a</text>
+  <text id="_" data-name="↓" class="cls-2" transform="translate(66.5 55.404) scale(1.86 1)">↓</text>
+</svg>

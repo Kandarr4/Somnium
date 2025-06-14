@@ -1,0 +1,1786 @@
+{% extends "base.html" %}
+
+{% block title %}Somnium - IT компания | Разработка ПО и IT-услуги{% endblock %}
+
+{% block additional_css %}
+/* Hero Carousel Section */
+.hero-carousel-section {
+  position: relative;
+  overflow: hidden;
+  padding-top: 80px;
+  z-index: 1;
+}
+
+.hero-carousel {
+  position: relative;
+  z-index: 2;
+}
+
+.swiper-container {
+  width: 100%;
+  height: 700px;
+  overflow: visible;
+}
+
+@media (max-width: 991px) {
+  .swiper-container {
+    height: auto;
+  }
+}
+
+/* Hero Slides */
+.hero-slide {
+  position: relative;
+  width: 100%;
+  height: 700px;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 80px 0;
+}
+
+@media (max-width: 991px) {
+  .hero-slide {
+    height: auto;
+    padding: 100px 0;
+  }
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(37, 99, 235, 0.8));
+  z-index: 1;
+}
+
+.gradient-overlay-2 {
+  background: linear-gradient(135deg, rgba(76, 29, 149, 0.9), rgba(124, 58, 237, 0.8));
+}
+
+.gradient-overlay-3 {
+  background: linear-gradient(135deg, rgba(6, 95, 70, 0.9), rgba(5, 150, 105, 0.8));
+}
+
+.gradient-overlay-4 {
+  background: linear-gradient(135deg, rgba(153, 27, 27, 0.9), rgba(220, 38, 38, 0.8));
+}
+
+.hero-slide .container {
+  position: relative;
+  z-index: 2;
+}
+
+/* Particles Background */
+.particles-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0.4;
+}
+
+/* Matrix Background */
+.matrix-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0.1;
+  background-image: linear-gradient(rgba(0, 0, 0, 0) 50%, rgba(0, 255, 0, 0.2) 50%), 
+               linear-gradient(90deg, rgba(0, 0, 0, 0) 50%, rgba(0, 255, 0, 0.2) 50%);
+  background-size: 10px 10px;
+  animation: matrixMove 20s linear infinite;
+}
+
+@keyframes matrixMove {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 50px 50px;
+  }
+}
+
+/* Hero Content */
+.hero-content {
+  color: white;
+  padding-right: 30px;
+}
+
+@media (max-width: 991px) {
+  .hero-content {
+    padding-right: 0;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 20px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.hero-badge:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.icon-badge {
+  margin-right: 8px;
+  font-size: 14px;
+}
+
+.hero-content h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  line-height: 1.2;
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 1199px) {
+  .hero-content h1 {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 575px) {
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+}
+
+.hero-content h1:hover {
+  transform: translateY(-5px);
+  text-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.text-gradient {
+  background: linear-gradient(90deg, #60a5fa, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+
+.hero-content p {
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 300;
+  line-height: 1.7;
+  max-width: 560px;
+}
+
+@media (max-width: 991px) {
+  .hero-content p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Hero Buttons */
+.hero-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+@media (max-width: 991px) {
+  .hero-buttons {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 575px) {
+  .hero-buttons {
+    flex-direction: column;
+  }
+}
+
+.hero-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 30px;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-btn:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+  z-index: 1;
+}
+
+.hero-btn:hover:before {
+  width: 300px;
+  height: 300px;
+}
+
+.hero-btn span, .hero-btn i {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-btn.primary {
+  background-color: #fff;
+  color: #2563eb;
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.25);
+}
+
+.hero-btn.primary:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
+}
+
+.hero-btn.secondary {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.hero-btn.secondary:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-5px);
+}
+
+.hero-btn i {
+  transition: all 0.3s ease;
+}
+
+.hero-btn.primary i {
+  margin-left: 10px;
+  font-size: 0.9rem;
+}
+
+.hero-btn.secondary i {
+  margin-right: 10px;
+  font-size: 0.9rem;
+}
+
+.hero-btn.primary:hover i {
+  transform: translateX(5px);
+  animation: iconPulse 1.5s infinite;
+}
+
+.hero-btn.secondary:hover i {
+  animation: iconPulse 1.5s infinite;
+}
+
+@keyframes iconPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Hero Image */
+.hero-image {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+/* SVG Анимации */
+.tech-orbit-svg,
+.web-dev-svg,
+.network-svg,
+.security-svg {
+  max-width: 100%;
+  height: auto;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2));
+}
+
+.center-logo {
+  transform-origin: center;
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.05);
+    filter: brightness(1.2);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+.orbit-point {
+  filter: drop-shadow(0 0 5px currentColor);
+}
+
+.web-element, .mobile-element {
+  transition: all 0.3s ease;
+}
+
+.data-packet {
+  filter: drop-shadow(0 0 3px currentColor);
+}
+
+/* Floating Tech Icons */
+.floating-tech-icons {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+}
+
+.tech-icon {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  animation: float 3s ease-in-out infinite;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0;
+}
+
+.tech-icon i {
+  font-size: 30px;
+  color: #2563eb;
+  transition: all 0.3s ease;
+}
+
+.tech-icon:nth-child(1) {
+  top: 15%;
+  left: 10%;
+  animation-delay: 0s;
+  animation-duration: 3s;
+}
+
+.tech-icon:nth-child(2) {
+  top: 60%;
+  left: 15%;
+  animation-delay: 0.5s;
+  animation-duration: 4s;
+}
+
+.tech-icon:nth-child(3) {
+  top: 25%;
+  right: 15%;
+  animation-delay: 1s;
+  animation-duration: 3.5s;
+}
+
+.tech-icon:nth-child(4) {
+  top: 70%;
+  right: 10%;
+  animation-delay: 1.5s;
+  animation-duration: 4.5s;
+}
+
+.tech-icon:nth-child(5) {
+  top: 45%;
+  left: 30%;
+  animation-delay: 2s;
+  animation-duration: 5s;
+}
+
+.tech-icon:hover {
+  transform: scale(1.2) translateY(-10px);
+  box-shadow: 0 15px 35px rgba(37, 99, 235, 0.3);
+  z-index: 10;
+}
+
+.tech-icon:hover i {
+  transform: rotate(360deg);
+  color: #1d4ed8;
+}
+
+.swiper-slide-active .tech-icon {
+  opacity: 1;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Custom Progress Bar */
+.swiper-progress-bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.3);
+  z-index: 10;
+}
+
+.swiper-progress-bar .progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  background-color: #fff;
+  transition: width 0.1s linear;
+}
+
+/* Shape Divider */
+.hero-shape-divider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  z-index: 2;
+}
+
+.hero-shape-divider svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 80px;
+}
+
+.hero-shape-divider .shape-fill {
+  fill: #FFFFFF;
+}
+
+/* Swiper Navigation & Pagination */
+.swiper-pagination {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  text-align: center;
+}
+
+.swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.4);
+  margin: 0 5px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: white;
+  transform: scale(1.2);
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  position: absolute;
+  top: 50%;
+  width: 50px;
+  height: 50px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  z-index: 10;
+  cursor: pointer;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.swiper-button-prev {
+  left: 30px;
+  transform: translateY(-50%);
+}
+
+.swiper-button-next {
+  right: 30px;
+  transform: translateY(-50%);
+}
+
+.swiper-button-prev i,
+.swiper-button-next i {
+  font-size: 20px;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+  .hero-slide {
+    text-align: center;
+  }
+  
+  .hero-content {
+    margin-bottom: 50px;
+  }
+  
+  .hero-content p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .hero-buttons {
+    justify-content: center;
+  }
+  
+  .swiper-button-prev,
+  .swiper-button-next {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .swiper-button-prev {
+    left: 15px;
+  }
+  
+  .swiper-button-next {
+    right: 15px;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-badge {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+  
+  .hero-content h1 {
+    font-size: 2.2rem;
+  }
+  
+  .hero-content p {
+    font-size: 1rem;
+  }
+  
+  .hero-btn {
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+  
+  .tech-icon {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .tech-icon i {
+    font-size: 24px;
+  }
+  
+  .swiper-button-prev,
+  .swiper-button-next {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .swiper-button-prev i,
+  .swiper-button-next i {
+    font-size: 16px;
+  }
+  
+  .swiper-pagination-bullet {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .hero-shape-divider svg {
+    height: 60px;
+  }
+}
+
+@media (max-width: 575px) {
+  .hero-badge {
+    font-size: 10px;
+    padding: 5px 10px;
+    margin-bottom: 15px;
+  }
+  
+  .hero-content h1 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+  }
+  
+  .hero-content p {
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+  }
+  
+  .hero-btn {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+  
+  .hero-image {
+    transform: scale(0.9);
+  }
+  
+  .tech-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .tech-icon i {
+    font-size: 20px;
+  }
+  
+  .swiper-button-prev,
+  .swiper-button-next {
+    width: 30px;
+    height: 30px;
+    display: none;
+  }
+  
+  .swiper-pagination-bullet {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .hero-shape-divider svg {
+    height: 40px;
+  }
+}
+{% endblock %}
+
+{% block content %}
+<!-- Hero Carousel Section -->
+<section class="hero-carousel-section">
+  <div class="hero-carousel">
+    <div class="swiper-container">
+      <div class="swiper-wrapper">
+        <!-- Слайд 1 - Инновационные решения -->
+        <div class="swiper-slide">
+          <div class="hero-slide">
+            <div class="hero-overlay"></div>
+            <div class="particles-container" id="particles-1"></div>
+            <div class="container">
+              <div class="row align-items-center">
+                <div class="col-lg-6 hero-content">
+                  <div class="hero-badge animate__animated animate__fadeInDown">
+                    <i class="fas fa-rocket icon-badge"></i>
+                    <span>Инновационные решения</span>
+                  </div>
+                  <h1 class="animate__animated animate__fadeInUp">
+                    Технологии будущего с <span class="text-gradient">Somnium</span>
+                  </h1>
+                  <p class="animate__animated animate__fadeInUp animate__delay-1s">
+                    Мы превращаем сложные идеи в простые технологические решения. Комплексная разработка ПО, сетевых решений и веб-приложений, которые выводят ваш бизнес на новый уровень.
+                  </p>
+                  <div class="hero-buttons animate__animated animate__fadeInUp animate__delay-2s">
+                    <a href="#solutions" class="hero-btn primary js-scroll-trigger">
+                      <span>Наши решения</span>
+                      <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a href="#contact" class="hero-btn secondary js-scroll-trigger">
+                      <i class="fas fa-headset"></i>
+                      <span>Бесплатная консультация</span>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-lg-6 hero-image animate__animated animate__zoomIn animate__delay-1s">
+                  <svg class="tech-orbit-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Орбиты -->
+                    <circle cx="200" cy="200" r="80" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1" />
+                    <circle cx="200" cy="200" r="130" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1" />
+                    <circle cx="200" cy="200" r="180" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
+                    
+                    <!-- Анимированные точки на орбитах -->
+                    <circle class="orbit-point" cx="280" cy="200" r="6" fill="#60a5fa">
+                      <animateTransform attributeName="transform" type="rotate" from="0 200 200" to="360 200 200" dur="20s" repeatCount="indefinite" />
+                    </circle>
+                    
+                    <circle class="orbit-point" cx="200" cy="330" r="8" fill="#3b82f6">
+                      <animateTransform attributeName="transform" type="rotate" from="90 200 200" to="450 200 200" dur="15s" repeatCount="indefinite" />
+                    </circle>
+                    
+                    <circle class="orbit-point" cx="330" cy="200" r="5" fill="#93c5fd">
+                      <animateTransform attributeName="transform" type="rotate" from="180 200 200" to="540 200 200" dur="25s" repeatCount="indefinite" />
+                    </circle>
+                    
+                    <!-- Логотип в центре -->
+                    <image href="/static/img/logo/f-logo.png" x="150" y="150" width="100" height="100" class="center-logo">
+                      <animate attributeName="opacity" values="0.8;1;0.8" dur="3s" repeatCount="indefinite" />
+                    </image>
+                  </svg>
+                  
+                  <div class="floating-tech-icons">
+                    <div class="tech-icon" data-delay="0">
+                      <i class="fab fa-react"></i>
+                    </div>
+                    <div class="tech-icon" data-delay="0.5">
+                      <i class="fab fa-python"></i>
+                    </div>
+                    <div class="tech-icon" data-delay="1">
+                      <i class="fab fa-js"></i>
+                    </div>
+                    <div class="tech-icon" data-delay="1.5">
+                      <i class="fab fa-node-js"></i>
+                    </div>
+                    <div class="tech-icon" data-delay="2">
+                      <i class="fas fa-database"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hero-shape-divider">
+              <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Слайд 2 - Веб-разработка -->
+        <div class="swiper-slide">
+          <div class="hero-slide">
+            <div class="hero-overlay gradient-overlay-2"></div>
+            <div class="particles-container" id="particles-2"></div>
+            <div class="container">
+              <div class="row align-items-center">
+                <div class="col-lg-6 hero-content">
+                  <div class="hero-badge animate__animated animate__fadeInDown">
+                    <i class="fas fa-code icon-badge"></i>
+                    <span>Веб-разработка</span>
+                  </div>
+                  <h1 class="animate__animated animate__fadeInUp">
+                    Создаем <span class="text-gradient">сайты</span>, которые привлекают клиентов
+                  </h1>
+                  <p class="animate__animated animate__fadeInUp animate__delay-1s">
+                    От корпоративных порталов до интернет-магазинов и мобильных приложений — мы разрабатываем решения, которые не только отражают ваш бренд, но и приносят реальные результаты.
+                  </p>
+                  <div class="hero-buttons animate__animated animate__fadeInUp animate__delay-2s">
+                    <a href="#portfolio" class="hero-btn primary js-scroll-trigger">
+                      <span>Портфолио работ</span>
+                      <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a href="#calculator" class="hero-btn secondary js-scroll-trigger">
+                      <i class="fas fa-calculator"></i>
+                      <span>Рассчитать стоимость</span>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-lg-6 hero-image animate__animated animate__zoomIn animate__delay-1s">
+                  <svg class="web-dev-svg" width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Browser Window -->
+                    <rect x="50" y="80" width="300" height="240" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+                    
+                    <!-- Browser Header -->
+                    <rect x="50" y="80" width="300" height="30" rx="10" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="2"/>
+                    
+                    <!-- Browser Controls -->
+                    <circle cx="70" cy="95" r="5" fill="#ef4444"/>
+                    <circle cx="90" cy="95" r="5" fill="#f59e0b"/>
+                    <circle cx="110" cy="95" r="5" fill="#10b981"/>
+                    
+                    <!-- URL Bar -->
+                    <rect x="130" y="87" width="200" height="16" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1"/>
+                    <text x="150" y="100" font-family="Arial" font-size="10" fill="#64748b">somnium.kz</text>
+                    <circle cx="140" cy="95" r="4" fill="#64748b">
+                      <animate attributeName="fill" values="#64748b;#10b981;#64748b" dur="3s" repeatCount="indefinite"/>
+                    </circle>
+                    
+                    <!-- Browser Content -->
+                    <rect x="70" y="130" width="260" height="40" rx="5" fill="#f1f5f9"/>
+                    <rect x="70" y="180" width="120" height="100" rx="5" fill="#f1f5f9"/>
+                    <rect x="210" y="180" width="120" height="100" rx="5" fill="#f1f5f9"/>
+                    
+                    <!-- Logo in Content -->
+                    <image href="/static/img/logo/f-logo.png" x="150" y="132" width="36" height="36"/>
+                    
+                    <!-- Web Elements Animation -->
+                    <rect class="web-element" x="80" y="190" width="100" height="10" rx="5" fill="#e2e8f0">
+                      <animate attributeName="fill" values="#e2e8f0;#93c5fd;#e2e8f0" dur="4s" repeatCount="indefinite"/>
+                    </rect>
+                    <rect class="web-element" x="80" y="210" width="80" height="10" rx="5" fill="#e2e8f0">
+                      <animate attributeName="fill" values="#e2e8f0;#93c5fd;#e2e8f0" dur="4s" begin="0.5s" repeatCount="indefinite"/>
+                    </rect>
+                    <rect class="web-element" x="80" y="230" width="90" height="10" rx="5" fill="#e2e8f0">
+                      <animate attributeName="fill" values="#e2e8f0;#93c5fd;#e2e8f0" dur="4s" begin="1s" repeatCount="indefinite"/>
+                    </rect>
+                    
+                    <rect class="web-element" x="220" y="190" width="100" height="10" rx="5" fill="#e2e8f0">
+                      <animate attributeName="fill" values="#e2e8f0;#93c5fd;#e2e8f0" dur="4s" begin="1.5s" repeatCount="indefinite"/>
+                    </rect>
+                    <rect class="web-element" x="220" y="210" width="80" height="10" rx="5" fill="#e2e8f0">
+                      <animate attributeName="fill" values="#e2e8f0;#93c5fd;#e2e8f0" dur="4s" begin="2s" repeatCount="indefinite"/>
+                    </rect>
+                    <rect class="web-element" x="220" y="230" width="90" height="10" rx="5" fill="#e2e8f0">
+                      <animate attributeName="fill" values="#e2e8f0;#93c5fd;#e2e8f0" dur="4s" begin="2.5s" repeatCount="indefinite"/>
+                    </rect>
+                    
+                    <!-- Mobile Device -->
+                    <rect x="280" y="240" width="70" height="120" rx="10" fill="#ffffff" stroke="#64748b" stroke-width="2"/>
+                    <rect x="280" y="260" width="70" height="80" fill="#f1f5f9"/>
+                    <circle cx="315" cy="350" r="8" fill="#e2e8f0" stroke="#64748b" stroke-width="1"/>
+                    
+                    <!-- Mobile Elements Animation -->
+                    <rect class="mobile-element" x="290" y="270" width="50" height="5" rx="2.5" fill="#e2e8f0">
+                      <animate attributeName="fill" values="#e2e8f0;#93c5fd;#e2e8f0" dur="3s" repeatCount="indefinite"/>
+                    </rect>
+                    <rect class="mobile-element" x="290" y="285" width="50" height="5" rx="2.5" fill="#e2e8f0">
+                      <animate attributeName="fill" values="#e2e8f0;#93c5fd;#e2e8f0" dur="3s" begin="0.5s" repeatCount="indefinite"/>
+                    </rect>
+                    <rect class="mobile-element" x="290" y="300" width="50" height="5" rx="2.5" fill="#e2e8f0">
+                      <animate attributeName="fill" values="#e2e8f0;#93c5fd;#e2e8f0" dur="3s" begin="1s" repeatCount="indefinite"/>
+                    </rect>
+                    
+                    <!-- Logo in Mobile -->
+                    <image href="/static/img/logo/f-logo.png" x="305" y="320" width="20" height="20"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div class="hero-shape-divider">
+              <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Слайд 3 - IT-инфраструктура -->
+        <div class="swiper-slide">
+          <div class="hero-slide">
+            <div class="hero-overlay gradient-overlay-3"></div>
+            <div class="particles-container" id="particles-3"></div>
+            <div class="container">
+              <div class="row align-items-center">
+                <div class="col-lg-6 hero-content">
+                  <div class="hero-badge animate__animated animate__fadeInDown">
+                    <i class="fas fa-network-wired icon-badge"></i>
+                    <span>IT-инфраструктура</span>
+                  </div>
+                  <h1 class="animate__animated animate__fadeInUp">
+                    Сетевые <span class="text-gradient">решения</span> для бизнеса любого масштаба
+                  </h1>
+                  <p class="animate__animated animate__fadeInUp animate__delay-1s">
+                    Проектирование, внедрение и поддержка IT-инфраструктуры, которая обеспечивает стабильность, безопасность и масштабируемость вашего бизнеса.
+                  </p>
+                  <div class="hero-buttons animate__animated animate__fadeInUp animate__delay-2s">
+                    <a href="#services" class="hero-btn primary js-scroll-trigger">
+                      <span>Подробнее о сервисах</span>
+                      <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a href="#cases" class="hero-btn secondary js-scroll-trigger">
+                      <i class="fas fa-briefcase"></i>
+                      <span>Кейсы клиентов</span>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-lg-6 hero-image animate__animated animate__zoomIn animate__delay-1s">
+                  <svg class="network-svg" width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Центральный сервер с логотипом -->
+                    <circle cx="200" cy="200" r="50" fill="rgba(255,255,255,0.9)" stroke="#3b82f6" stroke-width="2">
+                      <animate attributeName="r" values="50;54;50" dur="4s" repeatCount="indefinite"/>
+                    </circle>
+                    <image href="/static/img/logo/f-logo.png" x="175" y="175" width="50" height="50"/>
+                    
+                    <!-- Пульсирующий эффект вокруг центрального узла -->
+                    <circle cx="200" cy="200" r="60" fill="none" stroke="#3b82f6" stroke-width="2" opacity="0.5">
+                      <animate attributeName="r" values="60;90;60" dur="3s" repeatCount="indefinite"/>
+                      <animate attributeName="opacity" values="0.5;0;0.5" dur="3s" repeatCount="indefinite"/>
+                    </circle>
+                    
+                    <!-- Узлы сети -->
+                    <g class="network-node" transform="translate(100,100)">
+                      <circle cx="0" cy="0" r="25" fill="#ffffff" stroke="#10b981" stroke-width="2"/>
+                      <path d="M-10,-10 L10,10 M-10,10 L10,-10" stroke="#10b981" stroke-width="2"/>
+                      
+                      <!-- Соединительная линия -->
+                      <line x1="0" y1="0" x2="100" y2="100" stroke="#10b981" stroke-width="2" stroke-dasharray="5,5">
+                        <animate attributeName="stroke-dashoffset" from="0" to="20" dur="1s" repeatCount="indefinite"/>
+                      </line>
+                      
+                      <!-- Пакеты данных -->
+                      <circle class="data-packet" cx="50" cy="50" r="5" fill="#10b981">
+                        <animate attributeName="cx" values="0;100" dur="2s" repeatCount="indefinite"/>
+                        <animate attributeName="cy" values="0;100" dur="2s" repeatCount="indefinite"/>
+                      </circle>
+                    </g>
+                    
+                    <g class="network-node" transform="translate(300,100)">
+                      <circle cx="0" cy="0" r="25" fill="#ffffff" stroke="#f59e0b" stroke-width="2"/>
+                      <rect x="-15" y="-15" width="30" height="30" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                      
+                      <line x1="0" y1="0" x2="-100" y2="100" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,5">
+                        <animate attributeName="stroke-dashoffset" from="0" to="20" dur="1s" repeatCount="indefinite"/>
+                      </line>
+                      
+                      <circle class="data-packet" cx="-50" cy="50" r="5" fill="#f59e0b">
+                        <animate attributeName="cx" values="0;-100" dur="2.5s" repeatCount="indefinite"/>
+                        <animate attributeName="cy" values="0;100" dur="2.5s" repeatCount="indefinite"/>
+                      </circle>
+                    </g>
+                    
+                    <g class="network-node" transform="translate(300,300)">
+                      <circle cx="0" cy="0" r="25" fill="#ffffff" stroke="#3b82f6" stroke-width="2"/>
+                      <path d="M-15,0 L15,0 M0,-15 L0,15" stroke="#3b82f6" stroke-width="2"/>
+                      
+                      <line x1="0" y1="0" x2="-100" y2="-100" stroke="#3b82f6" stroke-width="2" stroke-dasharray="5,5">
+                        <animate attributeName="stroke-dashoffset" from="0" to="20" dur="1s" repeatCount="indefinite"/>
+                      </line>
+                      
+                      <circle class="data-packet" cx="-50" cy="-50" r="5" fill="#3b82f6">
+                        <animate attributeName="cx" values="0;-100" dur="1.5s" repeatCount="indefinite"/>
+                        <animate attributeName="cy" values="0;-100" dur="1.5s" repeatCount="indefinite"/>
+                      </circle>
+                    </g>
+                    
+                    <g class="network-node" transform="translate(100,300)">
+                      <circle cx="0" cy="0" r="25" fill="#ffffff" stroke="#ef4444" stroke-width="2"/>
+                      <path d="M-10,0 C-10,-10 10,-10 10,0 C10,10 -10,10 -10,0 Z" fill="none" stroke="#ef4444" stroke-width="2"/>
+                      
+                      <line x1="0" y1="0" x2="100" y2="-100" stroke="#ef4444" stroke-width="2" stroke-dasharray="5,5">
+                        <animate attributeName="stroke-dashoffset" from="0" to="20" dur="1s" repeatCount="indefinite"/>
+                      </line>
+                      
+                      <circle class="data-packet" cx="50" cy="-50" r="5" fill="#ef4444">
+                        <animate attributeName="cx" values="0;100" dur="3s" repeatCount="indefinite"/>
+                        <animate attributeName="cy" values="0;-100" dur="3s" repeatCount="indefinite"/>
+                      </circle>
+                    </g>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div class="hero-shape-divider">
+              <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Слайд 4 - Cybersecurity -->
+        <div class="swiper-slide">
+          <div class="hero-slide">
+            <div class="hero-overlay gradient-overlay-4"></div>
+            <div class="particles-container" id="particles-4"></div>
+            <div class="matrix-bg"></div>
+            <div class="container">
+              <div class="row align-items-center">
+                <div class="col-lg-6 hero-content">
+                  <div class="hero-badge animate__animated animate__fadeInDown">
+                    <i class="fas fa-shield-alt icon-badge"></i>
+                    <span>Кибербезопасность</span>
+                  </div>
+                  <h1 class="animate__animated animate__fadeInUp">
+                    Надежная <span class="text-gradient">защита</span> ваших цифровых активов
+                  </h1>
+                  <p class="animate__animated animate__fadeInUp animate__delay-1s">
+                    Комплексные решения для защиты вашего бизнеса от современных киберугроз, предотвращения утечек данных и обеспечения непрерывности бизнес-процессов.
+                  </p>
+                  <div class="hero-buttons animate__animated animate__fadeInUp animate__delay-2s">
+                    <a href="#security" class="hero-btn primary js-scroll-trigger">
+                      <span>Узнать подробнее</span>
+                      <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a href="#security-audit" class="hero-btn secondary js-scroll-trigger">
+                      <i class="fas fa-user-shield"></i>
+                      <span>Бесплатный аудит</span>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-lg-6 hero-image animate__animated animate__zoomIn animate__delay-1s">
+                  <svg class="security-svg" width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Защитный щит -->
+                    <path d="M200,80 L280,110 C280,200 250,270 200,320 C150,270 120,200 120,110 L200,80" fill="none" stroke="#ef4444" stroke-width="3" opacity="0.8">
+                      <animate attributeName="stroke-width" values="3;5;3" dur="2s" repeatCount="indefinite"/>
+                    </path>
+                    
+                    <!-- Внутренний круг защиты -->
+                    <circle cx="200" cy="200" r="80" fill="none" stroke="#ef4444" stroke-width="2" opacity="0.6">
+                      <animate attributeName="r" values="80;90;80" dur="4s" repeatCount="indefinite"/>
+                    </circle>
+                    
+                    <!-- Внешний круг защиты -->
+                    <circle cx="200" cy="200" r="120" fill="none" stroke="#ef4444" stroke-width="1" opacity="0.4">
+                      <animate attributeName="r" values="120;140;120" dur="6s" repeatCount="indefinite"/>
+                    </circle>
+                    
+                    <!-- Лого в центре щита -->
+                    <circle cx="200" cy="200" r="50" fill="#ffffff" stroke="#ef4444" stroke-width="3" opacity="0.9"/>
+                    <image href="/static/img/logo/f-logo.png" x="175" y="175" width="50" height="50"/>
+                    
+                    <!-- Анимированные атаки -->
+                    <g class="attack-animation">
+                      <!-- Атака 1 -->
+                      <path d="M50,50 L150,150" stroke="#ef4444" stroke-width="2" opacity="0">
+                        <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0s"/>
+                      </path>
+                      <circle cx="50" cy="50" r="5" fill="#ef4444">
+                        <animate attributeName="cx" values="50;150" dur="2s" repeatCount="indefinite" begin="0s"/>
+                        <animate attributeName="cy" values="50;150" dur="2s" repeatCount="indefinite" begin="0s"/>
+                        <animate attributeName="opacity" values="1;0" dur="2s" repeatCount="indefinite" begin="0s"/>
+                      </circle>
+                      
+                      <!-- Атака 2 -->
+                      <path d="M350,50 L250,150" stroke="#ef4444" stroke-width="2" opacity="0">
+                        <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+                      </path>
+                      <circle cx="350" cy="50" r="5" fill="#ef4444">
+                        <animate attributeName="cx" values="350;250" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+                        <animate attributeName="cy" values="50;150" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+                        <animate attributeName="opacity" values="1;0" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+                      </circle>
+                      
+                      <!-- Атака 3 -->
+                      <path d="M350,350 L250,250" stroke="#ef4444" stroke-width="2" opacity="0">
+                        <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="1s"/>
+                      </path>
+                      <circle cx="350" cy="350" r="5" fill="#ef4444">
+                        <animate attributeName="cx" values="350;250" dur="2s" repeatCount="indefinite" begin="1s"/>
+                        <animate attributeName="cy" values="350;250" dur="2s" repeatCount="indefinite" begin="1s"/>
+                        <animate attributeName="opacity" values="1;0" dur="2s" repeatCount="indefinite" begin="1s"/>
+                      </circle>
+                      
+                      <!-- Атака 4 -->
+                      <path d="M50,350 L150,250" stroke="#ef4444" stroke-width="2" opacity="0">
+                        <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="1.5s"/>
+                      </path>
+                      <circle cx="50" cy="350" r="5" fill="#ef4444">
+                        <animate attributeName="cx" values="50;150" dur="2s" repeatCount="indefinite" begin="1.5s"/>
+                        <animate attributeName="cy" values="350;250" dur="2s" repeatCount="indefinite" begin="1.5s"/>
+                        <animate attributeName="opacity" values="1;0" dur="2s" repeatCount="indefinite" begin="1.5s"/>
+                      </circle>
+                    </g>
+                    
+                    <!-- Бинарный код вокруг щита -->
+                    <g class="binary-code">
+                      <text x="100" y="100" font-family="monospace" font-size="10" fill="#ffffff" opacity="0.3">
+                        <tspan x="100" y="100">01001011</tspan>
+                        <animate attributeName="opacity" values="0.3;0.7;0.3" dur="4s" repeatCount="indefinite"/>
+                      </text>
+                      <text x="300" y="100" font-family="monospace" font-size="10" fill="#ffffff" opacity="0.3">
+                        <tspan x="300" y="100">10110110</tspan>
+                        <animate attributeName="opacity" values="0.3;0.7;0.3" dur="4s" begin="1s" repeatCount="indefinite"/>
+                      </text>
+                      <text x="100" y="300" font-family="monospace" font-size="10" fill="#ffffff" opacity="0.3">
+                        <tspan x="100" y="300">11001001</tspan>
+                        <animate attributeName="opacity" values="0.3;0.7;0.3" dur="4s" begin="2s" repeatCount="indefinite"/>
+                      </text>
+                      <text x="300" y="300" font-family="monospace" font-size="10" fill="#ffffff" opacity="0.3">
+                        <tspan x="300" y="300">01010111</tspan>
+                        <animate attributeName="opacity" values="0.3;0.7;0.3" dur="4s" begin="3s" repeatCount="indefinite"/>
+                      </text>
+                    </g>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div class="hero-shape-divider">
+              <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Навигация и пагинация слайдера -->
+      <div class="swiper-pagination"></div>
+      
+      <!-- Навигационные стрелки -->
+      <div class="swiper-button-prev">
+        <i class="fas fa-chevron-left"></i>
+      </div>
+      <div class="swiper-button-next">
+        <i class="fas fa-chevron-right"></i>
+      </div>
+      
+      <!-- Custom Progress Bar -->
+      <div class="swiper-progress-bar">
+        <span class="progress"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div style="
+    background-color: #f0f4f8;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    max-width: 800px;
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
+">
+  <p style="
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.5;
+      color: #333;
+      text-align: center;
+  ">
+    <strong>Quick Queue</strong> — одна платформа для управления всеми вашими очередями. Мультитенантная архитектура для масштабируемого роста вашего бизнеса!
+  </p>
+</div>
+
+						
+<!-- Категории Section -->
+<section class="category-section" id="categories">
+    <div class="container">
+        <div class="section-title">
+            <h2>Наши категории</h2>
+            <p>Изучите наш широкий ассортимент продуктов и услуг, распределенных по категориям для удобного поиска и навигации</p>
+        </div>
+
+        <div class="row" id="categories-container">
+            {% for category in categories %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4 category-container" id="category-{{ category.id }}">
+                <div class="category-card" onclick="showSubcategories({{ category.id }}, '{{ category.name }}')">
+                    <img src="{{ url_for('static', filename='uploads/category/' + category.image) if category.image else url_for('static', filename='img/default-placeholder.png') }}" alt="{{ category.name }}">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ category.name }}</h4>
+                        {% if category.description %}
+                        <p class="card-description">{{ category.description }}</p>
+                        {% endif %}
+                        <span class="card-subcategory-count">Подкатегорий: {{ category.subcategories|length }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Контейнер для подкатегорий -->
+        <div class="row" id="subcategories-container" style="display: none;">
+            <div class="col-12">
+                <div class="navigation-buttons">
+                    <button onclick="showCategories()" class="navigation-button">
+                        <i class="fas fa-arrow-left"></i> Вернуться к категориям
+                    </button>
+                </div>
+            </div>
+            
+            {% for category in categories %}
+            <div class="subcategory-group row" id="subcategory-for-{{ category.id }}" style="display: none; width: 100%;">
+                {% for subcategory in category.subcategories %}
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="subcategory-card" onclick="showProducts({{ subcategory.id }}, '{{ subcategory.name }}')">
+                        <img src="{{ url_for('static', filename='uploads/sub_category/' + subcategory.image) if subcategory.image else url_for('static', filename='img/default-placeholder.png') }}" alt="{{ subcategory.name }}">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ subcategory.name }}</h4>
+                            {% if subcategory.description %}
+                            <p class="card-description">{{ subcategory.description }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Контейнер для товаров -->
+        <div class="row" id="products-container" style="display: none;">
+            <div class="col-12">
+                <div class="navigation-buttons">
+                    <button onclick="showSubcategoriesBack()" class="navigation-button">
+                        <i class="fas fa-arrow-left"></i> Вернуться к подкатегориям
+                    </button>
+                </div>
+            </div>
+            
+            <div class="product-group row" id="product-group">
+                <!-- Продукты будут добавляться динамически -->
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section" id="features">
+    <div class="container">
+        <div class="section-title">
+            <h2 class="text-white">Почему выбирают <span class="text-gradient">Somnium</span></h2>
+            <p class="text-white opacity-80">
+                Мы не просто разработчики, мы ваши партнёры в мире технологий. Сочетаем креативность и профессионализм, технологичность и внимание к деталям.
+            </p>
+        </div>
+
+        <div class="row align-items-center">
+            <div class="col-lg-4">
+                <div class="features-item fade-in-left">
+                    <div class="features-icon">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <div class="content">
+                        <h3>Умные решения</h3>
+                        <p>
+                            Внедряем передовые технологии, обеспечивая высокую эффективность работы ваших систем.
+                        </p>
+                    </div>
+                </div>
+                <div class="features-item fade-in-left" style="animation-delay: 0.2s;">
+                    <div class="features-icon">
+                        <i class="fa-regular fa-envelope"></i>
+                    </div>
+                    <div class="content">
+                        <h3>Интеграция с Email</h3>
+                        <p>
+                            Привяжите систему событий и уведомлений к вашей корпоративной почте.
+                        </p>
+                    </div>
+                </div>
+                <div class="features-item fade-in-left" style="animation-delay: 0.4s;">
+                    <div class="features-icon">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <div class="content">
+                        <h3>Круглосуточная поддержка</h3>
+                        <p>
+                            Наша команда поддержки работает 24/7, обеспечивая помощь в любое время.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="features-image fade-in-up">
+                    <img src="/static/img/choose/hostings.png" alt="Хостинг Somnium">
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="features-item fade-in-right">
+                    <div class="features-icon">
+                        <i class="fa-solid fa-shield-alt"></i>
+                    </div>
+                    <div class="content">
+                        <h3>Серверная защита</h3>
+                        <p>
+                            Обеспечиваем высокий уровень безопасности для всех серверных решений и данных.
+                        </p>
+                    </div>
+                </div>
+                <div class="features-item fade-in-right" style="animation-delay: 0.2s;">
+                    <div class="features-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <div class="content">
+                        <h3>Облачная интеграция</h3>
+                        <p>
+                            Легкая интеграция с облачными сервисами для гибкости и масштабируемости вашего бизнеса.
+                        </p>
+                    </div>
+                </div>
+                <div class="features-item fade-in-right" style="animation-delay: 0.4s;">
+                    <div class="features-icon">
+                        <i class="fa-solid fa-rocket"></i>
+                    </div>
+                    <div class="content">
+                        <h3>Гибкие тарифы хостинга</h3>
+                        <p>
+                            Предлагаем широкий выбор тарифных планов, соответствующих потребностям вашего проекта.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Tabs Section -->
+<section class="tabs-section" id="solutions">
+    <div class="container">
+        <div class="section-title">
+            <h2>Система электронных опросов и тестов</h2>
+            <p>Интуитивно понятная платформа для создания, распространения и анализа опросов и тестов</p>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="tabs-navigation fade-in-left">
+                    <button class="tab-button active" data-tab="create">
+                        <span class="icon"><i class="fa-solid fa-pencil-alt"></i></span>
+                        <span>Создание опросов</span>
+                    </button>
+                    <button class="tab-button" data-tab="analyze">
+                        <span class="icon"><i class="fa-solid fa-chart-bar"></i></span>
+                        <span>Анализ результатов</span>
+                    </button>
+                    <button class="tab-button" data-tab="integrate">
+                        <span class="icon"><i class="fa-solid fa-plug"></i></span>
+                        <span>Интеграция</span>
+                    </button>
+                    <button class="tab-button" data-tab="security">
+                        <span class="icon"><i class="fa-solid fa-shield-alt"></i></span>
+                        <span>Безопасность</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="col-lg-9">
+                <div class="tab-content fade-in-right">
+                    <div class="tab-pane active" id="create">
+                        <div class="tab-image">
+                            <img src="/static/img/tab/create-survey.png" alt="Создание опросов">
+                        </div>
+                        <div class="tab-content-inner">
+                            <h3>Создание опросов и тестов</h3>
+                            <p>
+                                Разрабатывайте настраиваемые опросы и тесты с различными типами вопросов для сбора точной информации от ваших респондентов.
+                            </p>
+                            <ul class="feature-list">
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    <span>Разнообразие типов вопросов</span>
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    <span>Настройка дизайна и брендирование</span>
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    <span>Логические переходы и ветвление</span>
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    <span>Предпросмотр в реальном времени</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="analyze">
+                        <div class="tab-image">
+                            <img src="/static/img/tab/analyze-results.png" alt="Анализ результатов">
+                        </div>
+                        <div class="tab-content-inner">
+                            <h3>Анализ результатов</h3>
+                            <p>
+                                Получайте детализированные отчеты и визуализации для глубокого понимания собранных данных и принятия обоснованных решений.
+                            </p>
+                            <ul class="feature-list">
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    <span>Интерактивные графики и диаграммы</span>
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    <span>Расширенная фильтрация данных</span>
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    <span>Экспорт отчетов в различных форматах</span>
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    <span>Сравнительный анализ результатов</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="integrate">
+                        <div class="tab-image">
+                            <img src="/static/img/tab/integration.png" alt="Интеграция">
+                        </div>
+                        <div class="tab-content-inner">
+                            <h3>Интеграция с сервисами</h3>
+                            <p>
+                                Легко интегрируйте систему с вашими бизнес-инструментами и платформами для повышения эффективности рабочих процессов.
+                            </p>
+                            <ul class="feature-list">
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    <span>API для разработчиков</span>
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    <span>Интеграция с CRM-системами</span>
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    <span>Подключение к email-маркетингу</span>
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    <span>Синхронизация с базами данных</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="security">
+                        <div class="tab-image">
+                            <img src="/static/img/tab/security.png" alt="Безопасность">
+                        </div>
+                        <div class="tab-content-inner">
+                            <h3>Безопасность данных</h3>
+                            <p>
+                                Обеспечьте надежную защиту данных ваших пользователей с помощью передовых мер безопасности и соответствия стандартам.
+                            </p>
+                            <ul class="feature-list">
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    <span>Шифрование данных</span>
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    <span>Регулярное резервное копирование</span>
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    <span>Защита от DDoS-атак</span>
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    <span>Соответствие GDPR и другим стандартам</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section" id="contact">
+    <div class="container">
+        <div class="cta-content fade-in-up">
+            <h2 class="cta-title">Готовы начать проект с Somnium?</h2>
+            <p class="cta-text">Свяжитесь с нами сегодня, и мы поможем реализовать вашу идею в кратчайшие сроки.</p>
+            <a href="/contact" class="cta-button">
+                <span>Обсудить проект</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+// Initialize Swiper
+const swiper = new Swiper('.swiper-container', {
+    // Опции
+    slidesPerView: 1,
+    spaceBetween: 0,
+    speed: 1000,
+    loop: true,
+    autoplay: {
+        delay: 7000,
+        disableOnInteraction: false,
+    },
+    effect: 'fade',
+    fadeEffect: {
+        crossFade: true
+    },
+    // Пагинация
+    pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+    },
+    // Навигация
+    navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+    },
+    on: {
+        init: function() {
+            updateProgressBar(this);
+            animateSlideContent(this.slides[this.activeIndex]);
+        },
+        slideChangeTransitionStart: function() {
+            resetSlideAnimations();
+        },
+        slideChangeTransitionEnd: function() {
+            animateSlideContent(this.slides[this.activeIndex]);
+        },
+        autoplayTimeLeft: function(s, time, progress) {
+            updateProgressBar(this, progress);
+        }
+    }
+});
+
+// Функция для обновления прогресс-бара
+function updateProgressBar(swiper, progress) {
+    const progressBar = document.querySelector('.swiper-progress-bar .progress');
+    if (progressBar) {
+        let percent = 1;
+        if (progress !== undefined) {
+            percent = 1 - progress;
+        }
+        progressBar.style.width = percent * 100 + '%';
+    }
+}
+
+// Функция для анимации содержимого слайда
+function animateSlideContent(slide) {
+    const elements = slide.querySelectorAll('.animate__animated');
+    elements.forEach(element => {
+        element.style.opacity = '1';
+        element.classList.add('animate__animated');
+        
+        if (element.classList.contains('animate__fadeInDown')) {
+            element.classList.add('animate__fadeInDown');
+        } else if (element.classList.contains('animate__fadeInUp')) {
+            element.classList.add('animate__fadeInUp');
+        } else if (element.classList.contains('animate__zoomIn')) {
+            element.classList.add('animate__zoomIn');
+        }
+    });
+    
+    // Анимация технических иконок
+    const techIcons = slide.querySelectorAll('.tech-icon');
+    techIcons.forEach(icon => {
+        const delay = parseFloat(icon.getAttribute('data-delay') || 0);
+        icon.style.animationDelay = `${delay}s`;
+        icon.style.opacity = '1';
+    });
+}
+
+// Функция для сброса анимаций слайда
+function resetSlideAnimations() {
+    const elements = document.querySelectorAll('.animate__animated');
+    elements.forEach(element => {
+        element.classList.remove(
+            'animate__fadeInDown', 
+            'animate__fadeInUp', 
+            'animate__zoomIn'
+        );
+        element.style.opacity = '0';
+    });
+    
+    const techIcons = document.querySelectorAll('.tech-icon');
+    techIcons.forEach(icon => {
+        icon.style.opacity = '0';
+    });
+}
+
+// Tabs functionality
+const tabButtons = document.querySelectorAll('.tab-button');
+const tabPanes = document.querySelectorAll('.tab-pane');
+
+if (tabButtons.length > 0 && tabPanes.length > 0) {
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Remove active class from all buttons and panes
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabPanes.forEach(pane => pane.classList.remove('active'));
+            
+            // Add active class to clicked button and corresponding pane
+            this.classList.add('active');
+            const targetTab = document.getElementById(this.getAttribute('data-tab'));
+            if (targetTab) {
+                targetTab.classList.add('active');
+            }
+        });
+    });
+}
+
+// Category navigation functionality
+window.showSubcategories = function(categoryId, categoryName) {
+    const categoriesContainer = document.getElementById('categories-container');
+    const subcategoriesContainer = document.getElementById('subcategories-container');
+    
+    if (!categoriesContainer || !subcategoriesContainer) return;
+    
+    // Hide categories container
+    categoriesContainer.style.display = 'none';
+    
+    // Hide all subcategory groups
+    const subcategoryGroups = document.querySelectorAll('.subcategory-group');
+    subcategoryGroups.forEach(group => {
+        group.style.display = 'none';
+    });
+    
+    // Show subcategories for selected category
+    const selectedSubcategoryGroup = document.getElementById('subcategory-for-' + categoryId);
+    if (selectedSubcategoryGroup) {
+        selectedSubcategoryGroup.style.display = 'flex';
+    }
+    
+    // Show subcategories container
+    subcategoriesContainer.style.display = 'flex';
+    
+    // Update title if needed
+    const mainTitle = document.querySelector('.section-title h2');
+    if (mainTitle) {
+        mainTitle.textContent = categoryName;
+    }
+};
+
+window.showCategories = function() {
+    const categoriesContainer = document.getElementById('categories-container');
+    const subcategoriesContainer = document.getElementById('subcategories-container');
+    const productsContainer = document.getElementById('products-container');
+    
+    if (!categoriesContainer || !subcategoriesContainer) return;
+    
+    // Show categories container
+    categoriesContainer.style.display = 'flex';
+    
+    // Hide subcategories container
+    subcategoriesContainer.style.display = 'none';
+    
+    // Hide products container
+    if (productsContainer) {
+        productsContainer.style.display = 'none';
+    }
+    
+    // Reset title if needed
+    const mainTitle = document.querySelector('.section-title h2');
+    if (mainTitle) {
+        mainTitle.textContent = 'Наши категории';
+    }
+};
+
+window.showProducts = function(subcategoryId, subcategoryName) {
+    const subcategoriesContainer = document.getElementById('subcategories-container');
+    const productsContainer = document.getElementById('products-container');
+    
+    if (!subcategoriesContainer || !productsContainer) return;
+    
+    // Hide subcategories container
+    subcategoriesContainer.style.display = 'none';
+    
+    // Show products container
+    productsContainer.style.display = 'flex';
+    
+    // Update title if needed
+    const mainTitle = document.querySelector('.section-title h2');
+    if (mainTitle) {
+        mainTitle.textContent = subcategoryName;
+    }
+    
+    // Clear previous products
+    const productGroup = document.getElementById('product-group');
+    if (!productGroup) return;
+    
+    productGroup.innerHTML = '<div class="col-12 text-center"><p>Загрузка товаров...</p></div>';
+    
+    // Load products via AJAX
+    fetch(`/api/subcategory/${subcategoryId}/products`)
+        .then(response => response.json())
+        .then(products => {
+            productGroup.innerHTML = '';
+            
+            if (products.length === 0) {
+                productGroup.innerHTML = '<div class="col-12 text-center"><p>Товары не найдены.</p></div>';
+            } else {
+                products.forEach(product => {
+                    const col = document.createElement('div');
+                    col.className = 'col-lg-3 col-md-4 col-sm-6 mb-4';
+                    
+                    col.innerHTML = `
+                        <a href="/catalog/product/${product.id}" class="product-card-link">
+                            <div class="product-card">
+                                <div class="card-id">ID: ${product.id}</div>
+                                <img src="${product.image}" alt="${product.name}">
+                                <div class="card-body">
+                                    <h4 class="card-title">${product.name}</h4>
+                                    <p class="card-article">Артикул: ${product.article}</p>
+                                    <p class="card-price">${product.price} ₸</p>
+                                </div>
+                            </div>
+                        </a>
+                    `;
+                    
+                    productGroup.appendChild(col);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка при загрузке товаров:', error);
+            productGroup.innerHTML = '<div class="col-12 text-center"><p>Ошибка при загрузке товаров.</p></div>';
+        });
+};
+
+window.showSubcategoriesBack = function() {
+    const subcategoriesContainer = document.getElementById('subcategories-container');
+    const productsContainer = document.getElementById('products-container');
+    
+    if (!subcategoriesContainer || !productsContainer) return;
+    
+    // Hide products container
+    productsContainer.style.display = 'none';
+    
+    // Show subcategories container
+    subcategoriesContainer.style.display = 'flex';
+    
+    // Reset title if needed
+    const mainTitle = document.querySelector('.section-title h2');
+    if (mainTitle) {
+        mainTitle.textContent = 'Подкатегории';
+    }
+};
+{% endblock %}

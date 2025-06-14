@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Оплата тарифа</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .payment-method {
+            margin: 10px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 200px;
+            display: inline-block;
+            vertical-align: top;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .payment-method:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .payment-method img {
+            max-width: 150px;
+            border-radius: 8px;
+        }
+        .qr-code {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .qr-code img {
+            max-width: 200px;
+        }
+        .payment-status {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Оплата тарифа: {{ tariff.name }}</h2>
+        <p>{{ tariff.description }}</p>
+        <ul>
+            {% for key, value in tariff.features.items() %}
+                <li><strong>{{ key.replace('_', ' ').capitalize() }}:</strong> {{ value }}</li>
+            {% endfor %}
+        </ul>
+        <hr>
+        <h4>Выберите метод оплаты:</h4>
+
+        <div class="d-flex justify-content-center">
+            <!-- Карточки методов оплаты -->
+            <div class="payment-method" id="halyk-qr" onclick="toggleQrCode('halyk-qr', 'Халык QR')">
+                <img src="{{ url_for('static', filename='img/payment/halyk.png') }}" alt="Halyk QR">
+                <p>Халык QR</p>
+                <!-- Кнопка подтверждения для Халык QR -->
+                <button id="confirm-payment-halyk" class="btn btn-success mt-2">Подтвердить оплату</button>
+            </div>
+            <div class="payment-method" id="kaspi-qr" onclick="toggleQrCode('kaspi-qr', 'Каспи QR')">
+                <img src="{{ url_for('static', filename='img/payment/kaspi.png') }}" alt="Kaspi QR">
+                <p>Каспи QR</p>
+                <!-- Кнопка подтверждения для Каспи QR -->
+                <button id="confirm-payment-kaspi" class="btn btn-success mt-2">Подтвердить оплату</button>
+            </div>
+        </div>
+
+        <!-- QR-коды (спрятаны по умолчанию) -->
+        <div class="qr-code" id="halyk-qr-code">
+            <img src="{{ url_for('static', filename='img/payment/halyk-qr.png') }}" alt="Halyk QR код">
+        </div>
+        <div class="qr-code" id="kaspi-qr-code">
+            <img src="{{ url_for('static', filename='img/payment/kaspi-qr.png') }}" alt="Kaspi QR код">
+        </div>
+    </div>
+	
+    <div class="container mt-5">
+        <hr>
+        <h4>Детали оплаты:</h4>
+        <p><strong>User ID:</strong> {{ user_id }}</p>
+        <p><strong>Service ID:</strong> {{ service_id }}</p>
+        <p><strong>Tariff ID:</strong> {{ tariff_id }}</p>
+    </div>
+
+<script>
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const tariffId = {{ tariff_id }};
+    const serviceId = {{ service_id }};
+    const userId = {{ user_id }};
+    
+    // Карта соответствий service_id и URL
+    const serviceRedirectMap = {
+        1: '/survey',
+        2: '/message',
+        3: '/test',
+        4: '/electronic_queue'
+    };
+
+    function toggleQrCode(paymentMethodId, paymentMethodName) {
+        // Скрываем все QR-коды
+        const allQrCodes = document.querySelectorAll('.qr-code');
+        allQrCodes.forEach(function (qrCode) {
+            qrCode.style.display = 'none';
+        });
+
+        // Показываем QR-код для выбранного метода оплаты
+        const qrCodeElement = document.getElementById(paymentMethodId + '-code');
+        if (qrCodeElement) {
+            qrCodeElement.style.display = qrCodeElement.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Сохраняем выбранный метод оплаты
+        window.selectedPaymentMethod = paymentMethodName;
+    }
+
+    function confirmPayment(paymentMethod) {
+        fetch('{{ url_for("payment_bp.confirm_payment") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({
+                tariff_id: tariffId,
+                service_id: serviceId,
+                payment_method: paymentMethod
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    title: 'Оплата подтверждена',
+                    text: data.message,
+                    icon: 'success',
+                    confirmButtonText: 'Ок'
+                }).then(() => {
+                    // Перенаправление на страницу, соответствующую service_id, или на главную, если адрес не найден
+                    const redirectUrl = serviceRedirectMap[serviceId] || '/';
+                    window.location.href = redirectUrl;
+                });
+            } else {
+                Swal.fire({
+                    title: 'Ошибка',
+                    text: data.message,
+                    icon: 'error',
+                    confirmButtonText: 'Ок'
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            Swal.fire({
+                title: 'Ошибка',
+                text: 'Произошла ошибка при подтверждении оплаты.',
+                icon: 'error',
+                confirmButtonText: 'Ок'
+            });
+        });
+    }
+
+    // Добавление обработчиков событий для кнопок подтверждения оплаты
+    document.getElementById("confirm-payment-halyk")?.addEventListener("click", function() {
+        confirmPayment('Халык QR');
+    });
+
+    document.getElementById("confirm-payment-kaspi")?.addEventListener("click", function() {
+        confirmPayment('Каспи QR');
+    });
+</script>
+
+</body>
+</html>

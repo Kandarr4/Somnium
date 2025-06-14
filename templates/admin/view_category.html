@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="csrf-token" content="{{ csrf_token() }}">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *,
+        *:after,
+        *:before {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            line-height: 1.5;
+            display: flex;
+            background-color: #403060;
+            background-image: radial-gradient(circle, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%);
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        .sidebar {
+            width: 50px;
+            height: 100vh;
+            background-color: #05043e;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-radius: 10px;
+            box-shadow: 0 10px 50px 0 rgba(5, 4, 62, 0.25);
+        }
+
+        .sidebar .nav-item + .nav-item {
+            margin-top: 0.75rem;
+        }
+
+        .sidebar .nav-item a {
+            color: #FFF;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .sidebar .nav-item a:hover,
+        .sidebar .nav-item a:focus {
+            background-color: #30305a;
+            outline: 0;
+        }
+
+        .sidebar .nav-item a span {
+            position: absolute;
+            background-color: #30305a;
+            white-space: nowrap;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            left: calc(100% + 1.5rem);
+            transform-origin: center left;
+            transform: scale(0);
+            opacity: 0;
+            transition: 0.15s ease;
+        }
+
+        .sidebar .nav-item a:hover span,
+        .sidebar .nav-item a:focus span {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .sidebar .nav-item a span:before {
+            content: "";
+            display: block;
+            width: 12px;
+            height: 12px;
+            position: absolute;
+            background-color: #30305a;
+            left: -5px;
+            top: 50%;
+            transform: translateY(-50%) rotate(45deg);
+            border-radius: 3px;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 2rem;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 10px 50px 0 rgba(5, 4, 62, 0.1);
+        }
+
+        .footer {
+            margin-top: auto;
+        }
+
+        .modal {
+            position: fixed;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(31, 32, 41, 0.75);
+            z-index: 1000;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-wrap {
+            background-color: #fff;
+            border-radius: 4px;
+            padding: 20px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 12px 25px 0 rgba(199, 175, 189, 0.25);
+        }
+
+        .modal-header,
+        .modal-body,
+        .modal-footer {
+            padding: 1rem;
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #dee2e6;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #000;
+        }
+
+        .close:hover {
+            cursor: pointer;
+        }
+
+        .form-group img {
+            max-width: 100%;
+            margin-top: 10px;
+        }
+
+        main[role="main"] {
+            max-width: 1200px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .product {
+            background: #fff;
+            width: 300px;
+            height: 400px; /* Фиксированная высота карточки */
+            margin: 20px;
+            float: left;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+            border-radius: 5px; /* Скругленные углы */
+        }
+
+        .product:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .product img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .product-description {
+            padding: 15px;
+            color: #31353d;
+            height: 250px; /* Фиксированная высота описания */
+            overflow: hidden;
+        }
+
+        .product-description h1 {
+            font-size: 20px;
+            margin: 0 0 5px;
+            font-weight: bold;
+        }
+
+        .product-description p {
+            margin: 0 0 15px;
+            line-height: 1.3em;
+        }
+
+        .product-sidebar {
+            height: 100%;
+            background: #31353d;
+            width: 50px;
+            position: absolute;
+            top: 0;
+            right: -50px; /* Изначально скрыта за пределами карточки */
+            transition: right 0.3s ease;
+            border-radius: 0 2px 2px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .product-sidebar .icon {
+            height: 20px;
+            width: auto;
+            filter: invert(1); /* Инверсия цвета иконки */
+        }
+
+        .product:hover .product-sidebar {
+            right: 0; /* Панель появляется при наведении */
+        }
+
+        .product button {
+            border: 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+            color: #fff;
+            padding: 0.9em;
+            font-size: 0.8em;
+            width: 50px;
+            height: 50px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative; /* Добавлено для позиционирования текста */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column; /* Для вертикального расположения иконки и текста */
+        }
+
+        .product button:hover {
+            width: 250px;
+            background-color: #9bb6aa;
+            border-color: #9bb6aa;
+        }
+
+        .product button:hover span {
+            opacity: 1;
+            max-width: 100px; /* Устанавливаем ширину для текста */
+        }
+
+        .product button span {
+            display: block;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            white-space: nowrap;
+            position: absolute;
+            left: 0px;
+            top: 50%;
+            transform: translateY(-50%);
+            font: message-box;
+        }
+
+        .product button:hover span {
+            opacity: 1;
+        }
+
+        .card-id-watermark {
+            position: absolute;
+            bottom: 10px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        .breadcrumb {
+            background: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: ">";
+        }
+
+        /* List view styles */
+        .list-view .product {
+            display: flex;
+            flex-direction: row;
+            height: 150px;
+            width: 100%;
+        }
+
+        .list-view .product-description {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 10px 15px;
+            height: auto;
+        }
+
+        .list-view .product-sidebar {
+            height: 50px;
+            width: auto;
+            top: 0;
+            right: 0;
+            flex-direction: row;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .list-view .product button {
+            width: auto;
+            height: 50px;
+            flex-direction: row;
+            padding: 0 15px;
+            border-bottom: none;
+            border-right: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
+        .list-view .product button:last-child {
+            border-right: none;
+        }
+
+        .list-view .product button span {
+            display: block;
+            opacity: 1;
+            position: static;
+            transform: none;
+            margin-left: 10px;
+        }
+
+        .list-view .product button:hover {
+            width: auto;
+        }
+
+        .category-item {
+            cursor: pointer;
+            padding: 5px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .category-item .toggle-subcategories {
+            position: absolute;
+            left: -20px;
+            top: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .category-item.selected {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .subcategory-item {
+            cursor: pointer;
+            padding: 5px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            list-style: none;
+        }
+
+        .subcategory-item.selected {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .subcategory-list {
+            list-style: none;
+            padding-left: 20px;
+        }
+	.breadcrumb {
+		display: -ms-flexbox;
+		display: flex;
+		-ms-flex-wrap: wrap;
+		flex-wrap: wrap;
+		padding: .75rem 1rem;
+		margin-bottom: 1rem;
+		list-style: none;
+		background-color: #e9ecef;
+		border-radius: .25rem;
+	}
+    </style>
+    <title>Категория: {{ category.name }}</title>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="sidebar-sticky pt-3">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#categories" role="tab">
+                        <i class="ai-book-open"></i>
+                        <span>Категории</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#users" role="tab">
+                        <i class="ai-person"></i>
+                        <span>Пользователи</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#messages" role="tab">
+                        <i class="ai-bell"></i>
+                        <span>Сообщения</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#settings" role="tab">
+                        <i class="ai-gear"></i>
+                        <span>Настройки</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#pages" role="tab">
+                        <i class="ai-file"></i>
+                        <span>Страницы</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="footer">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('logout') }}">
+                        <i class="ai-logout"></i>
+                        <span>Выход</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('index') }}">
+                        <i class="ai-home"></i>
+                        <span>Главная</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-content tab-content">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('admin_bp.admin_dashboard') }}">База товаров</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ category.name }}</li>
+            </ol>
+        </nav>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Подкатегории: {{ category.name }}</h1>
+            <div>
+                <button class="btn btn-secondary" id="listViewBtn">Строки</button>
+                <button class="btn btn-secondary" id="cardViewBtn">Карточки</button>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
+            <h2>Подкатегории</h2>
+            <div>
+                <button class="btn btn-primary" id="addSubCategoryBtn">Добавить подкатегорию</button>
+                <button class="btn btn-danger ml-2" id="deleteSelectedBtn" style="display: none;">Удалить</button>
+                <button class="btn btn-warning ml-2" id="moveSelectedBtn" style="display: none;">Перенести в другую категорию</button>
+                <span id="selectedCount" class="ml-2" style="display: none;">Выбрано: 0</span>
+            </div>
+        </div>
+        <main role="main">
+            {% for subcategory in subcategories %}
+            <div class="product">
+                <input type="checkbox" class="select-subcategory" data-id="{{ subcategory.id }}">
+                <figure>
+                    {% if subcategory.image %}
+                    <img class="product-image" src="{{ url_for('admin_bp.uploaded_file', folder='sub_category', filename=subcategory.image) }}" alt="{{ subcategory.name }}">
+                    {% else %}
+                    <img class="product-image" src="{{ url_for('static', filename='img/default-placeholder.png') }}" alt="No Image">
+                    {% endif %}
+                    <div class="card-id-watermark">ID: {{ subcategory.id }}</div>
+                </figure>
+                <div class="product-description">
+                    <div class="info">
+                        <h1>{{ subcategory.name }}</h1>
+                        <p>{{ subcategory.description }}</p>
+                        <p>Количество товаров: {{ subcategory.products|length }}</p>
+                    </div>
+                </div>
+                <div class="product-sidebar">
+                    <button class="btn open-subcategory-btn" data-id="{{ subcategory.id }}">
+                        <img src="{{ url_for('static', filename='img/icon/open.svg') }}" alt="Открыть" class="icon">
+                        <span>Открыть</span>
+                    </button>
+                    <button class="btn edit-subcategory-btn" data-id="{{ subcategory.id }}" data-name="{{ subcategory.name }}" data-description="{{ subcategory.description }}" data-image="{{ subcategory.image }}">
+                        <img src="{{ url_for('static', filename='img/icon/edit.svg') }}" alt="Редактировать" class="icon">
+                        <span>Редактировать</span>
+                    </button>
+                    <button class="btn delete-subcategory-btn" data-id="{{ subcategory.id }}">
+                        <img src="{{ url_for('static', filename='img/icon/remove.svg') }}" alt="Удалить" class="icon">
+                        <span>Удалить</span>
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </main>
+    </div>
+
+    <div class="modal" id="addSubCategoryModal">
+        <div class="modal-wrap">
+            <div class="modal-header">
+                <h5 class="modal-title">Добавить подкатегорию</h5>
+                <button type="button" class="close" id="closeSubCategoryModal">&times;"></button>
+            </div>
+            <form action="{{ url_for('admin_bp.add_subcategory', category_id=category.id) }}" method="POST" enctype="multipart/form-data">
+				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+				<div class="modal-body">
+                    <div class="form-group">
+                        <label for="subcategoryName">Название подкатегории</label>
+                        <input type="text" class="form-control" id="subcategoryName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subcategoryDescription">Описание подкатегории</label>
+                        <textarea class="form-control" id="subcategoryDescription" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="subcategoryImage">Изображение подкатегории</label>
+                        <input type="file" class="form-control-file" id="subcategoryImage" name="image">
+                        <img id="subcategoryImagePreview" src="#" alt="Предпросмотр изображения" style="display: none;">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <button type="button" class="btn btn-secondary" id="cancelSubCategoryModal">Отмена</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="modal" id="editSubCategoryModal">
+        <div class="modal-wrap">
+            <div class="modal-header">
+                <h5 class="modal-title">Редактировать подкатегорию</h5>
+                <button type="button" class="close" id="closeEditSubCategoryModal">&times;"></button>
+            </div>
+            <form action="{{ url_for('admin_bp.edit_subcategory') }}" method="POST" enctype="multipart/form-data">
+                <input type="hidden" id="editSubCategoryId" name="id">
+				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="editSubCategoryName">Название подкатегории</label>
+                        <input type="text" class="form-control" id="editSubCategoryName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editSubCategoryDescription">Описание подкатегории</label>
+                        <textarea class="form-control" id="editSubCategoryDescription" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="editSubCategoryImage">Изображение подкатегории</label>
+                        <input type="file" class="form-control-file" id="editSubCategoryImage" name="image">
+                        <img id="editSubCategoryImagePreview" src="#" alt="Предпросмотр изображения" style="display: none;">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <button type="button" class="btn btn-secondary" id="cancelEditSubCategoryModal">Отмена</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+	<div class="modal" id="deleteSubCategoryModal">
+		<div class="modal-wrap">
+			<div class="modal-header">
+				<h5 class="modal-title">Удалить подкатегорию</h5>
+				<button type="button" class="close" id="closeDeleteSubCategoryModal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<p>Вы уверены, что хотите удалить подкатегорию?</p>
+				<form id="deleteSubCategoryForm" method="POST" action="{{ url_for('admin_bp.delete_subcategory') }}">
+					<input type="hidden" id="deleteSubCategoryId" name="id">
+					<input type="hidden" id="deleteSubCategoryAction" name="action">
+					<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+					<button type="button" class="btn btn-danger" id="deleteSubCategoryOnly" data-action="delete_only">Удалить только подкатегорию, но оставить товары</button>
+					<button type="button" class="btn btn-warning" id="deleteSubCategoryAndMove" data-action="delete_and_move">Удалить с переносом товаров</button>
+					<button type="button" class="btn btn-danger" id="deleteSubCategoryAndAll" data-action="delete_all">Удалить всё</button>
+				</form>
+			</div>
+		</div>
+	</div>
+
+    
+    <div class="modal" id="moveSubCategoryModal">
+        <div class="modal-wrap">
+            <div class="modal-header">
+                <h5 class="modal-title">Переместить подкатегорию в другую категорию</h5>
+                <button type="button" class="close" id="closeMoveSubCategoryModal">&times;"></button>
+            </div>
+            <div class="modal-body">
+                <div id="categoriesList"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="moveSubCategoryConfirm">Переместить</button>
+                <button type="button" class="btn btn-secondary" id="cancelMoveSubCategoryModal">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+	<div class="modal" id="moveProductsModal">
+		<div class="modal-wrap">
+			<div class="modal-header">
+				<h5 class="modal-title">Переместить товары в другую подкатегорию</h5>
+				<button type="button" class="close" id="closeMoveProductsModal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<div id="categoriesTree"></div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="moveProductsConfirm">Переместить</button>
+				<button type="button" class="btn btn-secondary" id="cancelMoveProductsModal">Отмена</button>
+			</div>
+		</div>
+	</div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/akar-icons-fonts"></script>
+<script>
+$(document).ready(function() {
+    // Добавляем CSRF-токен в заголовки всех AJAX-запросов
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && csrfToken) {
+                xhr.setRequestHeader("X-CSRFToken", csrfToken);
+            }
+        }
+    });
+
+    let selectedCount = 0;
+    let selectedSubcategories = [];
+    let selectedCategoryId = null;
+    let selectedProducts = [];
+
+    $('#addSubCategoryBtn').click(function() {
+        $('#addSubCategoryModal').addClass('show');
+    });
+
+    $('#closeSubCategoryModal, #cancelSubCategoryModal').click(function() {
+        $('#addSubCategoryModal').removeClass('show');
+    });
+
+    $('#subcategoryImage').change(function() {
+        readURL(this, '#subcategoryImagePreview');
+    });
+
+    function readURL(input, target) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                $(target).attr('src', e.target.result).show();
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $('.edit-subcategory-btn').click(function() {
+        var id = $(this).data('id');
+        var name = $(this).data('name');
+        var description = $(this).data('description');
+        var image = $(this).data('image');
+
+        $('#editSubCategoryId').val(id);
+        $('#editSubCategoryName').val(name);
+        $('#editSubCategoryDescription').val(description);
+        if (image) {
+			$('#editSubCategoryImagePreview').attr('src', '/admin/uploads/sub_category/' + image).show();
+        } else {
+            $('#editSubCategoryImagePreview').hide();
+        }
+        $('#editSubCategoryModal').addClass('show');
+    });
+
+    $('#closeEditSubCategoryModal, #cancelEditSubCategoryModal').click(function() {
+        $('#editSubCategoryModal').removeClass('show');
+    });
+
+    $('#editSubCategoryImage').change(function() {
+        readURL(this, '#editSubCategoryImagePreview');
+    });
+
+    $('.open-subcategory-btn').click(function() {
+        var id = $(this).data('id');
+        window.location.href = "/subcategory/" + id;
+    });
+
+    $('#listViewBtn').click(function() {
+        $('main').addClass('list-view');
+    });
+
+    $('#cardViewBtn').click(function() {
+        $('main').removeClass('list-view');
+    });
+
+    $('.select-subcategory').change(function() {
+        selectedCount = $('.select-subcategory:checked').length;
+        selectedSubcategories = $('.select-subcategory:checked').map(function() {
+            return $(this).data('id');
+        }).get();
+
+        $('#selectedCount').text('Выбрано: ' + selectedCount);
+        if (selectedCount > 0) {
+            $('#selectedCount').show();
+            $('#deleteSelectedBtn').show();
+            $('#moveSelectedBtn').show();
+        } else {
+            $('#selectedCount').hide();
+            $('#deleteSelectedBtn').hide();
+            $('#moveSelectedBtn').hide();
+        }
+    });
+
+    $('#deleteSelectedBtn').click(function() {
+        $('#deleteSubCategoryModal').addClass('show');
+    });
+
+    $('.delete-subcategory-btn').click(function() {
+        var id = $(this).data('id');
+        $('#deleteSubCategoryId').val(id);
+        $('#deleteSubCategoryModal').addClass('show');
+    });
+
+    $('#deleteSubCategoryOnly').click(function() {
+        handleDeleteSubCategory($(this).data('action'));
+    });
+
+    $('#deleteSubCategoryAndMove').click(function() {
+        handleDeleteSubCategory($(this).data('action'));
+    });
+
+    $('#deleteSubCategoryAndAll').click(function() {
+        handleDeleteSubCategory($(this).data('action'));
+    });
+
+    $('#closeDeleteSubCategoryModal, #cancelDeleteSubCategoryModal').click(function() {
+        $('#deleteSubCategoryModal').removeClass('show');
+    });
+
+	function handleDeleteSubCategory(action) {
+		var subcategoryId = $('#deleteSubCategoryId').val();
+
+		if (!subcategoryId || !action) {
+			alert('Необходимо указать подкатегорию и действие');
+			return;
+		}
+
+		if (action === 'delete_and_move') {
+			$.get('/get_categories_list', function(data) {
+				let categoriesTree = $('#categoriesTree');
+				categoriesTree.empty();
+
+				data.forEach(function(category) {
+					let categoryItem = $('<div>').addClass('category-item').text(category.name).attr('data-id', category.id);
+					if (category.subcategories && category.subcategories.length > 0) {
+						let toggleButton = $('<button>').addClass('toggle-subcategories').text('+');
+						toggleButton.click(function() {
+							let subcategoryList = $(this).siblings('.subcategory-list');
+							if (subcategoryList.is(':visible')) {
+								subcategoryList.hide();
+								$(this).text('+');
+							} else {
+								subcategoryList.show();
+								$(this).text('-');
+							}
+						});
+						categoryItem.prepend(toggleButton);
+						let subcategoryList = $('<ul>').addClass('subcategory-list').hide();
+						category.subcategories.forEach(function(subcategory) {
+							let subcategoryItem = $('<li>').addClass('subcategory-item').text(subcategory.name).attr('data-id', subcategory.id);
+							subcategoryList.append(subcategoryItem);
+						});
+						categoryItem.append(subcategoryList);
+					}
+					categoriesTree.append(categoryItem);
+				});
+
+				$('#moveProductsModal').addClass('show');
+			});
+			return;
+		}
+
+		$.ajax({
+			url: '/admin/delete_subcategory',
+			type: 'POST',
+			data: {
+				id: subcategoryId,
+				action: action
+			},
+			success: function(response) {
+				if (response.success) {
+					window.location.href = response.redirect;
+				} else {
+					alert('Ошибка при удалении подкатегории: ' + response.message);
+				}
+			},
+			error: function(xhr, status, error) {
+				alert('Ошибка при удалении подкатегории: ' + xhr.responseText);
+			}
+		});
+	}
+
+
+    $('#categoriesTree').on('click', '.subcategory-item', function() {
+        $('.subcategory-item').removeClass('selected');
+        $(this).addClass('selected');
+    });
+
+    $('#moveProductsConfirm').click(function() {
+        var selectedSubcategoryId = $('.subcategory-item.selected').data('id');
+        if (!selectedSubcategoryId) {
+            alert('Выберите подкатегорию для перемещения товаров');
+            return;
+        }
+        var subcategoryId = $('#deleteSubCategoryId').val();
+        $.ajax({
+            url: '/get_products_by_subcategory',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ subcategory_id: subcategoryId }),
+            success: function(response) {
+                if (response.status === 'success') {
+                    let product_ids = response.product_ids;
+                    $.ajax({
+                        url: '/move_products',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ product_ids: product_ids, new_subcategory_id: selectedSubcategoryId }),
+                        success: function(moveResponse) {
+                            if (moveResponse.status === 'success') {
+                                $.ajax({
+                                    url: '/admin/delete_subcategory',
+                                    type: 'POST',
+                                    data: {
+                                        id: subcategoryId,
+                                        action: 'delete_only'
+                                    },
+                                    success: function(deleteResponse) {
+                                        if (deleteResponse.success) {
+                                            window.location.href = deleteResponse.redirect;
+                                        } else {
+                                            alert('Ошибка при удалении подкатегории');
+                                        }
+                                    },
+                                    error: function() {
+                                        alert('Ошибка при удалении подкатегории');
+                                    }
+                                });
+                            } else {
+                                alert('Ошибка при перемещении товаров');
+                            }
+                        },
+                        error: function() {
+                            alert('Ошибка при перемещении товаров');
+                        }
+                    });
+                } else {
+                    alert('Ошибка при получении товаров');
+                }
+            },
+            error: function() {
+                alert('Ошибка при получении товаров');
+            }
+        });
+    });
+
+    $('#closeMoveProductsModal, #cancelMoveProductsModal').click(function() {
+        $('#moveProductsModal').removeClass('show');
+    });
+
+    $('#moveSelectedBtn').click(function() {
+        $.get('/get_categories_list', function(data) {
+            let categoriesList = $('#categoriesList');
+            categoriesList.empty();
+            data.forEach(function(category) {
+                let categoryItem = $('<div>').addClass('category-item').text(category.name).attr('data-id', category.id);
+                if (category.subcategories && category.subcategories.length > 0) {
+                    let toggleButton = $('<button>').addClass('toggle-subcategories').text('+');
+                    toggleButton.click(function() {
+                        let subcategoryList = $(this).siblings('.subcategory-list');
+                        if (subcategoryList.is(':visible')) {
+                            subcategoryList.hide();
+                            $(this).text('+');
+                        } else {
+                            subcategoryList.show();
+                            $(this).text('-');
+                        }
+                    });
+                    categoryItem.prepend(toggleButton);
+                    let subcategoryList = $('<ul>').addClass('subcategory-list').hide();
+                    category.subcategories.forEach(function(subcategory) {
+                        let subcategoryItem = $('<li>').addClass('subcategory-item').text(subcategory.name).attr('data-id', subcategory.id);
+                        subcategoryList.append(subcategoryItem);
+                    });
+                    categoryItem.append(subcategoryList);
+                }
+                categoriesList.append(categoryItem);
+            });
+
+            $('#moveSubCategoryModal').addClass('show');
+        });
+    });
+
+    $('#categoriesList').on('click', '.category-item', function() {
+        selectedCategoryId = $(this).data('id');
+        $('.category-item').removeClass('selected');
+        $(this).addClass('selected');
+    });
+
+    $('#moveSubCategoryConfirm').click(function() {
+        if (selectedCategoryId) {
+            $.ajax({
+                url: '/move_subcategory',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ subcategory_id: selectedSubcategories[0], new_category_id: selectedCategoryId }),
+                success: function(response) {
+                    if (response.status === 'success') {
+                        location.reload();
+                    } else {
+                        alert('Ошибка при перемещении подкатегории');
+                    }
+                }
+            });
+        } else {
+            alert('Выберите категорию для перемещения подкатегорий');
+        }
+    });
+
+    $('#closeMoveSubCategoryModal, #cancelMoveSubCategoryModal').click(function() {
+        $('#moveSubCategoryModal').removeClass('show');
+    });
+
+    $('#subcategoriesList').on('click', '.subcategory-item', function() {
+        selectedCategoryId = $(this).data('id');
+        $('.subcategory-item').removeClass('selected');
+        $(this).addClass('selected');
+    });
+
+    $('#moveProductsConfirm').click(function() {
+        if (selectedCategoryId) {
+            $.ajax({
+                url: '/move_products',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ product_ids: selectedSubcategories, new_subcategory_id: selectedCategoryId }),
+                success: function(response) {
+                    if (response.status === 'success') {
+                        location.reload();
+                    } else {
+                        alert('Ошибка при перемещении товаров');
+                    }
+                },
+                error: function() {
+                    alert('Ошибка при перемещении товаров');
+                }
+            });
+        } else {
+            alert('Выберите подкатегорию для перемещения товаров');
+        }
+    });
+
+    $('#closeMoveProductsModal, #cancelMoveProductsModal').click(function() {
+        $('#moveProductsModal').removeClass('show');
+    });
+});
+</script>
+
+</body>
+
+</html>

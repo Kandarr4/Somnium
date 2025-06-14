@@ -1,0 +1,291 @@
+/* Общие стили */
+body {
+    font-family: 'MS Sans Serif', 'Tahoma', sans-serif;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+    background-color: #C0C0C0; /* Серый фон, типичный для Windows 95 */
+}
+
+/* Контейнер опроса */
+#survey-content {
+    width: 800px;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #FFFFFF;
+    border: 2px inset #FFFFFF; /* Внутренняя рамка для эффекта 3D */
+}
+
+/* Заголовки */
+h1, h2 {
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #000080; /* Темно-синий цвет заголовков */
+}
+
+/* Вопросы */
+#survey-form p {
+    font-weight: bold;
+    margin-top: 20px;
+    padding-bottom: 5px;
+    border-bottom: 2px groove #808080; /* Рамка с эффектом вдавленности */
+}
+
+/* Ответы */
+.form-check-label {
+    font-weight: normal;
+    color: #000000;
+}
+
+/* Разделение вопросов */
+.mb-4 {
+    padding: 10px;
+    border: 2px outset #FFFFFF; /* Рамка с эффектом выпуклости */
+    margin-bottom: 15px;
+    background-color: #C0C0C0;
+}
+
+/* Кнопка отправки */
+.btn-primary {
+    background-color: #C0C0C0;
+    border: 2px outset #FFFFFF;
+    padding: 2px 10px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #000080;
+    text-align: center;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.btn-primary:active {
+    border: 2px inset #FFFFFF;
+    background-color: #808080;
+    color: #FFFFFF;
+}
+
+/* Промо-блоки */
+.promo-block {
+    background-color: #C0C0C0;
+    border: 2px outset #FFFFFF;
+    margin: 15px 0;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.promo-block .logo img {
+    width: 50px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.promo-block p {
+    margin: 0;
+    font-weight: bold;
+    color: #000080;
+}
+
+.promo-block .btn {
+    background-color: #C0C0C0;
+    border: 2px outset #FFFFFF;
+    padding: 2px 10px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #000080;
+    text-align: center;
+    display: inline-block;
+    margin-left: auto;
+}
+
+.promo-block .btn:active {
+    border: 2px inset #FFFFFF;
+    background-color: #808080;
+    color: #FFFFFF;
+}
+
+/* Формы участника */
+#participant-form .form-group {
+    margin-bottom: 10px;
+}
+
+#participant-form label {
+    display: block;
+    margin-bottom: 3px;
+    color: #000080;
+}
+
+#participant-form input {
+    width: 100%;
+    padding: 2px;
+    border: 2px inset #FFFFFF;
+    background-color: #C0C0C0;
+    font-family: 'MS Sans Serif', 'Tahoma', sans-serif;
+    font-size: 12px;
+}
+
+/* Текстовые поля для ответов */
+.text-field-group {
+    margin-top: 5px;
+}
+
+.text-field-group input {
+    width: 100%;
+    padding: 2px;
+    border: 2px inset #FFFFFF;
+    background-color: #C0C0C0;
+    font-family: 'MS Sans Serif', 'Tahoma', sans-serif;
+    font-size: 12px;
+}
+
+/* Стили для чекбоксов и радио-кнопок */
+.form-check {
+    margin-bottom: 5px;
+}
+
+.form-check-input {
+    margin-right: 5px;
+}
+
+.form-check-label {
+    color: #000000;
+    cursor: pointer;
+}
+
+/* Убираем современные эффекты */
+@keyframes fadeIn {
+    /* Анимации отключены для аутентичности */
+}
+
+@keyframes slideIn {
+    /* Анимации отключены для аутентичности */
+}
+
+/* Дополнительные стили для Windows 95 */
+a {
+    color: #0000FF;
+    text-decoration: underline;
+}
+
+a:hover {
+    color: #FF0000;
+}
+
+input, button {
+    font-family: 'MS Sans Serif', 'Tahoma', sans-serif;
+    font-size: 12px;
+}
+
+button {
+    padding: 2px 6px;
+}
+
+
+.side-ad {
+  position: fixed;
+  left: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 280px;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  z-index: 10;
+  opacity: 0;
+  animation: slideIn 0.6s ease-out forwards;
+}
+
+.side-ad-header {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  padding: 1rem;
+  color: white;
+  font-weight: 600;
+}
+
+.side-ad-content {
+  padding: 1.5rem;
+}
+
+.service-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.service-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e2e8f0;
+  transition: transform 0.2s ease;
+}
+
+.service-item:last-child {
+  border-bottom: none;
+}
+
+.service-item:hover {
+  transform: translateX(5px);
+}
+
+.service-icon {
+  width: 32px;
+  height: 32px;
+  margin-right: 1rem;
+  padding: 0.5rem;
+  background: #f1f5f9;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2563eb;
+}
+
+.service-text {
+  font-size: 0.875rem;
+  color: #1e293b;
+}
+
+.ad-cta {
+  display: block;
+  text-align: center;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: #2563eb;
+  color: white;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.ad-cta:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+.contact-info {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translate(-20px, -50%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, -50%);
+  }
+}
+
+@media (max-width: 1280px) {
+  .side-ad {
+    display: none;
+  }
+}

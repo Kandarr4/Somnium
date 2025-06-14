@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="author" content="ИП Somnium - Валентин Бортников">
+   <meta name="description" content="Ремонт компьютеров">
+	<meta name="csrf-token" content="{{ csrf_token() }}">
+   <title>Ремонт компьютеров Темиртау и Караганда</title>
+   <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+   <link rel="stylesheet" href="/static/css/odometer.css">
+   <link rel="stylesheet" href="/static/css/owl.min.css">
+   <link rel="stylesheet" href="/static/css/owl.theme.default.min.css">
+   <link rel="stylesheet" href="/static/css/all.min.css">
+   <link rel="stylesheet" href="/static/css/animate.css">
+   <link rel="stylesheet" href="/static/css/nice-select.css">
+   <link rel="stylesheet" href="/static/css/magnific-popup.css">
+   <link rel="stylesheet" href="/static/css/main.css">
+   <link rel="icon" href="/static/img/favicon/favicon.ico" type="image/x-icon">
+</head>
+
+<style>
+.pt-120 {
+	padding-top: 1px;
+}
+
+.pb-120 {
+	padding-top: 1px;
+}
+
+/* Общие стили для хедера */
+.somnium-header {
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Легкая тень для создания глубины */
+    padding: 15px 0;
+    width: 100%;
+    z-index: 10;
+}
+
+.somnium-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Логотип */
+.somnium-header .logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #007bff;
+    text-decoration: none;
+}
+
+/* Стили навигации */
+.somnium-header .navigation ul {
+    display: flex;
+    gap: 20px; /* Расстояние между пунктами меню */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.somnium-header .navigation ul li {
+    margin: 0;
+}
+
+.somnium-header .navigation ul li a {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #333;
+    text-decoration: none;
+    padding: 8px 15px;
+    transition: color 0.3s, background-color 0.3s;
+    border-radius: 5px;
+}
+
+.somnium-header .navigation ul li a:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .somnium-header .navigation ul {
+        display: none; /* Скрываем меню на мобильных устройствах */
+    }
+
+    .somnium-header .menu-toggle {
+        display: block;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #007bff;
+    }
+}
+
+
+/* Нижняя панель */
+.bottom-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #28a745;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1000;
+    padding: 15px 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
+    transition: height 0.3s ease;
+}
+
+/* Скрытая всплывающая панель */
+.panel-content {
+    position: fixed;
+    bottom: -400px; /* Скрыто за пределами экрана */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 400px;
+    background-color: #fff;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    z-index: 1001;
+    transition: bottom 0.3s ease;
+}
+
+/* Открытая панель */
+.bottom-panel.active + .panel-content {
+    bottom: 60px; /* Расстояние от нижней панели */
+}
+
+.hidden {
+    display: none;
+}
+
+/* Кнопка открытия панели */
+.panel-button {
+    display: flex;
+    align-items: center;
+}
+
+.panel-button i {
+    color: #fff;
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.panel-button span {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+/* Стили формы */
+.floating-panel .form-group {
+    margin-bottom: 10px;
+}
+
+.floating-panel label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.floating-panel input, .floating-panel textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #333; /* Устанавливаем черный цвет текста */
+}
+
+.floating-panel button.submit-btn {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.floating-panel button.submit-btn:hover {
+    background-color: #218838;
+}
+
+/* Кнопка закрытия */
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #333;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 15px; /* Отступ снизу для разделения полей */
+    display: flex;
+    flex-direction: column; /* Размещаем метку и поле ввода по вертикали */
+}
+
+.form-group label {
+    margin-bottom: 5px; /* Отступ снизу для отделения метки от поля ввода */
+    font-weight: bold; /* Жирный шрифт для метки */
+    color: #333; /* Цвет текста метки */
+    font-size: 14px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%; /* Ширина поля на 100% родителя */
+    padding: 10px; /* Внутренний отступ для удобства ввода */
+    border: 1px solid #ddd; /* Светло-серая рамка */
+    border-radius: 4px; /* Сглаженные углы */
+    font-size: 14px;
+    color: #333; /* Цвет текста поля */
+    outline: none; /* Убираем подсвечивание при фокусе */
+    transition: border-color 0.3s ease; /* Плавное изменение цвета рамки при фокусе */
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #28a745; /* Цвет рамки при фокусе */
+}
+
+.form-group textarea {
+    resize: vertical; /* Разрешаем изменение высоты только вертикально */
+    min-height: 100px; /* Минимальная высота для удобства написания текста */
+}
+
+/* Мобильная версия панели с прокруткой */
+@media (max-width: 600px) {
+    .panel-content {
+        max-width: 300px;
+        max-height: 60vh; /* Ограничиваем высоту панели 70% высоты экрана */
+        overflow-y: auto; /* Добавляем вертикальную прокрутку, если контент превышает высоту */
+        padding: 10px;
+    }
+
+    .bottom-panel {
+        padding: 10px 0;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 1px;
+        font-size: 11px;
+    }
+
+    .close-button {
+        font-size: 10px;
+        top: 8px;
+        right: 10px;
+    }
+
+    .panel-button i {
+        font-size: 12px;
+    }
+
+    .panel-button span {
+        font-size: 12px;
+    }
+
+    .floating-panel button.submit-btn {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    .form-group textarea {
+        min-height: 50px;
+    }
+}
+
+
+
+/* Стили для хедера */
+.header-wrapper {
+    display: flex;
+    flex-direction: row; /* Изменено с column на row */
+    align-items: center; /* Центрирование по вертикали */
+    justify-content: space-between; /* Распределение пространства между элементами */
+    padding: 20px 0;
+    flex-wrap: wrap; /* Позволяет элементам переноситься на новую строку при необходимости */
+}
+
+.navigation-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-grow: 1;
+}
+
+.main-menu {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* Стили для кнопки авторизации */
+.auth-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(45deg, #3b82f6, #2563eb);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.auth-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    filter: brightness(110%);
+    color: white;
+}
+
+/* Стили для профиля */
+.profile-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin: 0;
+}
+
+.profile-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.profile-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    flex-shrink: 0;
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.profile-info h5 {
+    color: #fff;
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.profile-btn, .logout-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.profile-btn {
+    background: rgba(59, 130, 246, 0.9);
+    color: white;
+}
+
+.logout-btn {
+    background: rgba(239, 68, 68, 0.9);
+    color: white;
+}
+
+.profile-btn:hover, .logout-btn:hover {
+    transform: translateY(-1px);
+    filter: brightness(110%);
+}
+
+.header-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Центрирование по горизонтали */
+    gap: 20px;
+    width: 100%; /* Чтобы центрировать относительно всей ширины */
+}
+
+.cmn--btn.border__trans {
+    background: transparent;
+    border: 2px solid #3b82f6;
+}
+
+.cmn--btn.border__trans:hover {
+    background: #3b82f6;
+    color: white;
+}
+
+@media (max-width: 1200px) {
+    .profile-info h5 {
+        font-size: 0.85rem;
+    }
+    
+    .profile-btn span, 
+    .logout-btn span,
+    .auth-btn span {
+        display: none;
+    }
+    
+    .profile-btn, 
+    .logout-btn {
+        padding: 4px 8px;
+    }
+    
+    .auth-btn {
+        padding: 8px;
+    }
+    
+    .profile-card {
+        min-width: auto;
+    }
+}
+
+@media (max-width: 992px) {
+    .navigation-section {
+        display: none;
+    }
+    
+    .header-bar {
+        display: block;
+    }
+    
+    .header-buttons {
+        flex-direction: column;
+        align-items: center; /* Центрирование по горизонтали */
+        gap: 10px;
+        margin-top: 10px;
+    }
+    
+    .cmn--btn.border__trans {
+        width: 100%;
+        text-align: center;
+    }
+}
+/* Общие стили для секции услуг */
+/* Общие стили для секции услуг */
+/* Общие стили для секции услуг */
+
+/* Общие стили для секции услуг */
+
+/* Общие стили для секции услуг */
+.somnium__services {
+    background-color: #f9f9f9; /* Светлый фон для контраста с контентом */
+}
+
+.somnium__services .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Стили заголовка секции */
+.section__header {
+    text-align: center;
+}
+
+.section__header h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #333;
+    position: relative;
+}
+
+.section__header h2 .text-base {
+    color: #007bff; /* Акцентный цвет для подчеркивания слова "Услуги" */
+}
+
+.section__header p {
+    font-size: 1.1rem;
+    color: #555;
+    margin: 0 auto;
+}
+
+/* Стили вкладок навигации */
+.somnium__left__wrap {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.nav-tabs {
+}
+
+.nav-tabs .nav-item {
+    margin-bottom: 15px;
+}
+
+/* Вкладки с фиксированной шириной */
+.nav-tabs .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    background-color: #f1f1f1;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+    font-weight: 500;
+    width: 100%; /* Растягивает кнопки вкладок на всю ширину родительского контейнера */
+    text-align: left; /* Выравнивание текста и иконки по левому краю */
+}
+
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-link:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+/* Равномерное распределение вкладок по ширине */
+.somnium__left__wrap ul.nav-tabs {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Настройка иконок и текста для выравнивания */
+.nav-tabs .nav-link .icon {
+    margin-right: 10px;
+    font-size: 1.2rem;
+    color: inherit; /* Наследование цвета от родительского элемента */
+}
+
+.nav-tabs .nav-link.active .icon {
+    color: #fff;
+}
+
+
+.nav-tabs .nav-link .icon {
+    margin-right: 10px;
+    font-size: 1.2rem;
+    color: #007bff;
+}
+
+
+
+.nav-tabs .nav-link.active .icon {
+    color: #fff;
+}
+
+/* Стили контента вкладок */
+.somnium__right__wrap {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.tab-content .tab-pane {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.somnium__body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.somnium__body .thumb {
+    flex: 1 1 40%;
+    padding: 10px;
+}
+
+.somnium__body .thumb img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.somnium__body .thumb img:hover {
+    transform: scale(1.05);
+}
+
+.somnium__body .content {
+    flex: 1 1 60%;
+    padding: 10px 20px;
+}
+
+.somnium__body .content h4 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.somnium__body .content h4 .text-base {
+    color: #007bff;
+}
+
+.somnium__body .content p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.tagging__listing {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tagging__listing li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    color: #555;
+    font-size: 1rem;
+}
+
+.tagging__listing li span:first-child {
+    color: #28a745; /* Зеленый цвет для галочек */
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+.tagging__listing li span:last-child {
+    flex: 1;
+}
+
+/* Адаптивность */
+@media (max-width: 992px) {
+    .somnium__body {
+        flex-direction: column;
+    }
+
+    .somnium__body .thumb,
+    .somnium__body .content {
+        flex: 1 1 100%;
+    }
+
+    .somnium__left__wrap {
+        margin-bottom: 30px;
+    }
+}
+
+@media (max-width: 576px) {
+    .section__header h2 {
+        font-size: 2rem;
+    }
+
+    .somnium__services .container {
+        padding: 0 10px;
+    }
+
+    .nav-tabs .nav-link {
+        padding: 10px 15px;
+        font-size: 0.95rem;
+    }
+
+    .somnium__body .content h4 {
+        font-size: 1.5rem;
+    }
+
+    .somnium__body .content p,
+    .tagging__listing li {
+        font-size: 0.95rem;
+    }
+}
+
+/* Общие стили */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: #333;
+}
+
+.company-header {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Стили для изображения логотипа */
+.company-header img {
+    width: 120px; /* Фиксированная ширина логотипа */
+    height: auto; /* Автоматическая высота для сохранения пропорций */
+    margin-right: 20px; /* Отступ справа от изображения */
+    transition: transform 0.3s ease; /* Плавный переход при наведении */
+}
+
+.company-header img:hover {
+    transform: scale(1.05); /* Легкое увеличение при наведении */
+}
+
+
+
+.logo {
+    width: 100px;
+    height: auto;
+}
+
+.company-name {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.company-details p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.tabs-container .nav-tabs {
+    border-bottom: 2px solid #007bff;
+}
+
+/* Стили для горизонтальных вкладок */
+.tabs-container .nav-tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    border-bottom: 2px solid #007bff;
+}
+
+.nav-tabs .nav-item {
+    flex: 1;
+    text-align: center;
+}
+
+.nav-tabs .nav-link {
+    color: #007bff;
+    font-weight: 500;
+    padding: 10px 15px;
+    border: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 4px 4px 0 0;
+}
+
+
+.tab-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.tab-content h3, .tab-content h4, .tab-content h5 {
+    color: #007bff;
+}
+
+.tab-content ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+.gallery-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.gallery-container img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    transition: transform 0.3s;
+}
+
+.gallery-container img:hover {
+    transform: scale(1.05);
+}
+
+.payment-methods .method {
+    background-color: #f1f1f1;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.payment-methods .method:hover {
+    background-color: #e2e6ea;
+}
+
+.payment-methods h5 {
+    margin-bottom: 10px;
+    color: #007bff;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .company-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .logo {
+        margin-bottom: 15px;
+    }
+}
+
+.section__header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.section__header h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    line-height: 1.4;
+    margin: 0 auto;
+}
+
+.section__header p {
+    font-size: 1.2rem;
+    color: #555;
+    margin: 10px auto 0;
+    max-width: 800px;
+}
+
+.pt-120 {
+	padding-top: 1px;
+}
+</style>
+
+<body>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();
+   for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+   k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(99157537, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true
+   });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/99157537" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+<!-- Header -->
+<header class="somnium-header">
+    <div class="container">
+        <a href="/" class="logo">Somnium</a>
+        <nav class="navigation">
+            <ul>
+                <li><a href="/">Главная</a></li>
+                <li><a href="/services">Сервисы</a></li>
+                <li><a href="/partners">Партнерам</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+	
+
+<!-- Modal for Notification -->
+<div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="notificationModalLabel">Уведомление</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Сообщение будет вставлено сюда -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Нижняя панель "Задать вопрос" -->
+<div class="bottom-panel" id="bottomPanel">
+	<div class="panel-content hidden" id="panelContent">
+        <button class="close-button" id="closePanel">&times;</button>
+        <form id="messageForm">
+            <div class="form-group">
+                <label for="firstName">Имя</label>
+                <input type="text" id="firstName" name="first_name" placeholder="Введите имя"
+                       {% if current_user.is_authenticated and current_user.first_name %}
+                           value="{{ current_user.first_name }}"
+                       {% endif %}>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Фамилия</label>
+                <input type="text" id="lastName" name="last_name" placeholder="Введите фамилию"
+                       {% if current_user.is_authenticated and current_user.last_name %}
+                           value="{{ current_user.last_name }}"
+                       {% endif %}>
+            </div>
+            <div class="form-group">
+                <label for="middleName">Отчество</label>
+                <input type="text" id="middleName" name="middle_name" placeholder="Введите отчество"
+                       {% if current_user.is_authenticated and current_user.middle_name %}
+                           value="{{ current_user.middle_name }}"
+                       {% endif %}>
+            </div>
+            <div class="form-group">
+                <label for="contactNumber">Номер телефона</label>
+                <input type="text" id="contactNumber" name="contact_number" placeholder="Введите номер телефона"
+                       {% if current_user.is_authenticated and current_user.phone %}
+                           value="{{ current_user.phone }}"
+                       {% endif %}>
+            </div>
+            <div class="form-group">
+                <label for="contactEmail">Email</label>
+                <input type="email" id="contactEmail" name="contact_email" placeholder="Введите email"
+                       {% if current_user.is_authenticated and current_user.email %}
+                           value="{{ current_user.email }}"
+                       {% endif %}>
+            </div>
+            <div class="form-group">
+                <label for="content">Сообщение</label>
+                <textarea id="content" name="content" placeholder="Введите ваше сообщение..."></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Отправить</button>
+        </form>
+    </div>
+    <div class="panel-button" id="openPanel">
+        <i class="fas fa-phone-alt"></i>
+        <span>Задать вопрос</span>
+    </div>
+</div>
+
+
+
+
+<!--Somnium IT Services Start-->
+<section class="somnium__services pt-120 pb-120">
+   <div class="container">
+      <div class="section__header section__header__space">
+         <h2 class="wow fadeInDown" data-wow-delay="0.2s">
+            <span class="text-base">Ремонт компьютеров</span> в Темиртау и Караганде
+         </h2>
+         <p class="text-black wow fadeInDown" data-wow-delay="0.4s">
+            Мы предоставляем полный спектр услуг по ремонту компьютеров в Темиртау и Караганде.
+         </p>
+      </div>
+      <div class="row g-4">
+         <div class="col-xxl-3 col-xl-3 col-lg-3">
+            <div class="somnium__left__wrap">
+               <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <!-- Диагностика и ремонт -->
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="diagnostics-repair-tab" data-bs-toggle="tab" data-bs-target="#diagnostics-repair" type="button" role="tab" aria-controls="diagnostics-repair" aria-selected="true">
+                     <span class="icon"><i class="fa-solid fa-tools"></i></span>
+                     <span>Диагностика и ремонт</span>
+                    </button>
+                  </li>
+                  <!-- Модернизация компьютеров -->
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="upgrade-tab" data-bs-toggle="tab" data-bs-target="#upgrade" type="button" role="tab" aria-controls="upgrade" aria-selected="false">
+                     <span class="icon"><i class="fa-solid fa-laptop-code"></i></span>
+                     <span>Модернизация компьютеров</span>
+                    </button>
+                  </li>
+                  <!-- Установка и настройка ПО -->
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="software-install-tab" data-bs-toggle="tab" data-bs-target="#software-install" type="button" role="tab" aria-controls="software-install" aria-selected="false">
+                     <span class="icon"><i class="fa-solid fa-cogs"></i></span>
+                     <span>Установка и настройка ПО</span>
+                    </button>
+                  </li>
+                  <!-- Чистка и профилактика -->
+                  <li class="nav-item" role="presentation">
+                     <button class="nav-link" id="cleaning-tab" data-bs-toggle="tab" data-bs-target="#cleaning" type="button" role="tab" aria-controls="cleaning" aria-selected="false">
+                      <span class="icon"><i class="fa-solid fa-broom"></i></span>
+                      <span>Чистка и профилактика</span>
+                   </button>
+                  </li>
+                  <!-- Ремонт ноутбуков -->
+                  <li class="nav-item" role="presentation">
+                     <button class="nav-link" id="laptop-repair-tab" data-bs-toggle="tab" data-bs-target="#laptop-repair" type="button" role="tab" aria-controls="laptop-repair" aria-selected="false">
+                      <span class="icon"><i class="fa-solid fa-laptop"></i></span>
+                      <span>Ремонт ноутбуков</span>
+                   </button>
+                  </li>
+                  <!-- Восстановление данных -->
+                  <li class="nav-item" role="presentation">
+                     <button class="nav-link" id="data-recovery-tab" data-bs-toggle="tab" data-bs-target="#data-recovery" type="button" role="tab" aria-controls="data-recovery" aria-selected="false">
+                      <span class="icon"><i class="fa-solid fa-database"></i></span>
+                      <span>Восстановление данных</span>
+                   </button>
+                  </li>
+                </ul>
+            </div>
+         </div>
+         <div class="col-xxl-9 col-xl-9 col-lg-9">
+            <div class="somnium__right__wrap">
+               <div class="tab-content" id="myTabContent">
+                  <!-- Диагностика и ремонт -->
+                  <div class="tab-pane fade show active" id="diagnostics-repair" role="tabpanel" aria-labelledby="diagnostics-repair-tab">
+                     <div class="somnium__body">
+                        <div class="thumb" itemscope itemtype="http://schema.org/ImageObject">
+                           <img src="static/img/tab/diagnostics-repair.png" alt="Диагностика и ремонт" itemprop="contentUrl" />
+                           <meta itemprop="name" content="Диагностика и ремонт компьютеров" />
+                           <meta itemprop="description" content="Профессиональная диагностика и ремонт компьютеров любой сложности." />
+                        </div>
+                        <div class="content">
+                           <h4>
+                              <span class="text-base">Диагностика</span> и Ремонт
+                           </h4>
+                           <p>
+                              Профессиональная диагностика и ремонт компьютеров любой сложности.
+                           </p>
+                           <ul class="tagging__listing">
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Поиск и устранение неисправностей</span>
+                              </li>
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Замена неисправных комплектующих</span>
+                              </li>
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Ремонт материнских плат</span>
+                              </li>
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Ремонт блоков питания</span>
+                              </li>
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Настройка BIOS и прошивка</span>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- Модернизация компьютеров -->
+                  <div class="tab-pane fade" id="upgrade" role="tabpanel" aria-labelledby="upgrade-tab">
+                     <div class="somnium__body">
+                        <div class="thumb" itemscope itemtype="http://schema.org/ImageObject">
+                           <img src="static/img/tab/upgrade.png" alt="Модернизация компьютеров" itemprop="contentUrl" />
+                           <meta itemprop="name" content="Модернизация компьютеров" />
+                           <meta itemprop="description" content="Улучшение производительности вашего компьютера с помощью обновления комплектующих." />
+                        </div>
+                        <div class="content">
+                           <h4>
+                              <span class="text-base">Модернизация</span> Компьютеров
+                           </h4>
+                           <p>
+                              Улучшение производительности вашего компьютера с помощью обновления комплектующих.
+                           </p>
+                           <ul class="tagging__listing">
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Увеличение объема ОЗУ</span>
+                              </li>
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Замена HDD на SSD</span>
+                              </li>
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Установка более мощной видеокарты</span>
+                              </li>
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Апгрейд процессора</span>
+                              </li>
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Настройка системы после апгрейда</span>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- Установка и настройка ПО -->
+                  <div class="tab-pane fade" id="software-install" role="tabpanel" aria-labelledby="software-install-tab">
+                     <div class="somnium__body">
+                        <div class="thumb" itemscope itemtype="http://schema.org/ImageObject">
+                           <img src="static/img/tab/software-install.png" alt="Установка и настройка ПО" itemprop="contentUrl" />
+                           <meta itemprop="name" content="Установка и настройка ПО" />
+                           <meta itemprop="description" content="Профессиональная установка и настройка операционных систем и программного обеспечения." />
+                        </div>
+                        <div class="content">
+                           <h4>
+                              <span class="text-base">Установка</span> и Настройка ПО
+                           </h4>
+                           <p>
+                              Профессиональная установка и настройка операционных систем и программного обеспечения.
+                           </p>
+                           <ul class="tagging__listing">
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Установка Windows, Linux</span>
+                              </li>
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Настройка драйверов</span>
+                              </li>
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Установка офисных программ</span>
+                              </li>
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Настройка почтовых клиентов</span>
+                              </li>
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Установка антивирусов</span>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- Чистка и профилактика -->
+                  <div class="tab-pane fade" id="cleaning" role="tabpanel" aria-labelledby="cleaning-tab">
+                     <div class="somnium__body">
+                        <div class="thumb" itemscope itemtype="http://schema.org/ImageObject">
+                           <img src="static/img/tab/cleaning.png" alt="Чистка и профилактика" itemprop="contentUrl" />
+                           <meta itemprop="name" content="Чистка и профилактика компьютеров" />
+                           <meta itemprop="description" content="Комплексная чистка компьютера для предотвращения перегрева и продления срока службы." />
+                        </div>
+                        <div class="content">
+                           <h4>
+                              <span class="text-base">Чистка</span> и Профилактика
+                           </h4>
+                           <p>
+                              Комплексная чистка компьютера для предотвращения перегрева и продления срока службы.
+                           </p>
+                           <ul class="tagging__listing">
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Удаление пыли из системного блока</span>
+                              </li>
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Замена термопасты</span>
+                              </li>
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Проверка системы охлаждения</span>
+                              </li>
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Оптимизация работы системы</span>
+                              </li>
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Удаление вирусов и вредоносного ПО</span>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- Ремонт ноутбуков -->
+                  <div class="tab-pane fade" id="laptop-repair" role="tabpanel" aria-labelledby="laptop-repair-tab">
+                     <div class="somnium__body">
+                        <div class="thumb" itemscope itemtype="http://schema.org/ImageObject">
+                           <img src="static/img/tab/laptop-repair.png" alt="Ремонт ноутбуков" itemprop="contentUrl" />
+                           <meta itemprop="name" content="Ремонт ноутбуков" />
+                           <meta itemprop="description" content="Качественный ремонт ноутбуков различных брендов и моделей." />
+                        </div>
+                        <div class="content">
+                           <h4>
+                              <span class="text-base">Ремонт</span> Ноутбуков
+                           </h4>
+                           <p>
+                              Качественный ремонт ноутбуков различных брендов и моделей.
+                           </p>
+                           <ul class="tagging__listing">
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Замена экранов и матриц</span>
+                              </li>
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Ремонт клавиатуры</span>
+                              </li>
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Замена аккумуляторов</span>
+                              </li>
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Ремонт систем охлаждения</span>
+                              </li>
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Восстановление после залития жидкостью</span>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- Восстановление данных -->
+                  <div class="tab-pane fade" id="data-recovery" role="tabpanel" aria-labelledby="data-recovery-tab">
+                     <div class="somnium__body">
+                        <div class="thumb" itemscope itemtype="http://schema.org/ImageObject">
+                           <img src="static/img/tab/data-recovery.png" alt="Восстановление данных" itemprop="contentUrl" />
+                           <meta itemprop="name" content="Восстановление данных" />
+                           <meta itemprop="description" content="Восстановление утраченной информации с жестких дисков и других носителей." />
+                        </div>
+                        <div class="content">
+                           <h4>
+                              <span class="text-base">Восстановление</span> Данных
+                           </h4>
+                           <p>
+                              Восстановление утраченной информации с жестких дисков и других носителей.
+                           </p>
+                           <ul class="tagging__listing">
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Восстановление удаленных файлов</span>
+                              </li>
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Восстановление данных после форматирования</span>
+                              </li>
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Работа с поврежденными носителями</span>
+                              </li>
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Перенос данных на новые устройства</span>
+                              </li>
+                              <li>
+                                 <span><i class="fa-solid fa-check"></i></span>
+                                 <span>Резервное копирование</span>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+                </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</section>
+<!--Somnium IT Services End-->
+
+    <div class="container mt-5">
+        <div class="company-header d-flex align-items-center mb-4">
+			<img src="{{ url_for('static', filename='img/logo/logo-black.png') }}" alt="Логотип">
+            <div class="company-info">
+                <h1 class="company-name">ИП "Somnium"</h1>
+                <div class="company-details">
+                    <p>IT Компания</p>
+                    <p>Казахстан, Карагандинская область, г. Темиртау</p>
+                    <p>Разработка программного обеспечения, веб-разработка, IT-консалтинг</p>
+                    <p>ИИН: 000104551353</p>
+				
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs-container">
+			<ul class="nav nav-tabs d-flex justify-content-around" id="companyTabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="about-tab" data-toggle="tab" href="#about" role="tab" aria-controls="about" aria-selected="true">О компании</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="contacts-tab" data-toggle="tab" href="#contacts" role="tab" aria-controls="contacts" aria-selected="false">Контакты</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" id="services-tab" data-toggle="tab" href="#services" role="tab" aria-controls="services" aria-selected="false">Услуги</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="gallery-tab" data-toggle="tab" href="#gallery" role="tab" aria-controls="gallery" aria-selected="false">Фотогалерея</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="reviews-tab" data-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">Отзывы</a>
+                </li>
+                <!-- Вкладка "Способы оплаты" -->
+                <li class="nav-item">
+                    <a class="nav-link" id="payment-tab" data-toggle="tab" href="#payment" role="tab" aria-controls="payment" aria-selected="false">Способы оплаты</a>
+                </li>
+                <!-- Новая вкладка "Наши преимущества" -->
+                <li class="nav-item">
+                    <a class="nav-link" href="https://somnium.kz/benefits" target="_blank">Наши преимущества</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="tab-content mt-4" id="companyTabsContent">
+            <div class="tab-pane fade show active" id="about" role="tabpanel" aria-labelledby="about-tab">
+                <p>ИП "Somnium" — ведущая IT-компания Казахстана, специализирующаяся на разработке программного обеспечения и веб-решений. Мы предоставляем полный спектр IT-услуг, начиная от создания сайтов и мобильных приложений до комплексного IT-консалтинга.</p>
+                <p>Наша команда профессионалов гарантирует высокое качество и своевременную реализацию проектов, ориентируясь на потребности и цели наших клиентов.</p>
+                <h4>Наши ценности:</h4>
+                <ul>
+                    <li>Инновации и передовые технологии.</li>
+                    <li>Индивидуальный подход к каждому клиенту.</li>
+                    <li>Высокое качество и надежность.</li>
+                </ul>
+            </div>
+            
+            <div class="tab-pane fade" id="services" role="tabpanel" aria-labelledby="services-tab">
+                <h3>Наши услуги</h3>
+                <ul>
+                    <li>Разработка веб-приложений</li>
+                    <li>Создание мобильных приложений</li>
+                    <li>IT-консалтинг и аудит систем</li>
+                    <li>Поддержка и обслуживание IT-инфраструктуры</li>
+                    <li>Кибербезопасность и защита данных</li>
+                </ul>
+            </div>
+            
+            <div class="tab-pane fade" id="gallery" role="tabpanel" aria-labelledby="gallery-tab">
+                <div class="gallery-container row" id="gallery-container">
+                    <!-- Здесь будут отображаться изображения -->
+                </div>
+                <div class="text-center mt-3">
+                    <button class="btn btn-primary" id="load-more-btn">Показать еще</button>
+                </div>
+            </div>
+            
+            <div class="tab-pane fade" id="contacts" role="tabpanel" aria-labelledby="contacts-tab">
+                <p><strong>Адрес:</strong> Республика Казахстан, Карагандинская область, г. Темиртау</p>
+                <p><strong>Телефоны:</strong> +7 708 128 7246</p>
+                <p><strong>Email:</strong> <a href="kandarr4@gmai.com">kandarr4@gmai.com</a></p>
+				<p><strong>ИИН</strong> <a href="https://ba.prg.kz/352410000-temirtau/000104551353-ip-somnium/">000104551353</a></p>
+
+
+                <!-- Вставляем карту Яндекс -->
+            </div>
+            
+            <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                <p>Отзывы о компании ИП "Somnium".</p>
+                <!-- Здесь можно добавить реальные отзывы или интегрировать систему отзывов -->
+            </div>
+            
+            <!-- Новое содержимое вкладки "Способы оплаты" -->
+            <div class="tab-pane fade" id="payment" role="tabpanel" aria-labelledby="payment-tab">
+                <div class="container">
+                    <h3>Варианты оплаты</h3>
+                    <div class="payment-methods row">
+                        <div class="col-md-6 method">
+                            <h5>Предоплата</h5>
+                            <p>Внесите предоплату удобным для вас способом. Это гарантирует бронирование услуг.</p>
+                        </div>
+                        <div class="col-md-6 method">
+                            <h5>Наличными</h5>
+                            <p>Оплата наличными возможна при личной встрече или в офисе компании.</p>
+                        </div>
+                        <div class="col-md-6 method">
+                            <h5>Оплата картой</h5>
+                            <p>Мы принимаем все основные кредитные и дебетовые карты для вашего удобства.</p>
+                        </div>
+                        <div class="col-md-6 method">
+                            <h5>Банковский перевод</h5>
+                            <p>Выполните банковский перевод на наш расчетный счет. Все реквизиты доступны по запросу.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--Особенности Наших Услуг-->
+<section class="feature__section pt-80 pb-80">
+   <div class="container">
+         <h2 class="wow fadeInDown" data-wow-delay="0.2s">
+             <span class="text-base">Особенности</span> Наших Услуг
+         </h2>
+      </div>
+      <div class="feature__wrap">
+         <div class="row g-4">
+            <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6">
+               <div class="feature__items">
+                  <div class="thumb">
+                  </div>
+                  <h4>
+                     100%
+                  </h4>
+                  <h5>
+                     Гарантия Качества
+                  </h5>
+                  <p>
+                     Мы гарантируем высокое качество всех наших IT-решений и услуг.
+                  </p>
+                  <div class="shape">
+                  </div>
+               </div>
+            </div>
+            <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6">
+               <div class="feature__items">
+                  <div class="thumb">
+                  </div>
+                  <h4>
+                     24/7
+                  </h4>
+                  <h5>
+                     Круглосуточная Поддержка
+                  </h5>
+                  <p>
+                     Наша команда поддержки готова помочь вам в любое время суток.
+                  </p>
+                  <div class="shape">
+                  </div>
+               </div>
+            </div>
+            <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6">
+               <div class="feature__items">
+                  <div class="thumb">
+                  </div>
+                  <h4>
+                     99.9%
+                  </h4>
+                  <h5>
+                     Надежность Систем
+                  </h5>
+                  <p>
+                     Обеспечиваем высокую надежность и стабильность всех IT-систем.
+                  </p>
+                  <div class="shape">
+                  </div>
+               </div>
+            </div>
+            <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6">
+               <div class="feature__items">
+                  <div class="thumb">
+                  </div>
+                  <h4>
+                     100%
+                  </h4>
+                  <h5>
+                     Персональный Подход
+                  </h5>
+                  <p>
+                     Индивидуальные решения, разработанные под нужды вашего бизнеса.
+                  </p>
+                  <div class="shape">
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+<!--Особенности Наших Услуг End-->
+	
+<!--Часто Задаваемые Вопросы-->
+<section class="faq__section pt-120 pb-120">
+   <div class="container">
+      <div class="section__header center">
+         <h2 class="text-white wow fadeInDown" data-wow-delay="0.2s">
+            Часто Задаваемые <span class="text-base">Вопросы</span>
+         </h2>
+         <p class="text-white wow fadeInDown" data-wow-delay="0.4s">
+            Ответы на самые популярные вопросы о наших услугах.
+         </p>
+      </div>
+      <div class="row g-4 align-items-center">
+         <div class="col-xxl-6 col-xl-6 col-lg-6 wow fadeInRight" data-wow-delay="0.2s">
+            <div class="faq__left">
+               <img src="static/img/faq/right.png" alt="right-img">
+            </div>
+         </div>
+         <div class="col-xxl-6 col-xl-6 col-lg-6">
+            <div class="faq__right">
+               <div class="accordion" id="accordionExample">
+                  <div class="accordion-item wow fadeInUp" data-wow-delay="0.2s">
+                    <h2 class="accordion-header" id="headingOne">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Как начать сотрудничество с вашей компанией?
+                      </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                      <div class="accordion-body">
+                        <p>
+                           Свяжитесь с нами по телефону или через форму на сайте, и наш менеджер свяжется с вами для обсуждения деталей.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="accordion-item wow fadeInUp" data-wow-delay="0.4s">
+                    <h2 class="accordion-header" id="headingTwo">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Какие услуги вы предлагаете?
+                      </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                      <div class="accordion-body">
+                        <p>
+                           Мы предлагаем широкий спектр IT-услуг, включая веб-разработку, облачные решения, SEO оптимизацию и техническую поддержку.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="accordion-item wow fadeInUp" data-wow-delay="0.6s">
+                    <h2 class="accordion-header" id="headingThree">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        Как быстро вы выполняете проекты?
+                      </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                      <div class="accordion-body">
+                        <p>
+                           Сроки выполнения зависят от сложности проекта. Мы всегда стараемся выполнить работу в оговоренные сроки без потери качества.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="accordion-item wow fadeInUp" data-wow-delay="0.8s">
+                     <h2 class="accordion-header" id="headingfour">
+                       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsefour" aria-expanded="false" aria-controls="collapsefour">
+                         Предоставляете ли вы техническую поддержку после завершения проекта?
+                       </button>
+                     </h2>
+                     <div id="collapsefour" class="accordion-collapse collapse" aria-labelledby="headingfour" data-bs-parent="#accordionExample">
+                       <div class="accordion-body">
+                        <p>
+                           Да, мы предлагаем различные пакеты технической поддержки, чтобы обеспечить бесперебойную работу ваших систем.
+                        </p>
+                       </div>
+                     </div>
+                   </div>
+                </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</section>
+<!--Часто Задаваемые Вопросы End-->
+
+
+
+
+
+<!--Footer Here-->
+<footer class="footer-section section-bg pt-120">
+   <div class="container">
+      <div class="footer-top pb-120">
+         <div class="row g-4">
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 ">
+               <div class="widget-items">
+                  <div class="footer-head">
+                     <a href="index.html" class="footer-logo">
+                        <img src="static/img/logo/logo-black.png" alt="f-logo">
+                     </a>
+                  </div>
+                  <div class="content-area">
+                     <p>
+                        Вы можете задать вопрос или оставить заявку
+                     </p>
+                     <ul class="social">
+                        <li>
+                           <a href="#" class="icon">
+                              <i class="fa-brands fa-facebook-f"></i>
+                           </a>
+                        </li>
+                        <li>
+                           <a href="#" class="icon">
+                              <i class="fa-brands fa-instagram"></i>
+                           </a>
+                        </li>
+                        <li>
+                           <a href="#" class="icon">
+                              <i class="fa-brands fa-twitter"></i>
+                           </a>
+                        </li>
+                        <li>
+                           <a href="https://wa.me/+77081287246" class="icon">
+                              <i class="fa-brands fa-whatsapp"></i>
+                           </a>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+	<div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 ">
+	   <div class="widget-items">
+		  <div class="footer-head">
+			 <h5 class="title">
+				Услуги
+			 </h5>
+		  </div>
+		  <div class="content-area">
+			 <ul class="quick-link">
+				<li>
+				   <a href="#0">
+					  <i class="fas fa-caret-right"></i> Ремонт компьютерного оборудования
+				   </a>
+				</li>
+				<li>
+				   <a href="#0">
+					  <i class="fas fa-caret-right"></i> Создание сети и настройка оборудования
+				   </a>
+				</li>
+				<li>
+				   <a href="#0">
+					  <i class="fas fa-caret-right"></i> Установка слаботочных сетей
+				   </a>
+				</li>
+				<li>
+				   <a href="#0">
+					  <i class="fas fa-caret-right"></i> Планирование IT-инфраструктуры
+				   </a>
+				</li>
+				<li>
+				   <a href="#0">
+					  <i class="fas fa-caret-right"></i> Разработка и поддержка сайтов
+				   </a>
+				</li>
+				<li>
+				   <a href="#0">
+					  <i class="fas fa-caret-right"></i> Консультации по IT вопросам
+				   </a>
+				</li>
+			 </ul>
+		  </div>
+	   </div>
+	</div>
+	<div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 ">
+	   <div class="widget-items">
+		  <div class="footer-head">
+			 <h5 class="title">
+				Дополнительные Услуги
+			 </h5>
+		  </div>
+		  <div class="content-area">
+			 <ul class="quick-link">
+				<li>
+				   <a href="#0">
+					  <i class="fas fa-caret-right"></i> Настройка и ремонт периферийного оборудования
+				   </a>
+				</li>
+				<li>
+				   <a href="#0">
+					  <i class="fas fa-caret-right"></i> Оптимизация работы сетевых устройств
+				   </a>
+				</li>
+				<li>
+				   <a href="#0">
+					  <i class="fas fa-caret-right"></i> Сетевое и серверное администрирование
+				   </a>
+				</li>
+				<li>
+				   <a href="#0">
+					  <i class="fas fa-caret-right"></i> Настройка системы видеонаблюдения
+				   </a>
+				</li>
+				<li>
+				   <a href="#0">
+					  <i class="fas fa-caret-right"></i> Настройка резервного копирования
+				   </a>
+				</li>
+				<li>
+				   <a href="#0">
+					  <i class="fas fa-caret-right"></i> Консультации по защите данных
+				   </a>
+				</li>
+			 </ul>
+		  </div>
+	   </div>
+	</div>
+            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 ">
+               <div class="widget-items">
+                  <div class="footer-head">
+                     <h5 class="title">
+                        Наши контакты
+                     </h5>
+                  </div>
+                  <div class="content-area">
+                     <ul class="contact">
+                        <li>
+                           <div class="phone-icon">
+                              <img src="static/img/footer/email.png" alt="email">
+                           </div>
+                           <a href="#0" class="email-part">
+                              <span>Email:</span>
+                              kandarr4@gmail.com
+                           </a>
+                        </li>
+                        <li>
+                           <div class="phone-icon">
+                              <img src="static/img/footer/phone.png" alt="phone">
+                           </div>
+                           <a href="#0" class="email-part">
+                              <span>WhatsApp</span>
+                              +7 708 128 7246
+                           </a>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="footer-bottom">
+         <p>
+            Copyright &copy; 2024 Somnium| Designed by <a href="#0">Bortnikov V.V</a>
+         </p>
+      </div>
+   </div>
+</footer>
+<!--Footer End-->
+
+   <script src="/static/js/jquery-3.6.0.min.js"></script>
+   <script src="/static/js/bootstrap.bundle.js"></script>
+   <script src="/static/js/jquery.waypoints.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+   <script src="/static/js/viewport.jquery.js"></script>
+   <script src="/static/js/wow.min.js"></script>
+   <script src="/static/js/odometer.min.js"></script>
+   <script src="/static/js/owl.min.js"></script>
+   <script src="/static/js/jquery.nice-select.min.js"></script>
+   <script src="/static/js/magnific-popup.js"></script>
+   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+
+		
+document.addEventListener('DOMContentLoaded', function () {
+    const bottomPanel = document.getElementById('bottomPanel');
+    const panelContent = document.getElementById('panelContent');
+    const openPanelButton = document.getElementById('openPanel');
+    const closePanelButton = document.getElementById('closePanel');
+
+    // Скрываем панель по умолчанию
+    panelContent.classList.add('hidden');
+
+    // Открытие панели при нажатии на кнопку "Задать вопрос"
+    openPanelButton.addEventListener('click', function (e) {
+        e.stopPropagation();
+        panelContent.classList.remove('hidden'); // Убираем класс hidden для отображения
+        panelContent.style.bottom = '60px'; // Поднимаем панель
+        bottomPanel.classList.add('active');
+    });
+
+    // Закрытие панели при нажатии на кнопку "X"
+    closePanelButton.addEventListener('click', function (e) {
+        e.stopPropagation();
+        panelContent.style.bottom = '-400px'; // Скрываем панель
+        bottomPanel.classList.remove('active');
+        panelContent.classList.add('hidden'); // Добавляем класс hidden, чтобы скрыть панель
+    });
+
+    // Закрытие панели при клике вне ее
+    document.addEventListener('click', function (e) {
+        if (!panelContent.contains(e.target) && !openPanelButton.contains(e.target)) {
+            panelContent.style.bottom = '-400px';
+            bottomPanel.classList.remove('active');
+            panelContent.classList.add('hidden'); // Добавляем класс hidden, чтобы скрыть панель
+        }
+    });
+
+    // Обработка формы отправки сообщений
+    document.getElementById('messageForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        // Сбор данных формы
+        const formData = {
+            first_name: document.getElementById('firstName').value,
+            last_name: document.getElementById('lastName').value,
+            middle_name: document.getElementById('middleName').value,
+            contact_number: document.getElementById('contactNumber').value,
+            contact_email: document.getElementById('contactEmail').value,
+            content: document.getElementById('content').value
+        };
+
+        // Получение CSRF токена, если используете Flask-WTF
+        const csrfToken = "{{ csrf_token() }}";  // Убедитесь, что csrf_token передается в шаблон
+
+        // Отправка данных на сервер
+        fetch('{{ url_for("send_message") }}', {  // Используем url_for для динамического пути
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken  // Добавляем CSRF токен в заголовки
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Успешное уведомление через SweetAlert2
+                Swal.fire({
+                    title: 'Успешно!',
+                    text: data.message,
+                    icon: 'success',
+                    confirmButtonText: 'ОК'
+                });
+
+                // Закрытие панели
+                panelContent.style.bottom = '-400px';
+                bottomPanel.classList.remove('active');
+                panelContent.classList.add('hidden'); // Добавляем класс hidden, чтобы скрыть панель
+
+                // Очистка формы
+                document.getElementById('messageForm').reset();
+            } else {
+                // Обработка ошибок и уведомление об ошибке
+                let errorMessages = '';
+                if (data.errors) {
+                    for (const field in data.errors) {
+                        errorMessages += `${data.errors[field]}\n`;
+                    }
+                    Swal.fire({
+                        title: 'Ошибка',
+                        text: 'Ошибки при отправке:\n' + errorMessages,
+                        icon: 'error',
+                        confirmButtonText: 'ОК'
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Ошибка',
+                        text: 'Ошибка при отправке сообщения: ' + data.message,
+                        icon: 'error',
+                        confirmButtonText: 'ОК'
+                    });
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            // Показываем модальное окно Bootstrap при ошибке отправки
+            const modalBody = document.querySelector('#notificationModal .modal-body');
+            modalBody.textContent = 'Не удалось отправить сообщение. Попробуйте позже.';
+            const notificationModal = new bootstrap.Modal(document.getElementById('notificationModal'));
+            notificationModal.show();
+        });
+    });
+});
+
+
+</script>
+
+
+</body>
+
+</html>

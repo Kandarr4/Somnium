@@ -1,0 +1,34 @@
+{
+    "max_surveys": 5,
+    "max_questions_per_survey": 20,
+    "max_answers_per_question": 5,
+    "max_users": 100,
+    "duration_days": 0,
+    "data_retention_days": 7,
+    "data_export_formats": ["CSV"]
+}
+
+{
+    "max_surveys": 50,
+    "max_questions_per_survey": 100,
+    "max_answers_per_question": 5,
+    "max_users": 500,
+    "duration_days": 365,
+    "data_retention_days": 365,
+    "data_export_formats": ["CSV", "Excel", "PDF"],
+    "analytics": "advanced"
+}
+
+{
+    "max_surveys": null,
+    "max_questions_per_survey": null,
+    "max_answers_per_question": null,
+    "max_users": null,
+    "duration_days": 365,
+    "data_retention_days": null,
+    "data_export_formats": ["CSV", "Excel", "PDF", "BI Integration"],
+    "analytics": "premium",
+    "custom_styles": true,
+    "template": "premium",
+    "css": "premium_style.css"
+}

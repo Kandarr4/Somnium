@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="author" content="ИП Somnium - Валентин Бортников">
+   <meta name="description" content="О нас">
+   <meta name="csrf-token" content="YOUR_CSRF_TOKEN_HERE">
+   <title>Somnium - карточка товара</title>
+   <link rel="stylesheet" href="C:/somnium/static/css/bootstrap.min.css">
+   <link rel="stylesheet" href="C:/somnium/static/css/odometer.css">
+   <link rel="stylesheet" href="C:/somnium/static/css/owl.min.css">
+   <link rel="stylesheet" href="C:/somnium/static/css/owl.theme.default.min.css">
+   <link rel="stylesheet" href="C:/somnium/static/css/all.min.css">
+   <link rel="stylesheet" href="C:/somnium/static/css/animate.css">
+   <link rel="stylesheet" href="C:/somnium/static/css/nice-select.css">
+   <link rel="stylesheet" href="C:/somnium/static/css/magnific-popup.css">
+   <link rel="stylesheet" href="C:/somnium/static/css/main.css">
+   <link rel="icon" href="C:/somnium/static/img/favicon/favicon.ico" type="image/x-icon">
+   <style>
+      /* Основной стиль для карточки товара 1000x1000 */
+      .product-card {
+         width: 1000px;
+         height: 1000px;
+         margin: 0 auto;
+         background-color: #f8f9fa;
+         display: flex;
+         flex-direction: column;
+         justify-content: flex-start;
+         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+         overflow: hidden;
+      }
+      /* Верхняя часть – навигация */
+      .card-header {
+         padding: 20px;
+         background-color: #fff;
+         border-bottom: 1px solid #ddd;
+      }
+      /* Нижняя часть – контент */
+      .card-body {
+         flex: 1;
+         overflow-y: auto;
+         padding: 20px;
+         background-color: #fff;
+      }
+      /* Стили для навигационного блока */
+      .somnium__left__wrap {
+         background-color: #fff;
+         padding: 20px;
+         border-radius: 8px;
+         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      /* Изменяем расположение кнопок на вертикальное */
+      .nav-tabs {
+         display: flex;
+         flex-direction: column;
+         gap: 10px;
+         border: none;
+         padding: 0;
+         margin: 0;
+      }
+      .nav-tabs .nav-item {
+         /* убираем flex: 1, чтобы кнопки не растягивались */
+         text-align: left;
+         width: 100%;
+      }
+      .nav-tabs .nav-link {
+         display: flex;
+         align-items: center;
+         padding: 12px 20px;
+         border: none;
+         border-radius: 6px;
+         background-color: #f1f1f1;
+         color: #333;
+         transition: background-color 0.3s, color 0.3s;
+         font-weight: 500;
+         width: 100%;
+      }
+      .nav-tabs .nav-link.active,
+      .nav-tabs .nav-link:hover {
+         background-color: #007bff;
+         color: #fff;
+      }
+      .nav-tabs .nav-link .icon {
+         margin-right: 10px;
+         font-size: 1.2rem;
+      }
+      /* Стили для контента табов */
+      .somnium__right__wrap {
+         padding: 20px;
+         background-color: #fff;
+         border-radius: 8px;
+         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .somnium__body {
+         display: flex;
+         flex-wrap: wrap;
+         align-items: center;
+      }
+      .somnium__body .thumb {
+         flex: 1 1 40%;
+         padding: 10px;
+      }
+      .somnium__body .thumb img {
+         width: 100%;
+         height: auto;
+         border-radius: 8px;
+         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+         transition: transform 0.3s;
+      }
+      .somnium__body .thumb img:hover {
+         transform: scale(1.05);
+      }
+      .somnium__body .content {
+         flex: 1 1 60%;
+         padding: 10px 20px;
+      }
+      .somnium__body .content h4 {
+         font-size: 1.8rem;
+         color: #333;
+         margin-bottom: 15px;
+      }
+      .somnium__body .content p {
+         font-size: 1rem;
+         color: #555;
+         margin-bottom: 20px;
+         line-height: 1.6;
+      }
+      .tagging__listing {
+         list-style: none;
+         padding: 0;
+         margin: 0;
+      }
+      .tagging__listing li {
+         display: flex;
+         align-items: center;
+         margin-bottom: 10px;
+         color: #555;
+         font-size: 1rem;
+      }
+      .tagging__listing li span:first-child {
+         color: #28a745;
+         margin-right: 10px;
+         font-size: 1.2rem;
+      }
+   </style>
+</head>
+<body>
+   <!-- Карточка товара в разрешении 1000x1000 -->
+   <div class="product-card">
+      <!-- Верхняя часть: навигация (сверху) -->
+      <div class="card-header">
+         <div class="somnium__left__wrap">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+               <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="web-dev-tab" data-bs-toggle="tab" data-bs-target="#web-dev" type="button" role="tab" aria-controls="web-dev" aria-selected="true">
+                     <span class="icon"><i class="fa-solid fa-code"></i></span>
+                     <span>Веб-разработка</span>
+                  </button>
+               </li>
+               <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="hardware-repair-tab" data-bs-toggle="tab" data-bs-target="#hardware-repair" type="button" role="tab" aria-controls="hardware-repair" aria-selected="false">
+                     <span class="icon"><i class="fa-solid fa-tools"></i></span>
+                     <span>Ремонт компьютеров</span>
+                  </button>
+               </li>
+               <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="it-outsourcing-tab" data-bs-toggle="tab" data-bs-target="#it-outsourcing" type="button" role="tab" aria-controls="it-outsourcing" aria-selected="false">
+                     <span class="icon"><i class="fa-solid fa-network-wired"></i></span>
+                     <span>IT Аутсорсинг</span>
+                  </button>
+               </li>
+               <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="multimedia-design-tab" data-bs-toggle="tab" data-bs-target="#multimedia-design" type="button" role="tab" aria-controls="multimedia-design" aria-selected="false">
+                     <span class="icon"><i class="fa-solid fa-paint-brush"></i></span>
+                     <span>Мультимедийный дизайн</span>
+                  </button>
+               </li>
+               <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="technical-support-tab" data-bs-toggle="tab" data-bs-target="#technical-support" type="button" role="tab" aria-controls="technical-support" aria-selected="false">
+                     <span class="icon"><i class="fa-solid fa-headset"></i></span>
+                     <span>Техническая поддержка</span>
+                  </button>
+               </li>
+               <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="additional-services-tab" data-bs-toggle="tab" data-bs-target="#additional-services" type="button" role="tab" aria-controls="additional-services" aria-selected="false">
+                     <span class="icon"><i class="fa-solid fa-briefcase"></i></span>
+                     <span>Доп. услуги</span>
+                  </button>
+               </li>
+            </ul>
+         </div>
+      </div>
+      <!-- Нижняя часть: контент выбранного таба -->
+      <div class="card-body">
+         <div class="somnium__right__wrap">
+            <div class="tab-content" id="myTabContent">
+               <div class="tab-pane fade show active" id="web-dev" role="tabpanel" aria-labelledby="web-dev-tab">
+                  <div class="somnium__body">
+                     <div class="thumb">
+                        <img src="C:/somnium/static/img/tab/webdev.png" alt="Веб-разработка">
+                     </div>
+                     <div class="content">
+                        <h4><span class="text-base">Веб</span> Разработка</h4>
+                        <p>Создаем современные и функциональные веб-сайты, адаптированные под ваши нужды.</p>
+                        <ul class="tagging__listing">
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Разработка сайтов</span>
+                           </li>
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Корпоративные системы</span>
+                           </li>
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Настольные приложения</span>
+                           </li>
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Тестирование и обеспечение качества</span>
+                           </li>
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Поддержка и обновления</span>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+               <div class="tab-pane fade" id="hardware-repair" role="tabpanel" aria-labelledby="hardware-repair-tab">
+                  <div class="somnium__body">
+                     <div class="thumb">
+                        <img src="C:/somnium/static/img/tab/hardware-repair.png" alt="Ремонт компьютеров">
+                     </div>
+                     <div class="content">
+                        <h4><span class="text-base">Ремонт</span> Компьютеров</h4>
+                        <p>Профессиональный ремонт и обслуживание компьютерного оборудования для обеспечения его долгой и надежной работы.</p>
+                        <ul class="tagging__listing">
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Ремонт компьютеров</span>
+                           </li>
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Апгрейд и модернизация</span>
+                           </li>
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Ремонт периферии</span>
+                           </li>
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Очистка и профилактика</span>
+                           </li>
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Установка ПО</span>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+               <div class="tab-pane fade" id="it-outsourcing" role="tabpanel" aria-labelledby="it-outsourcing-tab">
+                  <div class="somnium__body">
+                     <div class="thumb">
+                        <img src="C:/somnium/static/img/tab/it-outsourcing.png" alt="IT Аутсорсинг">
+                     </div>
+                     <div class="content">
+                        <h4><span class="text-base">IT</span> Аутсорсинг</h4>
+                        <p>Полный спектр IT-услуг для вашего бизнеса, позволяющий сосредоточиться на основных задачах.</p>
+                        <ul class="tagging__listing">
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Управление IT-инфраструктурой</span>
+                           </li>
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Удалённое администрирование</span>
+                           </li>
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Облачные решения</span>
+                           </li>
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Консалтинг</span>
+                           </li>
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Стратегическое планирование</span>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+               <div class="tab-pane fade" id="multimedia-design" role="tabpanel" aria-labelledby="multimedia-design-tab">
+                  <div class="somnium__body">
+                     <div class="thumb">
+                        <img src="C:/somnium/static/img/tab/multimedia-design.png" alt="Мультимедийный дизайн">
+                     </div>
+                     <div class="content">
+                        <h4><span class="text-base">Мультимедийный</span> Дизайн</h4>
+                        <p>Создаем визуально привлекательные материалы для вашего бизнеса, включая графику, анимацию и 3D модели.</p>
+                        <ul class="tagging__listing">
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Видеомонтаж</span>
+                           </li>
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>3D моделирование</span>
+                           </li>
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Логотипы</span>
+                           </li>
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Перенос в 3D</span>
+                           </li>
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Графика и анимация</span>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+               <div class="tab-pane fade" id="technical-support" role="tabpanel" aria-labelledby="technical-support-tab">
+                  <div class="somnium__body">
+                     <div class="thumb">
+                        <img src="C:/somnium/static/img/tab/technical-support.png" alt="Техническая поддержка">
+                     </div>
+                     <div class="content">
+                        <h4><span class="text-base">Техническая</span> Поддержка</h4>
+                        <p>Круглосуточная поддержка для обеспечения бесперебойной работы ваших IT-систем.</p>
+                        <ul class="tagging__listing">
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Круглосуточная поддержка</span>
+                           </li>
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Удалённое администрирование</span>
+                           </li>
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Решение проблем</span>
+                           </li>
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Консультации</span>
+                           </li>
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Управление инфраструктурой</span>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+               <div class="tab-pane fade" id="additional-services" role="tabpanel" aria-labelledby="additional-services-tab">
+                  <div class="somnium__body">
+                     <div class="thumb">
+                        <img src="C:/somnium/static/img/tab/additional-services.png" alt="Дополнительные услуги">
+                     </div>
+                     <div class="content">
+                        <h4><span class="text-base">Дополнительные</span> Услуги</h4>
+                        <p>Расширьте возможности вашего бизнеса с помощью наших дополнительных IT-решений.</p>
+                        <ul class="tagging__listing">
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Консалтинг</span>
+                           </li>
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Облачные решения</span>
+                           </li>
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Управление IT-инфраструктурой</span>
+                           </li>
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Настольные приложения</span>
+                           </li>
+                           <li>
+                              <span><i class="fa-solid fa-check"></i></span>
+                              <span>Анимация и спецэффекты</span>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <script src="C:/somnium/static/js/jquery-3.6.0.min.js"></script>
+   <script src="C:/somnium/static/js/bootstrap.bundle.js"></script>
+   <script src="C:/somnium/static/js/jquery.waypoints.min.js"></script>
+   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+   <script src="C:/somnium/static/js/viewport.jquery.js"></script>
+   <script src="C:/somnium/static/js/wow.min.js"></script>
+   <script src="C:/somnium/static/js/odometer.min.js"></script>
+   <script src="C:/somnium/static/js/owl.min.js"></script>
+   <script src="C:/somnium/static/js/jquery.nice-select.min.js"></script>
+   <script src="C:/somnium/static/js/magnific-popup.js"></script>
+   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>

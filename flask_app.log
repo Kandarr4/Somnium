@@ -1,0 +1,19 @@
+2024-12-06 23:24:48,578 - WARNING -  * Debugger is active!
+2024-12-06 23:24:48,594 - INFO -  * Debugger PIN: 361-587-884
+2024-12-06 23:24:51,725 - INFO - Вложение сохранено: static/files\b3272ad58ed64e2cb93bb19728d9189b_IMG-20241206-WA0047.jpeg
+2024-12-06 23:24:53,790 - ERROR - Exception при отправке письма: HTTPConnectionPool(host='localhost', port=7001): Max retries exceeded with url: /send_email (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000023EDA82EBD0>: Failed to establish a new connection: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение'))
+2024-12-06 23:25:01,960 - INFO - Selected Recipient: admin@somnium.kz
+2024-12-06 23:25:01,960 - INFO - Number of incoming threads fetched: 2
+2024-12-06 23:25:01,975 - INFO - Number of outgoing threads fetched: 8
+2024-12-06 23:25:02,319 - INFO - Selected Recipient: admin@somnium.kz
+2024-12-06 23:25:02,319 - INFO - Number of incoming threads fetched: 2
+2024-12-06 23:25:02,319 - INFO - Number of outgoing threads fetched: 8
+2024-12-06 23:25:13,795 - INFO - Вложение сохранено: static/files\a7036ec0aeb8473293337ed2c1ce2ee7_IMG-20241206-WA0047.jpeg
+2024-12-06 23:25:15,840 - ERROR - Exception при отправке письма: HTTPConnectionPool(host='localhost', port=7001): Max retries exceeded with url: /send_email (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000023EDA8816D0>: Failed to establish a new connection: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение'))
+2024-12-06 23:27:48,320 - INFO -  * Detected change in 'C:\\somnium\\smtp_server.py', reloading
+2024-12-06 23:27:53,398 - WARNING -  * Debugger is active!
+2024-12-06 23:27:53,398 - INFO -  * Debugger PIN: 361-587-884
+2024-12-06 23:28:19,814 - INFO -  * Detected change in 'C:\\somnium\\smtp_server.py', reloading
+2024-12-06 23:28:24,471 - WARNING -  * Debugger is active!
+2024-12-06 23:28:24,471 - INFO -  * Debugger PIN: 361-587-884
+2024-12-06 23:28:43,777 - INFO -  * Detected change in 'C:\\somnium\\app.py', reloading

@@ -1,0 +1,165 @@
+{
+  "data": [
+    [
+      "Характеристики"
+    ],
+    [
+      "Серия",
+      "",
+      ""
+    ],
+    [
+      "Масса",
+      "",
+      ""
+    ],
+    [
+      "Объем<br>",
+      "",
+      ""
+    ],
+    [
+      "Производитель",
+      "",
+      ""
+    ],
+    [
+      "Страна производства",
+      "",
+      ""
+    ],
+    [
+      "Консруктивные характеристики",
+      "",
+      ""
+    ],
+    [
+      "Исполнение",
+      "",
+      ""
+    ],
+    [
+      "Тип",
+      "",
+      ""
+    ],
+    [
+      "Тип электрического присоединения",
+      "",
+      ""
+    ],
+    [
+      "Номинальное сопротивление датчика",
+      "",
+      ""
+    ],
+    [
+      "Класс защиты IP",
+      "",
+      ""
+    ],
+    [
+      "Климатические характеристики",
+      "",
+      ""
+    ],
+    [
+      "Температурный диапазон измерений",
+      "",
+      ""
+    ],
+    [
+      "Температура перемещаемой среды",
+      "",
+      ""
+    ],
+    [
+      "Температура внешней среды",
+      "",
+      ""
+    ]
+  ],
+  "styles": {
+    "0-0": "font-weight:bold;background-color:rgb(255, 255, 255);text-align:left;font-size:30px;vertical-align:middle;",
+    "1-0": "font-weight:bold;background-color:rgb(255, 255, 255);",
+    "1-1": "background-color:rgb(255, 255, 255);",
+    "1-2": "background-color:rgb(255, 255, 255);",
+    "2-0": "font-weight:bold;background-color:rgb(255, 255, 255);",
+    "2-1": "background-color:rgb(255, 255, 255);",
+    "2-2": "background-color:rgb(255, 255, 255);",
+    "3-0": "font-weight:bold;background-color:rgb(255, 255, 255);",
+    "3-1": "background-color:rgb(255, 255, 255);",
+    "3-2": "background-color:rgb(255, 255, 255);",
+    "4-0": "font-weight:bold;background-color:rgb(255, 255, 255);",
+    "4-1": "background-color:rgb(255, 255, 255);",
+    "4-2": "background-color:rgb(255, 255, 255);",
+    "5-0": "font-weight:bold;background-color:rgb(242, 242, 242);",
+    "5-1": "background-color:rgb(242, 242, 242);",
+    "5-2": "font-weight:bold;background-color:rgb(242, 242, 242);",
+    "6-0": "font-weight:bold;background-color:rgb(255, 255, 255);text-align:left;font-size:36px;vertical-align:middle;",
+    "6-1": "",
+    "6-2": "",
+    "7-0": "font-weight:bold;background-color:rgb(242, 242, 242);",
+    "7-1": "background-color:rgb(242, 242, 242);",
+    "7-2": "background-color:rgb(242, 242, 242);",
+    "8-0": "font-weight:bold;background-color:rgb(255, 255, 255);",
+    "8-1": "background-color:rgb(255, 255, 255);",
+    "8-2": "background-color:rgb(255, 255, 255);",
+    "9-0": "font-weight:bold;background-color:rgb(242, 242, 242);",
+    "9-1": "background-color:rgb(242, 242, 242);",
+    "9-2": "background-color:rgb(242, 242, 242);",
+    "10-0": "font-weight:bold;background-color:rgb(255, 255, 255);",
+    "10-1": "background-color:rgb(255, 255, 255);",
+    "10-2": "background-color:rgb(255, 255, 255);",
+    "11-0": "font-weight:bold;background-color:rgb(242, 242, 242);",
+    "11-1": "background-color:rgb(242, 242, 242);",
+    "11-2": "background-color:rgb(242, 242, 242);",
+    "12-0": "font-weight:bold;background-color:rgb(255, 255, 255);font-size:38px;vertical-align:middle;",
+    "12-1": "",
+    "12-2": "",
+    "13-0": "font-weight:bold;background-color:rgb(242, 242, 242);",
+    "13-1": "",
+    "13-2": "",
+    "14-0": "font-weight:bold;background-color:rgb(255, 255, 255);",
+    "14-1": "background-color:rgb(255, 255, 255);",
+    "14-2": "background-color:rgb(255, 255, 255);",
+    "15-0": "font-weight:bold;background-color:rgb(242, 242, 242);",
+    "15-1": "background-color:rgb(242, 242, 242);",
+    "15-2": "background-color:rgb(242, 242, 242);"
+  },
+  "merges": [
+    {
+      "s": {
+        "r": 0,
+        "c": 0
+      },
+      "e": {
+        "r": 0,
+        "c": 2
+      }
+    }
+  ],
+  "widths": [
+    "",
+    "",
+    ""
+  ],
+  "heights": [
+    "75.5906px",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+  ]
+}

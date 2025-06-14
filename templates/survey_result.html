@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результаты опроса: {{ survey.title if survey else "Неизвестно" }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<style>
+:root {
+    --primary-color: #3d5af1;
+    --secondary-color: #22d1ee;
+    --accent-color: #ff6b6b;
+    --background-color: #f6f8ff;
+    --card-bg: #ffffff;
+    --text-color: #2c3e50;
+    --text-light: #6c757d;
+    --card-shadow: 0 8px 20px rgba(61, 90, 241, 0.08);
+    --transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    transition: var(--transition);
+    padding-bottom: 3rem;
+}
+
+.dashboard-container {
+    max-width: 1280px;
+    padding: 2rem;
+    margin: 2rem auto;
+    background-color: var(--card-bg);
+    box-shadow: var(--card-shadow);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.survey-header {
+    position: relative;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 2.5rem 2rem;
+    margin: -2rem -2rem 2rem -2rem;
+    border-radius: 16px 16px 0 0;
+}
+
+.survey-header h1 {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-size: 2.2rem;
+    border: none;
+    color: white;
+}
+
+.survey-header p {
+    opacity: 0.9;
+    max-width: 700px;
+    font-size: 1.05rem;
+}
+
+.survey-meta {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+    display: inline-flex;
+    gap: 1.5rem;
+}
+
+.survey-meta-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.survey-meta-item i {
+    margin-right: 0.5rem;
+}
+
+h2, h3 {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin: 2.5rem 0 1.5rem 0;
+    position: relative;
+    padding-bottom: 0.75rem;
+}
+
+h2::after, h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    border-radius: 3px;
+}
+
+.stats-card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stats-item {
+    background-color: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
+}
+
+.stats-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(61, 90, 241, 0.15);
+}
+
+.stats-value {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+}
+
+.stats-label {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.stats-icon {
+    float: right;
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+    opacity: 0.8;
+}
+
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 1.5rem;
+    transition: var(--transition);
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    padding: 1.25rem 1.5rem;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #e0e6ed;
+    padding: 0.6rem 1rem;
+    font-size: 0.95rem;
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 3px rgba(61, 90, 241, 0.1);
+    border-color: var(--primary-color);
+}
+
+.btn {
+    border-radius: 8px;
+    padding: 0.6rem 1.25rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: var(--transition);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border: none;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-color));
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(61, 90, 241, 0.2);
+}
+
+.btn-secondary {
+    background-color: #ebedf2;
+    border: none;
+    color: var(--text-color);
+}
+
+.btn-secondary:hover {
+    background-color: #dee2e6;
+    color: var(--text-color);
+}
+
+.date-filter-form {
+    background-color: var(--card-bg);
+    padding: 1.25rem;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 2rem;
+}
+
+.chart-container {
+    background-color: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 2rem;
+}
+
+canvas {
+    border-radius: 8px;
+}
+
+table {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 2rem;
+}
+
+.table thead th {
+    background: linear-gradient(135deg, var(--primary-color), #4f68e0);
+    color: white;
+    font-weight: 600;
+    border: none;
+    padding: 1rem 1.25rem;
+    font-size: 0.95rem;
+}
+
+.table tbody tr:nth-child(odd) {
+    background-color: rgba(245, 247, 250, 0.5);
+}
+
+.table tbody tr:hover {
+    background-color: rgba(61, 90, 241, 0.05);
+}
+
+.table td {
+    padding: 1rem 1.25rem;
+    vertical-align: middle;
+    border-top: 1px solid #e9ecef;
+    font-size: 0.95rem;
+}
+
+.badge {
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+
+.badge-success {
+    background-color: #2ecc71;
+}
+
+.badge-secondary {
+    background-color: #7f8c8d;
+}
+
+.answer-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.answer-item {
+    display: flex;
+    justify-content: space-between;
+    background-color: #f8f9fa;
+    margin-bottom: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.answer-item:hover {
+    background-color: #e9ecef;
+    transform: translateX(5px);
+}
+
+.answer-text {
+    font-weight: 500;
+}
+
+.answer-count {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.question-stats {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.question-stat {
+    background-color: #f8f9fa;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+}
+
+.question-stat i {
+    margin-right: 0.5rem;
+    color: var(--primary-color);
+}
+
+.url-box {
+    background-color: #f8f9fa;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.url-text {
+    flex-grow: 1;
+    font-family: monospace;
+    word-break: break-all;
+}
+
+.copy-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.25rem 0.75rem;
+    margin-left: 0.75rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.copy-btn:hover {
+    background-color: var(--secondary-color);
+}
+
+.text-answer {
+    background-color: #f8f9fa;
+    border-left: 3px solid var(--primary-color);
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+    border-radius: 0 8px 8px 0;
+}
+
+.alert {
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+}
+
+.alert i {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .stats-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+    
+    .dashboard-container {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+    
+    .survey-header {
+        padding: 2rem 1.5rem;
+        margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+    }
+}
+
+@media (max-width: 767px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .dashboard-container {
+        padding: 1rem;
+        margin: 0.5rem;
+    }
+    
+    .survey-header {
+        padding: 1.5rem 1rem;
+        margin: -1rem -1rem 1rem -1rem;
+    }
+    
+    .survey-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .survey-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.85rem;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dashboard-container > * {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.dashboard-container > *:nth-child(1) { animation-delay: 0.1s; }
+.dashboard-container > *:nth-child(2) { animation-delay: 0.2s; }
+.dashboard-container > *:nth-child(3) { animation-delay: 0.3s; }
+.dashboard-container > *:nth-child(4) { animation-delay: 0.4s; }
+.dashboard-container > *:nth-child(5) { animation-delay: 0.5s; }
+</style>
+<body>
+<div class="dashboard-container">
+    {% if show_alert %}
+        <div class="alert alert-{{ alert_type }}" role="alert">
+            <i class="fas {% if alert_type == 'success' %}fa-check-circle{% elif alert_type == 'warning' %}fa-exclamation-triangle{% elif alert_type == 'danger' %}fa-times-circle{% else %}fa-info-circle{% endif %}"></i>
+            <div>
+                <h4 class="alert-heading">{{ alert_title }}</h4>
+                <p class="mb-0">{{ alert_text }}</p>
+            </div>
+        </div>
+    {% elif survey %}
+        <div class="survey-header">
+            <h1>{{ survey.title }}</h1>
+            <p>{{ survey.description }}</p>
+            <div class="survey-meta">
+                <div class="survey-meta-item">
+                    <i class="fas fa-users"></i> {{ total_participants }} участников
+                </div>
+                <div class="survey-meta-item">
+                    <i class="fas fa-calendar-alt"></i> Создан: {{ created_at.strftime('%d.%m.%Y') }}
+                </div>
+                <div class="survey-meta-item">
+                    <i class="fas {% if is_active %}fa-check-circle{% else %}fa-times-circle{% endif %}"></i>
+                    {{ 'Активен' if is_active else 'Неактивен' }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Ключевые показатели -->
+        <h2><i class="fas fa-chart-pie mr-2"></i>Ключевые показатели</h2>
+        <div class="stats-grid">
+            <div class="stats-item">
+                <i class="fas fa-users stats-icon"></i>
+                <div class="stats-value">{{ total_participants }}</div>
+                <div class="stats-label">Всего участников</div>
+            </div>
+            <div class="stats-item">
+                <i class="fas fa-clock stats-icon"></i>
+                <div class="stats-value">{{ average_time|round(1) }}</div>
+                <div class="stats-label">Среднее время (мин)</div>
+            </div>
+            <div class="stats-item">
+                <i class="fas fa-check-double stats-icon"></i>
+                <div class="stats-value">{{ completion_rate|round }}%</div>
+                <div class="stats-label">Завершаемость</div>
+            </div>
+            {% if average_score %}
+            <div class="stats-item">
+                <i class="fas fa-trophy stats-icon"></i>
+                <div class="stats-value">{{ average_score|round }}%</div>
+                <div class="stats-label">Средний балл</div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Информация о доступе -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-link mr-2"></i>Информация о доступе
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><i class="fas fa-clipboard-list mr-2"></i>Тип опроса: <strong>{{ survey_type }}</strong></p>
+                        <p><i class="fas fa-users-cog mr-2"></i>Доступ: <strong>{{ access_user_ids }}</strong></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><i class="fas fa-link mr-2"></i>URL доступа:</p>
+                        <div class="url-box">
+                            <span class="url-text">{{ request.host_url }}survey/{{ survey.url }}</span>
+                            <button class="copy-btn" onclick="copyToClipboard('{{ request.host_url }}survey/{{ survey.url }}')">
+                                <i class="far fa-copy mr-1"></i>Копировать
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Форма для выбора диапазона дат -->
+        <h2><i class="fas fa-chart-line mr-2"></i>Активность участников</h2>
+        <div class="date-filter-form">
+            <form id="date-filter-form" class="form-row align-items-end">
+                <div class="col-md-4 mb-2 mb-md-0">
+                    <label for="start_date">Начальная дата:</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                        </div>
+                        <input type="date" id="start_date" name="start_date" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-4 mb-2 mb-md-0">
+                    <label for="end_date">Конечная дата:</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                        </div>
+                        <input type="date" id="end_date" name="end_date" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-4 d-flex">
+                    <button type="submit" class="btn btn-primary mr-2">
+                        <i class="fas fa-filter mr-1"></i>Применить
+                    </button>
+                    <button type="button" id="reset-filter" class="btn btn-secondary">
+                        <i class="fas fa-redo-alt mr-1"></i>Сбросить
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- График участников -->
+        <div class="chart-container">
+            <canvas id="participantChart" width="400" height="250"></canvas>
+        </div>
+
+        <!-- Статистика по вопросам -->
+        <h2><i class="fas fa-question-circle mr-2"></i>Результаты по вопросам</h2>
+        {% for question in questions_stats %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <span class="badge badge-light mr-2">№{{ loop.index }}</span>
+                    {{ question.text }}
+                </div>
+                <div class="card-body">
+                    <div class="question-stats">
+                        <div class="question-stat">
+                            <i class="fas fa-list-ul"></i>
+                            <span>{{ question.question_type }}</span>
+                        </div>
+                        <div class="question-stat">
+                            <i class="fas fa-reply-all"></i>
+                            <span>{{ question.total_answers }} ответов</span>
+                        </div>
+                        {% if question.percentage_correct is not none %}
+                        <div class="question-stat">
+                            <i class="fas fa-check-circle"></i>
+                            <span>{{ question.percentage_correct|round(1) }}% правильных</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    {% if question.choice_distribution %}
+                    <h5 class="mt-4 mb-3">Распределение ответов</h5>
+                    <ul class="answer-list">
+                        {% for choice in question.choice_distribution %}
+                            <li class="answer-item">
+                                <span class="answer-text">{{ choice.choice_text }}</span>
+                                <span class="answer-count">{{ choice.count }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+
+                    {% if question.popular_text_answers %}
+                        <h5 class="mt-4 mb-3">Текстовые ответы</h5>
+                        {% for text, count in question.popular_text_answers %}
+                            <div class="text-answer">
+                                <div class="d-flex justify-content-between">
+                                    <span>{{ text }}</span>
+                                    <span class="badge badge-primary">{{ count }}</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+
+        <!-- Статистика по участникам -->
+        <h2><i class="fas fa-users mr-2"></i>Информация об участниках</h2>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Имя</th>
+                    <th>Фамилия</th>
+                    <th>Отчество</th>
+                    <th>IIN</th>
+                    <th>Телефон</th>
+                    <th>Тип авторизации</th>
+                    <th>Дата регистрации</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for participant in participant_stats %}
+                    <tr>
+                        <td>{{ participant.id }}</td>
+                        <td>{{ participant.first_name }}</td>
+                        <td>{{ participant.last_name }}</td>
+                        <td>{{ participant.patronymic }}</td>
+                        <td>{{ participant.iin }}</td>
+                        <td>{{ participant.phone_number }}</td>
+                        <td><span class="badge badge-primary">{{ participant.auth_type }}</span></td>
+                        <td>{{ participant.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Статистика по вариантам ответов -->
+        <h2><i class="fas fa-list-alt mr-2"></i>Статистика вариантов ответов</h2>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID варианта</th>
+                    <th>ID вопроса</th>
+                    <th>Текст варианта</th>
+                    <th>Выбрано</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for choice in choices_stats %}
+                    <tr>
+                        <td>{{ choice.choice_id }}</td>
+                        <td>{{ choice.question_id }}</td>
+                        <td>{{ choice.choice_text }}</td>
+                        <td><span class="badge badge-primary">{{ choice.count }}</span></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Скрипты -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+<script>
+// Функция для копирования текста в буфер обмена
+function copyToClipboard(text) {
+    const el = document.createElement('textarea');
+    el.value = text;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    
+    // Уведомление о копировании
+    const btn = event.currentTarget;
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-check mr-1"></i>Скопировано';
+    setTimeout(() => {
+        btn.innerHTML = originalText;
+    }, 2000);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const ctx = document.getElementById('participantChart').getContext('2d');
+    let participantChart;
+
+    // Функция для загрузки данных и построения графика
+    function loadChartData(startDate = null, endDate = null) {
+        // Формируем URL с параметрами
+        let url = `{{ url_for('survey_bp.participant_chart', survey_id=survey.id) }}`;
+        let params = [];
+        if (startDate) params.push(`start_date=${startDate}`);
+        if (endDate) params.push(`end_date=${endDate}`);
+        if (params.length > 0) url += `?${params.join('&')}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success === false && data.message) {
+                    alert(data.message);
+                    return;
+                }
+
+                // Установка значений полей даты, если они не заданы
+                if (data.min_date && data.max_date && !startDate && !endDate) {
+                    document.getElementById('start_date').value = data.min_date;
+                    document.getElementById('end_date').value = data.max_date;
+                }
+
+                // Извлекаем данные
+                let dates = data.dates;
+                let perDayCounts = data.per_day_counts;
+                let cumulativeCounts = data.cumulative_counts;
+
+                // Если необходимо, можно добавить проверку соответствия длины массивов
+
+                // Если график уже существует, уничтожаем его
+                if (participantChart) {
+                    participantChart.destroy();
+                }
+
+                const gradientFill = ctx.createLinearGradient(0, 0, 0, 400);
+                gradientFill.addColorStop(0, "rgba(61, 90, 241, 0.4)");
+                gradientFill.addColorStop(1, "rgba(61, 90, 241, 0.0)");
+
+                participantChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dates,
+                        datasets: [{
+                            label: 'Количество участников',
+                            data: cumulativeCounts,  // Накопительные суммы для графика
+                            backgroundColor: gradientFill,
+                            borderColor: '#3d5af1',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.3,
+                            pointBackgroundColor: '#3d5af1',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 5,
+                            pointHoverRadius: 7,
+                            pointHoverBackgroundColor: '#22d1ee',
+                            pointHoverBorderColor: '#fff'
+                        }, {
+                            label: 'Ежедневные участники',
+                            data: perDayCounts,
+                            type: 'bar',
+                            backgroundColor: '#22d1ee',
+                            barPercentage: 0.5,
+                            order: 2,
+                            yAxisID: 'y1'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0,
+                                    stepSize: 1,
+                                    suggestedMax: {{ total_participants }}
+                                },
+                                grid: {
+                                    color: 'rgba(200, 200, 200, 0.2)'
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Общее количество',
+                                    color: '#2c3e50',
+                                    font: {
+                                        weight: 'bold'
+                                    }
+                                }
+                            },
+                            y1: {
+                                beginAtZero: true,
+                                position: 'right',
+                                grid: {
+                                    drawOnChartArea: false
+                                },
+                                ticks: {
+                                    precision: 0,
+                                    stepSize: 1,
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Ежедневные участники',
+                                    color: '#2c3e50',
+                                    font: {
+                                        weight: 'bold'
+                                    }
+                                }
+                            },
+                            x: {

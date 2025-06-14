@@ -1,0 +1,1911 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="csrf-token" content="{{ csrf_token() }}">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/monokai.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="static/css/admin_dashboard.css">
+
+
+    </style>
+    <title>Admin Dashboard</title>
+</head>
+
+<body>
+
+
+<div class="sidebar">
+    <div class="sidebar-sticky pt-3">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#categories" role="tab">
+                    <img src="{{ url_for('static', filename='img/icon/Categories_product.svg') }}" alt="Категории" class="tab-icon">
+                    <span>Категории</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#users" role="tab">
+                    <img src="{{ url_for('static', filename='img/icon/users.svg') }}" alt="Пользователи" class="tab-icon">
+                    <span>Пользователи</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#services" role="tab">
+                    <img src="{{ url_for('static', filename='img/icon/service-list.svg') }}" alt="Сервисы" class="tab-icon">
+                    <span>Сервисы</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#chats" role="tab">
+                    <img src="{{ url_for('static', filename='img/icon/chat.svg') }}" alt="Чаты" class="tab-icon">
+                    <span>Чаты</span>
+                    <span class="chat-notification-badge" id="chatNotificationBadge" style="display: none;">0</span>
+                </a>
+            </li>			
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#email" role="tab">
+                    <img src="{{ url_for('static', filename='img/icon/email.svg') }}" alt="Настройки" class="tab-icon">
+                    <span>Email</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#Interactive_elements" role="tab">
+                    <img src="{{ url_for('static', filename='img/icon/Interactive.svg') }}" alt="Интерактивные элементы" class="tab-icon">
+                    <span>Интерактивные элементы</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#pages" role="tab">
+                    <img src="{{ url_for('static', filename='img/icon/pages.svg') }}" alt="Страницы" class="tab-icon">
+                    <span>Страницы</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="footer">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('logout') }}">
+                    <img src="{{ url_for('static', filename='img/icon/logout.svg') }}" alt="Выход" class="tab-icon">
+                    <span>Выход</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='img/icon/home.svg') }}" alt="Главная" class="tab-icon">
+                    <span>Главная</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- Добавление аудиофайла для звукового уведомления -->
+<audio id="notificationSound" src="{{ url_for('static', filename='sounds/notification.mp3') }}" preload="auto"></audio>
+
+<!-- Контейнер для пуш-уведомлений -->
+<div id="notificationContainer" style="position: fixed; top: 20px; right: 20px; z-index: 1050;"></div>
+
+
+    <div class="main-content tab-content">
+        <div class="tab-pane fade show active" id="categories" role="tabpanel">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Категории</h1>
+                <div>
+                    <button class="btn btn-secondary" id="listViewBtn">Строки</button>
+                    <button class="btn btn-secondary" id="cardViewBtn">Карточки</button>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between mt-4 mb-2">
+                <h2>Категории</h2>
+                <button class="btn btn-primary" id="addCategoryBtn">Добавить категорию</button>
+            </div>
+            <main role="main">
+                {% for category in categories %}
+                <div class="product">
+                    <figure>
+                        <img class="product-image" src="{{ category.image and url_for('admin_bp.uploaded_file', folder='category', filename=category.image) or '#' }}" alt="{{ category.name }}">
+                        <div class="card-id-watermark">ID: {{ category.id }}</div>
+                    </figure>
+                    <div class="product-description">
+                        <div class="info">
+                            <h1>{{ category.name }}</h1>
+                            <p>{{ category.description }}</p>
+                            <p>Количество подкатегорий: {{ category.subcategories|length }}</p>
+                        </div>
+                    </div>
+                    <div class="product-sidebar">
+                        <button class="btn open-category-btn" data-id="{{ category.id }}">
+                            <img src="{{ url_for('static', filename='img/icon/open.svg') }}" alt="Открыть" class="icon">
+                            <span>Открыть</span>
+                        </button>
+                        <button class="btn edit-category-btn" data-id="{{ category.id }}" data-name="{{ category.name }}" data-description="{{ category.description }}" data-image="{{ category.image }}">
+                            <img src="{{ url_for('static', filename='img/icon/edit.svg') }}" alt="Редактировать" class="icon">
+                            <span>Редактировать</span>
+                        </button>
+                        <button class="btn delete-category-btn" data-id="{{ category.id }}">
+                            <img src="{{ url_for('static', filename='img/icon/remove.svg') }}" alt="Удалить" class="icon">
+                            <span>Удалить</span>
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </main>
+        </div>
+
+	<!-- Вкладка "Пользователи" -->
+	<div class="tab-pane fade" id="users" role="tabpanel">
+		<h2>Пользователи</h2>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Имя пользователя</th>
+					<th>Роль</th>
+					<th>Имя</th>
+					<th>Фамилия</th>
+					<th>Отчество</th>
+					<th>Номер телефона</th>
+					<th>Дата создания</th>
+					<th>Действия</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for user in users %}
+				<tr data-toggle="collapse" data-target="#userDetails{{ user.id }}" aria-expanded="false" aria-controls="userDetails{{ user.id }}" style="cursor: pointer;">
+					<td>{{ user.id }}</td>
+					<td>{{ user.username }}</td>
+					<td>{{ user.role }}</td>
+					<td>{{ user.first_name }}</td>
+					<td>{{ user.last_name }}</td>
+					<td>{{ user.middle_name }}</td>
+					<td>{{ user.phone }}</td>
+					<td>{{ user.registered_at.strftime('%d.%m.%Y') }}</td>
+					<td>
+						<!-- Кнопка для редактирования пользователя -->
+						<button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editUserModal{{ user.id }}">Редактировать</button>
+						
+						<!-- Кнопка для удаления пользователя -->
+						<form action="{{ url_for('admin_bp.delete_user', user_id=user.id) }}" method="POST" style="display:inline;">
+							<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+							<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Вы уверены, что хотите удалить этого пользователя?')">Удалить</button>
+						</form>
+					</td>
+				</tr>
+				<tr class="collapse" id="userDetails{{ user.id }}">
+					<td colspan="9">
+						<h5>Назначенные тарифы и услуги</h5>
+						{% if user.user_tariffs %}
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>ID сервиса</th>
+										<th>Название сервиса</th>
+										<th>ID тарифа</th>
+										<th>Название тарифа</th>
+										<th>Бесплатный</th>
+										<th>Остаток по тарифу</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for user_tariff in user.user_tariffs %}
+										<tr>
+											<td>{{ user_tariff.service.id }}</td>
+											<td>{{ user_tariff.service.name }}</td>
+											<td>{{ user_tariff.tariff.id }}</td>
+											<td>{{ user_tariff.tariff.name }}</td>
+											<td>
+												{% if user_tariff.tariff.is_free %}
+													<span class="badge badge-success">Да</span>
+												{% else %}
+													<span class="badge badge-secondary">Нет</span>
+												{% endif %}
+											</td>
+											<td>
+												<!-- Отображение остатка по каждому параметру тарифа -->
+												{% if user_tariff.counters %}
+													<ul>
+														{% for key, value in user_tariff.counters.items() %}
+															<li><strong>{{ key.replace('_', ' ').capitalize() }}:</strong>
+																{% if value is boolean %}
+																	{{ 'Да' if value else 'Нет' }}
+																{% elif value is iterable and not value is string %}
+																	{{ value|length }}
+																{% elif value is none %}
+																	Не ограничено
+																{% else %}
+																	{{ value }}
+																{% endif %}
+															</li>
+														{% endfor %}
+													</ul>
+												{% else %}
+													Нет данных
+												{% endif %}
+											</td>
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						{% else %}
+							<p>У пользователя нет назначенных тарифов.</p>
+						{% endif %}
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+	<div class="tab-pane fade" id="chats" role="tabpanel">
+		{% include 'admin_chats.html' %}
+	</div>
+
+	<!-- Вкладка "Сервисы" -->
+	<div class="tab-pane fade" id="services" role="tabpanel">
+		<h3>Сервисы</h3>
+		<!-- Кнопка для добавления нового сервиса -->
+		<button class="btn btn-primary mb-3" data-toggle="modal" data-target="#addServiceModal">Добавить сервис</button>
+
+		<!-- Таблица со списком сервисов -->
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>ID сервиса</th>
+					<th>Название сервиса</th>
+					<th>Blueprint</th>
+					<th>Действия</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for service in services %}
+				<tr>
+					<td>{{ service.id }}</td>
+					<td>{{ service.name }}</td>
+					<td>{{ service.blueprint }}</td>
+					<td>
+						<!-- Кнопка для редактирования сервиса -->
+						<button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editServiceModal{{ service.id }}">Редактировать</button>
+						
+						<!-- Кнопка для удаления сервиса -->
+						<form action="{{ url_for('admin_bp.delete_service', service_id=service.id) }}" method="POST" style="display:inline;">
+							<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+							<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Вы уверены, что хотите удалить этот сервис?')">Удалить</button>
+						</form>
+						
+						<!-- Кнопка для отображения тарифов сервиса -->
+						<button class="btn btn-info btn-sm" data-toggle="collapse" data-target="#tariffs{{ service.id }}">Тарифы</button>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="4">
+						<!-- Выпадающий список тарифов -->
+						<div id="tariffs{{ service.id }}" class="collapse">
+							<!-- Кнопка для добавления тарифа к сервису -->
+							<button class="btn btn-success btn-sm mb-2" data-toggle="modal" data-target="#addTariffModal{{ service.id }}">Добавить тариф</button>
+							
+							<!-- Таблица тарифов для текущего сервиса -->
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>ID тарифа</th>
+										<th>Название тарифа</th>
+										<th>Цена</th>
+										<th>Длительность (дней)</th>
+										<th>Макс. элементов</th>
+										<th>Бесплатный</th>
+										<th>Действия</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for service_tariff in service.service_tariffs %}
+									<tr>
+										<td>{{ service_tariff.tariff.id }}</td>
+										<td>{{ service_tariff.tariff.name }}</td>
+										<td>{{ service_tariff.tariff.price }}</td>
+										<td>{{ service_tariff.tariff.duration_days }}</td>
+										<td>{{ service_tariff.max_elements or 'Не ограничено' }}</td>
+										<td>
+											{% if service_tariff.tariff.is_free %}
+												<span class="badge badge-success">Да</span>
+											{% else %}
+												<span class="badge badge-secondary">Нет</span>
+											{% endif %}
+										</td>
+										<td>
+											<!-- Кнопка для редактирования тарифа -->
+											<button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editTariffModal{{ service_tariff.id }}">Редактировать</button>
+											
+											<!-- Кнопка для удаления тарифа -->
+											<form action="{{ url_for('admin_bp.delete_tariff', service_tariff_id=service_tariff.id) }}" method="POST" style="display:inline;">
+												<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+												<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Вы уверены, что хотите удалить этот тариф?')">Удалить</button>
+											</form>
+										</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+	<!-- Вкладка Email -->
+	<div class="tab-pane fade" id="email" role="tabpanel">
+		<div class="email-container container mt-4">
+			<div id="notificationContainer" class="mb-3"></div>
+			<button id="initSound" onclick="initializeSound()" class="d-none">Инициализировать звук</button>
+			
+			<!-- Выпадающий список получателей -->
+			<div class="form-group">
+				<label for="recipient-select"><i class="fas fa-user"></i> Выберите адрес:</label>
+				<select id="recipient-select" class="form-control custom-select" onchange="filterEmails()">
+					{% for recipient in recipients %}
+					<option value="{{ recipient }}" {% if recipient == selected_recipient %}selected{% endif %}>
+						{{ recipient }}
+					</option>
+					{% endfor %}
+				</select>
+			</div>
+			
+			<!-- Кнопка "Отправить письмо" -->
+			<div class="mb-3">
+				<button class="btn btn-primary" onclick="openSendEmailModal()">
+					<i class="fas fa-paper-plane"></i> Отправить письмо
+				</button>
+			</div>
+			
+			<!-- Вкладки "Входящие" и "Исходящие" -->
+			<ul class="nav nav-tabs" id="emailSubTabs" role="tablist">
+				<li class="nav-item">
+					<a class="nav-link active" id="inbox-tab" data-toggle="tab" href="#inbox" role="tab" aria-controls="inbox" aria-selected="true">Входящие</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="outbox-tab" data-toggle="tab" href="#outbox" role="tab" aria-controls="outbox" aria-selected="false">Исходящие</a>
+				</li>
+			</ul>
+			<div class="tab-content" id="emailSubTabsContent">
+				<!-- Входящие -->
+				<div class="tab-pane fade show active" id="inbox" role="tabpanel" aria-labelledby="inbox-tab">
+					<!-- Кнопки "Обновить" и "Назад" -->
+					<div class="mb-3 mt-3 d-flex justify-content-between">
+						<button class="btn btn-success" id="refresh-button" onclick="filterEmails()">
+							<i class="fas fa-sync-alt"></i> Обновить
+						</button>
+						<button class="btn btn-secondary d-none" onclick="backToEmails()" id="back-button">
+							<i class="fas fa-arrow-left"></i> Назад
+						</button>
+					</div>
+					
+					<!-- Таблица потоков писем -->
+					<div class="table-responsive" id="inbox-emails-table-container">
+						<table class="table table-hover" id="inbox-emails-table">
+							<thead class="thead-light">
+								<tr>
+									<th>Отправитель</th>
+									<th>Тема</th>
+									<th>Дата</th>
+									<th>Действия</th>
+								</tr>
+							</thead>
+							<tbody id="inbox-emails-table-body">
+								{% for thread in incoming_threads %}
+									{% if thread %}
+										{% set root_email = thread[0] %}
+										<tr class="thread-header {% if root_email.status == 'Не прочитанно' %}unread-header{% else %}read-header{% endif %}" data-thread-id="{{ root_email.thread_id or root_email.id }}">
+											<td colspan="4">
+												{% if root_email.status == 'Не прочитанно' %}
+													<i class="fas fa-circle text-danger"></i>
+												{% endif %}
+												{% if thread|length > 1 %}
+													<i class="fas fa-comments"></i> <!-- Иконка только для потоков -->
+												{% endif %}
+												<strong>{{ root_email.subject or 'Без темы' }}</strong> от {{ root_email.sender }}
+												{% if thread|length > 1 %}
+													({{ thread|length }} письма)
+												{% endif %}
+												<button class="btn btn-primary btn-sm float-right mr-2" onclick="showEmailContent({{ root_email.id }}, 'inbox')">
+													<i class="fas fa-eye"></i> Просмотреть
+												</button>
+												<button class="btn btn-danger btn-sm float-right ml-2" onclick="confirmDeleteEmail({{ root_email.id }}, {{ thread|length }})">
+													<i class="fas fa-trash"></i> Удалить
+												</button>
+											</td>
+										</tr>
+									{% else %}
+										<tr>
+											<td colspan="4" class="text-center">Пустой поток писем.</td>
+										</tr>
+									{% endif %}
+								{% else %}
+									<tr>
+										<td colspan="4" class="text-center">Нет входящих писем для выбранного адреса.</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<!-- Исходящие -->
+				<div class="tab-pane fade" id="outbox" role="tabpanel" aria-labelledby="outbox-tab">
+					<!-- Кнопки "Обновить" и "Назад" -->
+					<div class="mb-3 mt-3 d-flex justify-content-between">
+						<button class="btn btn-success" id="refresh-button" onclick="filterEmails()">
+							<i class="fas fa-sync-alt"></i> Обновить
+						</button>
+						<button class="btn btn-secondary d-none" onclick="backToEmails()" id="back-button">
+							<i class="fas fa-arrow-left"></i> Назад
+						</button>
+					</div>
+					
+					<!-- Таблица потоков писем -->
+					<div class="table-responsive" id="outbox-emails-table-container">
+						<table class="table table-hover" id="outbox-emails-table">
+							<thead class="thead-light">
+								<tr>
+									<th>Получатель</th>
+									<th>Тема</th>
+									<th>Дата</th>
+									<th>Действия</th>
+								</tr>
+							</thead>
+							<tbody id="outbox-emails-table-body">
+								{% for thread in outgoing_threads %}
+									{% if thread %}
+										{% set root_email = thread[0] %}
+										<tr class="thread-header {% if root_email.status == 'Не прочитанно' %}unread-header{% else %}read-header{% endif %}" data-thread-id="{{ root_email.thread_id or root_email.id }}">
+											<td colspan="4">
+												{% if root_email.status == 'Не прочитанно' %}
+													<i class="fas fa-circle text-danger"></i>
+												{% endif %}
+												{% if thread|length > 1 %}
+													<i class="fas fa-comments"></i> <!-- Иконка только для потоков -->
+												{% endif %}
+												<strong>{{ root_email.subject or 'Без темы' }}</strong> к {{ root_email.recipient }}
+												{% if thread|length > 1 %}
+													({{ thread|length }} письма)
+												{% endif %}
+												<button class="btn btn-primary btn-sm float-right mr-2" onclick="showEmailContent({{ root_email.id }}, 'outbox')">
+													<i class="fas fa-eye"></i> Просмотреть
+												</button>
+												<button class="btn btn-danger btn-sm float-right ml-2" onclick="confirmDeleteEmail({{ root_email.id }}, {{ thread|length }})">
+													<i class="fas fa-trash"></i> Удалить
+												</button>
+											</td>
+										</tr>
+									{% else %}
+										<tr>
+											<td colspan="4" class="text-center">Пустой поток писем.</td>
+										</tr>
+									{% endif %}
+								{% else %}
+									<tr>
+										<td colspan="4" class="text-center">Нет исходящих писем для выбранного адреса.</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			
+			<!-- Контент письма в потоке -->
+			<div id="email-content" class="mt-4 card d-none">
+				<div class="card-header bg-primary text-white">
+					<h5>Письма в потоке</h5>
+				</div>
+				<div class="card-body" id="emails-in-thread">
+					<!-- Таблицы писем будут динамически добавляться сюда -->
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Контент письма -->
+	<div id="email-content-single" class="mt-4 card d-none">
+		<div class="card-header bg-primary text-white">
+		</div>
+	</div>
+        
+
+	<div class="tab-pane fade" id="Interactive_elements" role="tabpanel">
+		<h1>Интерактивные элементы</h1>
+		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addElementModal">Добавить элемент</button>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Название</th>
+					<th>Действия</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for element in Elements %}
+				<tr>
+					<td>{{ element.id }}</td>
+					<td>{{ element.name }}</td>
+					<td>
+							<button type="button" class="btn btn-sm btn-warning edit-element-btn" data-id="{{ element.id }}" data-file="{{ element.html_file }}">Редактировать</button>
+						<form action="{{ url_for('delete_element', id=element.id) }}" method="POST" style="display:inline;">
+							<button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Вы уверены?')">Удалить</button>
+						</form>
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div class="tab-pane fade" id="pages" role="tabpanel">
+		<h2>Страницы</h2>
+		<ul class="list-group">
+			{% for file in template_files %}
+			<li class="list-group-item">{{ file }}</li>
+			{% endfor %}
+		</ul>
+	</div>
+</div>
+
+<!-- Модальное окно для отправки письма -->
+<div class="modal fade" id="sendEmailModal" tabindex="-1" role="dialog" aria-labelledby="sendEmailModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<form id="send-email-form">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="sendEmailModalLabel">Отправить письмо</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<!-- Поле "Отправитель", выбираем из существующих адресов -->
+					<div class="form-group">
+						<label for="send-sender">Отправитель:</label>
+						<select id="send-sender" class="form-control" required>
+							{% for recipient in recipients %}
+							<option value="{{ recipient }}">{{ recipient }}</option>
+							{% endfor %}
+						</select>
+					</div>
+
+					<!-- Поле "Получатель", вводим вручную -->
+					<div class="form-group">
+						<label for="send-recipient">Получатель:</label>
+						<input type="email" class="form-control" id="send-recipient" name="recipient" required>
+					</div>
+
+					<div class="form-group">
+						<label for="send-subject">Тема:</label>
+						<input type="text" class="form-control" id="send-subject" name="subject" required>
+					</div>
+					<div class="form-group">
+						<label for="send-body">Содержание:</label>
+						<textarea class="form-control" id="send-body" name="body" rows="5" required></textarea>
+					</div>
+					<div class="form-group">
+						<label for="send-attachments">Вложения:</label>
+						<input type="file" class="form-control-file" id="send-attachments" name="attachments" multiple>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+					<button type="submit" class="btn btn-primary">Отправить</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+
+<!-- Модальные окна для редактирования пользователей -->
+{% for user in users %}
+<div class="modal fade" id="editUserModal{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel{{ user.id }}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST" action="{{ url_for('admin_bp.edit_user', user_id=user.id) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="modal-header">
+                    <h5 class="modal-title">Редактировать пользователя "{{ user.username }}"</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Поля формы для редактирования пользователя -->
+                    <div class="form-group">
+                        <label>Имя пользователя</label>
+                        <input type="text" class="form-control" name="username" value="{{ user.username }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Электронная почта</label>
+                        <input type="email" class="form-control" name="email" value="{{ user.email }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Роль</label>
+                        <select class="form-control" name="role" required>
+                            <option value="user" {% if user.role == 'user' %}selected{% endif %}>Пользователь</option>
+                            <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Администратор</option>
+                            <!-- Добавьте другие роли по необходимости -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Имя</label>
+                        <input type="text" class="form-control" name="first_name" value="{{ user.first_name }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Фамилия</label>
+                        <input type="text" class="form-control" name="last_name" value="{{ user.last_name }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Отчество</label>
+                        <input type="text" class="form-control" name="middle_name" value="{{ user.middle_name }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Номер телефона</label>
+                        <input type="text" class="form-control" name="phone_number" value="{{ user.phone }}">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+<!-- Модальное окно для добавления сервиса -->
+<div class="modal fade" id="addServiceModal" tabindex="-1" role="dialog" aria-labelledby="addServiceModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="addServiceForm" method="POST" action="{{ url_for('admin_bp.add_service') }}">
+                <div class="modal-header">
+                    <h5 class="modal-title">Добавить новый сервис</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Название сервиса</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Blueprint сервиса</label>
+                        <input type="text" class="form-control" name="blueprint" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Описание</label>
+                        <textarea class="form-control" name="description"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для редактирования сервиса -->
+{% for service in services %}
+<div class="modal fade" id="editServiceModal{{ service.id }}" tabindex="-1" role="dialog" aria-labelledby="editServiceModalLabel{{ service.id }}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST" action="{{ url_for('admin_bp.edit_service', service_id=service.id) }}">
+                <div class="modal-header">
+                    <h5 class="modal-title">Редактировать сервис "{{ service.name }}"</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Название сервиса</label>
+                        <input type="text" class="form-control" name="name" value="{{ service.name }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Blueprint</label>
+                        <input type="text" class="form-control" name="blueprint" value="{{ service.blueprint }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Описание</label>
+                        <textarea class="form-control" name="description">{{ service.description }}</textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<!-- Модальное окно для добавления тарифа -->
+{% for service in services %}
+<div class="modal fade" id="addTariffModal{{ service.id }}" tabindex="-1" role="dialog" aria-labelledby="addTariffModalLabel{{ service.id }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document"> <!-- Увеличиваем размер модального окна для удобства -->
+        <div class="modal-content">
+            <form method="POST" action="{{ url_for('admin_bp.add_tariff_to_service', service_id=service.id) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="modal-header">
+                    <h5 class="modal-title">Добавить тариф к "{{ service.name }}"</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Другие поля формы -->
+                    <div class="form-group">
+                        <label>Название тарифа</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Описание</label>
+                        <textarea class="form-control" name="description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Цена</label>
+                        <input type="number" class="form-control" name="price" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Длительность (в днях)</label>
+                        <input type="number" class="form-control" name="duration_days" required>
+                    </div>
+                    
+                    <!-- Чекбокс для бесплатного тарифа -->
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="isFreeAdd{{ service.id }}" name="is_free">
+                        <label class="form-check-label" for="isFreeAdd{{ service.id }}">Бесплатный тариф</label>
+                    </div>
+                    
+                    <!-- Поле для ввода JSON с улучшенным стилем -->
+                    <div class="form-group">
+                        <label>Настройки тарифа (JSON)</label>
+                        <div class="json-editor">
+                            <div class="line-numbers" id="lineNumbersAdd{{ service.id }}">1</div>
+                            <textarea class="form-control json-textarea" id="jsonTextareaAdd{{ service.id }}" name="features" rows="10" placeholder='{"max_surveys": 50, "max_questions_per_survey": 100, "custom_branding": true}'>{"max_surveys": 10, "max_questions_per_survey": 20, "custom_branding": false}</textarea>
+                        </div>
+                        <div class="json-info">
+                            <span id="charCountAdd{{ service.id }}">Символов: 0</span> | 
+                            <span id="lineCountAdd{{ service.id }}">Строк: 1</span>
+                        </div>
+                        <small class="form-text text-muted">Введите настройки тарифа в формате JSON. Пример: {"max_surveys": 10, "max_questions_per_survey": 20, "custom_branding": false}</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Добавить тариф</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+<!-- Модальное окно для редактирования тарифа -->
+{% for service in services %}
+    {% for service_tariff in service.service_tariffs %}
+        <div class="modal fade" id="editTariffModal{{ service_tariff.id }}" tabindex="-1" role="dialog" aria-labelledby="editTariffModalLabel{{ service_tariff.id }}" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document"> <!-- Увеличиваем размер модального окна для удобства -->
+                <div class="modal-content">
+                    <form method="POST" action="{{ url_for('admin_bp.edit_tariff', service_tariff_id=service_tariff.id) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Редактировать тариф "{{ service_tariff.tariff.name }}"</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Другие поля формы -->
+                            <div class="form-group">
+                                <label>Название тарифа</label>
+                                <input type="text" class="form-control" name="name" value="{{ service_tariff.tariff.name }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Описание тарифа</label>
+                                <textarea class="form-control" name="description">{{ service_tariff.tariff.description }}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Цена</label>
+                                <input type="number" class="form-control" name="price" step="0.01" value="{{ service_tariff.tariff.price }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Длительность (в днях)</label>
+                                <input type="number" class="form-control" name="duration_days" value="{{ service_tariff.tariff.duration_days }}" required>
+                            </div>
+                            
+                            <!-- Чекбокс для бесплатного тарифа -->
+                            <div class="form-group form-check">
+                                <input type="checkbox" class="form-check-input" id="isFreeEdit{{ service_tariff.id }}" name="is_free" {% if service_tariff.tariff.is_free %}checked{% endif %}>
+                                <label class="form-check-label" for="isFreeEdit{{ service_tariff.id }}">Бесплатный тариф</label>
+                            </div>
+                            
+                            <!-- Поле для ввода JSON с улучшенным стилем -->
+                            <div class="form-group">
+                                <label>Настройки тарифа (JSON)</label>
+                                <div class="json-editor">
+                                    <div class="line-numbers" id="lineNumbersEdit{{ service_tariff.id }}">1</div>
+                                    <textarea class="form-control json-textarea" id="jsonTextareaEdit{{ service_tariff.id }}" name="features" rows="10">{{ service_tariff.tariff.features | tojson }}</textarea>
+                                </div>
+                                <div class="json-info">
+                                    <span id="charCountEdit{{ service_tariff.id }}">Символов: 0</span> | 
+                                    <span id="lineCountEdit{{ service_tariff.id }}">Строк: 1</span>
+                                </div>
+                                <small class="form-text text-muted">Введите настройки тарифа в формате JSON. Пример: {"max_surveys": 10, "max_questions_per_survey": 20, "custom_branding": false}</small>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endfor %}
+	
+	<!-- Модальное окно для добавления элемента -->
+	<div class="modal fade" id="addElementModal" tabindex="-1" role="dialog" aria-labelledby="addElementModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="addElementModalLabel">Добавить элемент</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form action="{{ url_for('admin_bp.admin_elements') }}" method="POST">
+			    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="name">Название</label>
+							<input type="text" class="form-control" id="name" name="name" required>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+						<button type="submit" class="btn btn-primary">Сохранить</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<!-- Модальное окно для редактирования элемента -->
+	<div class="modal fade" id="editElementModal" tabindex="-1" role="dialog" aria-labelledby="editElementModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-xl" role="document"> <!-- Увеличиваем размер модального окна до "xl" -->
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="editElementModalLabel">Редактировать элемент</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body d-flex">
+					<!-- Левая часть с формами -->
+					<div class="col-4 pr-3 border-right">
+						<div class="form-group">
+							<label for="elementName">Название элемента</label>
+							<input type="text" class="form-control" id="elementName" name="name">
+						</div>
+						<div class="form-group" id="editFormContent">
+							<!-- Сюда будут добавлены формы для редактирования -->
+						</div>
+					</div>
+
+					<!-- Правая часть с рендером элемента -->
+					<div class="col-8 pl-3" id="renderedPreview" style="height: 600px; overflow: auto;"> <!-- Увеличиваем блок с превью -->
+						<!-- Здесь будет отображаться динамически обновляемый элемент -->
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="saveChangesButton">Сохранить изменения</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+    <div class="modal" id="addCategoryModal">
+        <div class="modal-wrap">
+            <div class="modal-header">
+                <h5 class="modal-title">Добавить категорию</h5>
+                <button type="button" class="close" id="closeModal">&times;</button>
+            </div>
+            <form action="{{ url_for('admin_bp.add_category') }}" method="POST" enctype="multipart/form-data">
+			    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="categoryName">Название категории</label>
+                        <input type="text" class="form-control" id="categoryName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="categoryDescription">Описание категории</label>
+                        <textarea class="form-control" id="categoryDescription" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="categoryImage">Изображение категории</label>
+                        <input type="file" class="form-control-file" id="categoryImage" name="image">
+                        <img id="categoryImagePreview" src="#" alt="Предпросмотр изображения" style="display: none;">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <button type="button" class="btn btn-secondary" id="cancelModal">Отмена</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="editCategoryModal">
+        <div class="modal-wrap">
+            <div class="modal-header">
+                <h5 class="modal-title">Редактировать категорию</h5>
+                <button type="button" class="close" id="closeEditModal">&times;</button>
+            </div>
+            <form action="{{ url_for('admin_bp.edit_category') }}" method="POST" enctype="multipart/form-data">
+                <input type="hidden" id="editCategoryId" name="id">
+				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="editCategoryName">Название категории</label>
+                        <input type="text" class="form-control" id="editCategoryName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editCategoryDescription">Описание категории</label>
+                        <textarea class="form-control" id="editCategoryDescription" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="editCategoryImage">Изображение категории</label>
+                        <input type="file" class="form-control-file" id="editCategoryImage" name="image">
+                        <img id="editCategoryImagePreview" src="#" alt="Предпросмотр изображения" style="display: none;">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <button type="button" class="btn btn-secondary" id="cancelEditModal">Отмена</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="deleteCategoryModal">
+        <div class="modal-wrap">
+            <div class="modal-header">
+                <h5 class="modal-title">Удалить категорию</h5>
+                <button type="button" class="close" id="closeDeleteModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Вы точно хотите удалить ЦЕЛУЮ КАТЕГОРИЮ ТОВАРОВ?</p>
+            </div>
+            <div class="modal-footer">
+                <form action="{{ url_for('admin_bp.delete_category') }}" method="POST">
+                    <input type="hidden" id="deleteCategoryId" name="id">
+					<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-danger">ДА</button>
+                </form>
+                <button type="button" class="btn btn-secondary" id="cancelDeleteModal">Нет</button>
+            </div>
+        </div>
+    </div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+
+<script>
+    // Сохранение активной вкладки при переключении
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        const activeTab = $(e.target).attr('href');
+        localStorage.setItem('activeTab', activeTab);
+    });
+
+    // Восстановление активной вкладки при загрузке страницы
+    $(document).ready(function() {
+        const activeTab = localStorage.getItem('activeTab');
+        if (activeTab) {
+            const tabLink = $('a[href="' + activeTab + '"]');
+            if (tabLink.length) {
+                tabLink.tab('show');
+            }
+        }
+    });
+	
+    // Получение CSRF токена из meta-тега
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    // Инициализация звука уведомления
+    function initializeSound() {
+        const notificationSound = document.getElementById('notificationSound');
+        notificationSound.play().then(() => {
+            console.log('Звук инициализирован');
+        }).catch(error => {
+            console.error('Ошибка при инициализации звука:', error);
+        });
+
+        // Скрыть кнопку после инициализации
+        document.getElementById('initSound').style.display = 'none';
+    }
+
+    // Автоматически показать кнопку после загрузки страницы
+    document.addEventListener('DOMContentLoaded', () => {
+        // Показываем кнопку только если звук не может быть воспроизведён автоматически
+        document.getElementById('initSound').style.display = 'block';
+    });
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Подключение к SocketIO
+    const socket = io('/admin', { transports: ['websocket', 'polling'] });  // Используем namespace '/admin'
+
+    socket.on('connect', () => {
+        console.log('Подключен к SocketIO серверу');
+    });
+
+    socket.on('new_email', (data) => {
+        console.log('Новое письмо:', data);
+        const currentRecipient = document.getElementById('recipient-select').value;
+        if (data.recipient === currentRecipient) {
+            // Отображаем уведомление
+            showNotification(`Новое письмо получено. Обновление списка писем...`);
+
+            // Перезапрашиваем список писем для активной под-вкладки
+            filterEmails();
+        }
+    });
+
+    socket.on('disconnect', () => {
+        console.log('Отключен от SocketIO сервера');
+    });
+
+    socket.on('connect_error', (error) => {
+        console.error('Connection Error:', error);
+    });
+
+    socket.on('connect_failed', () => {
+        console.error('Connection Failed');
+    });
+
+    // Инициализируем список писем при загрузке страницы
+    filterEmails();
+});
+
+    // Функция отображения уведомления
+    function showNotification(message) {
+        // Проверяем разрешение
+        if (Notification.permission === 'granted') {
+            new Notification('Новое письмо', {
+                body: message,
+                icon: '/static/icons/envelope.png' // Укажите путь к иконке, если нужно
+            });
+        } else {
+            // Запросить разрешение на показ уведомлений
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    new Notification('Новое письмо', {
+                        body: message,
+                        icon: '/static/icons/envelope.png' // Укажите путь к иконке, если нужно
+                    });
+                } else {
+                    // Fallback: отображение внутри страницы
+                    const notificationContainer = document.getElementById('notificationContainer');
+                    const notificationSound = document.getElementById('notificationSound');
+
+                    const notification = document.createElement('div');
+                    notification.className = 'notification alert alert-info';
+                    notification.innerHTML = `<i class="fas fa-envelope"></i> ${message}`;
+
+                    notificationContainer.appendChild(notification);
+
+                    notificationSound.play().catch(error => {
+                        console.error('Ошибка при воспроизведении звука:', error);
+                    });
+
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 5000);
+                }
+            });
+        }
+    }
+
+    // Функция для рендеринга списка писем в таблице
+    function renderEmailList(threads, tab) {
+        console.log(`Rendering ${tab} threads:`, threads); // Для отладки
+        let tableBody;
+        if (tab === 'inbox') {
+            tableBody = document.querySelector('#inbox-emails-table-body');
+        } else if (tab === 'outbox') {
+            tableBody = document.querySelector('#outbox-emails-table-body');
+        }
+
+        if (!tableBody) return;
+
+        tableBody.innerHTML = '';
+
+        if (threads.length === 0) {
+            const noDataRow = document.createElement('tr');
+            noDataRow.innerHTML = `<td colspan="4" class="text-center">Нет ${tab === 'inbox' ? 'входящих' : 'исходящих'} писем для выбранного адреса.</td>`;
+            tableBody.appendChild(noDataRow);
+            return;
+        }
+
+        threads.forEach(thread => {
+            const rootEmail = thread[0];
+            const threadId = rootEmail.thread_id || rootEmail.id;
+
+            const threadRow = document.createElement('tr');
+            threadRow.className = `thread-header ${rootEmail.status === 'Не прочитанно' ? 'unread-header' : 'read-header'}`;
+            threadRow.setAttribute('data-thread-id', threadId);
+
+            let headerContent = '';
+            if (rootEmail.status === 'Не прочитанно') {
+                headerContent += '<i class="fas fa-circle text-danger"></i> ';
+            }
+            if (thread.length > 1) {
+                headerContent += '<i class="fas fa-comments"></i> '; // Иконка только для потоков
+            }
+            headerContent += `<strong>${rootEmail.subject || 'Без темы'}</strong> `;
+            headerContent += tab === 'inbox' ? `от ${rootEmail.sender}` : `к ${rootEmail.recipient}`;
+            if (thread.length > 1) {
+                headerContent += ` (${thread.length} письма)`;
+            }
+            headerContent += `
+                <button class="btn btn-primary btn-sm float-right mr-2" onclick="showEmailContent(${rootEmail.id}, '${tab}')">
+                    <i class="fas fa-eye"></i> Просмотреть
+                </button>
+                <button class="btn btn-danger btn-sm float-right ml-2" onclick="confirmDeleteEmail(${rootEmail.id}, ${thread.length})">
+                    <i class="fas fa-trash"></i> Удалить
+                </button>
+            `;
+
+            threadRow.innerHTML = `<td colspan="4">${headerContent}</td>`;
+            tableBody.appendChild(threadRow);
+        });
+    }
+
+	function filterEmails() {
+		const recipient = document.getElementById('recipient-select').value;
+
+		// Определение выбранной под-вкладки
+		const selectedTab = document.querySelector('#emailSubTabs .nav-link.active').getAttribute('href').substring(1);
+
+		// Определяем направление на основе выбранной под-вкладки
+		let direction;
+		let tabType;
+
+		if (selectedTab === 'inbox') {
+			direction = 'incoming';
+			tabType = 'inbox';
+		} else if (selectedTab === 'outbox') {
+			direction = 'outgoing';
+			tabType = 'outbox';
+		} else {
+			console.error('Неизвестная под-вкладка:', selectedTab);
+			return;
+		}
+
+		// Загружаем только письма для выбранного направления
+		fetch(`/admin/emails/${recipient}?direction=${direction}`)
+			.then(response => {
+				if (!response.ok) {
+					throw new Error(`Ошибка при загрузке ${direction === 'incoming' ? 'входящих' : 'исходящих'} писем`);
+				}
+				return response.json();
+			})
+			.then(threads => {
+				renderEmailList(threads, tabType);
+			})
+			.catch(error => {
+				console.error(error);
+				alert(`Не удалось загрузить ${direction === 'incoming' ? 'входящие' : 'исходящие'} письма`);
+			});
+	}
+
+
+    // Функция "Обновить" для перезагрузки списка писем
+    function refreshEmails() {
+        filterEmails();
+    }
+
+    // Функция "Назад" для возврата к списку писем
+    function backToEmails() {
+        // Показать таблицы писем
+        document.querySelectorAll('#inbox-emails-table-container, #outbox-emails-table-container').forEach(container => {
+            container.classList.remove('d-none');
+        });
+        // Скрыть содержимое письма
+        hideEmailContent();
+    }
+
+    // Функция для скрытия содержимого письма
+    function hideEmailContent() {
+        document.getElementById('email-content').classList.add('d-none');
+        document.getElementById('email-content-single').classList.add('d-none');
+        // Показать кнопки "Обновить" и скрыть "Назад"
+        document.querySelectorAll('#refresh-button').forEach(button => button.classList.remove('d-none'));
+        document.querySelectorAll('#back-button').forEach(button => button.classList.add('d-none'));
+    }
+
+    async function showEmailContent(emailId, tab) {
+        try {
+            const response = await fetch(`/admin/emails/content/${emailId}`);
+            if (!response.ok) {
+                throw new Error('Ошибка при загрузке содержимого письма');
+            }
+            const data = await response.json();
+            const emails = data.emails; // Массив писем в потоке
+
+            const emailsContainer = document.getElementById('emails-in-thread');
+            emailsContainer.innerHTML = ''; // Очистка предыдущего содержимого
+
+            emails.forEach(email => {
+                // Создаем контейнер для каждого письма
+                const emailCard = document.createElement('div');
+                emailCard.className = 'mb-4 card';
+
+                // Заголовок письма
+                const cardHeader = document.createElement('div');
+                cardHeader.className = 'card-header bg-secondary text-white';
+                cardHeader.innerHTML = `
+                    <strong>${email.subject || 'Без темы'}</strong> от ${email.sender} 
+                    <span class="float-right">${new Date(email.received_at).toLocaleString()}</span>
+                `;
+                emailCard.appendChild(cardHeader);
+
+                // Тело письма
+                const cardBody = document.createElement('div');
+                cardBody.className = 'card-body';
+
+                // Таблица с деталями письма
+                const table = document.createElement('table');
+                table.className = 'table table-borderless';
+                table.innerHTML = `
+                    <tr>
+                        <th>Отправитель:</th>
+                        <td>${email.sender || 'Неизвестный отправитель'}</td>
+                    </tr>
+                    <tr>
+                        <th>Получатель:</th>
+                        <td>${email.recipient || 'Неизвестный получатель'}</td>
+                    </tr>
+                    <tr>
+                        <th>Тема:</th>
+                        <td>${email.subject || 'Без темы'}</td>
+                    </tr>
+                    <tr>
+                        <th>Дата:</th>
+                        <td>${new Date(email.received_at).toLocaleString()}</td>
+                    </tr>
+                    <tr>
+                        <th>Содержание:</th>
+                        <td>${email.body || 'Нет содержимого'}</td>
+                    </tr>
+                    <tr>
+                        <th>Вложения:</th>
+                        <td>
+                            <ul class="list-unstyled">
+                                ${email.attachments.length > 0 ? 
+                                    email.attachments.map(file => `<li><a href="${file.filepath}" download>${file.filename}</a></li>`).join('') 
+                                    : '<li>Вложения нет.</li>'}
+                            </ul>
+                        </td>
+                    </tr>
+                `;
+                cardBody.appendChild(table);
+
+                // Действия с письмом
+                const actionsDiv = document.createElement('div');
+                actionsDiv.className = 'd-flex justify-content-end';
+                actionsDiv.innerHTML = `
+                    <button class="btn btn-danger btn-sm mr-2" onclick="confirmDeleteEmail(${email.id}, ${emails.length})">
+                        <i class="fas fa-trash"></i> Удалить
+                    </button>
+                `;
+                cardBody.appendChild(actionsDiv);
+
+                emailCard.appendChild(cardBody);
+                emailsContainer.appendChild(emailCard);
+            });
+
+            // Скрыть таблицы писем и показать содержимое потока
+            document.querySelectorAll('#inbox-emails-table-container, #outbox-emails-table-container').forEach(container => {
+                container.classList.add('d-none');
+            });
+            document.getElementById('email-content').classList.remove('d-none');
+            document.getElementById('email-content-single').classList.remove('d-none');
+
+            // Показать кнопку "Назад" и скрыть кнопки "Обновить"
+            document.querySelectorAll('#back-button').forEach(button => button.classList.remove('d-none'));
+            document.querySelectorAll('#refresh-button').forEach(button => button.classList.add('d-none'));
+
+            // Обновление статуса писем на "Прочитанно"
+            if (emails.some(email => email.status === 'Не прочитанно')) {
+                const threadId = data.thread_id;
+                fetch(`/admin/emails/mark_read_thread/${threadId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken // Добавление CSRF токена
+                    },
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Ошибка при обновлении статуса потока');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data.status);
+                    // Обновляем интерфейс
+                    const threadHeader = document.querySelector(`tr.thread-header[data-thread-id="${threadId}"]`);
+                    if (threadHeader) {
+                        threadHeader.classList.remove('unread-header');
+                        const faCircle = threadHeader.querySelector('.fa-circle');
+                        if (faCircle) {
+                            faCircle.remove();
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+            }
+        } catch (error) {
+            alert(error.message);
+        }
+    }
+
+    // Функция для отправки запроса на обновление статуса письма
+    function markEmailAsRead(emailId) {
+        fetch(`/admin/emails/mark_read/${emailId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken // Добавление CSRF токена
+            },
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Ошибка при обновлении статуса письма');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data.status);
+            // Обновление интерфейса
+            const threadHeader = document.querySelector(`tr.thread-header[data-thread-id="${emailId}"]`);
+            if (threadHeader) {
+                threadHeader.classList.remove('unread-header');
+                const faCircle = threadHeader.querySelector('.fa-circle');
+                if (faCircle) {
+                    faCircle.remove();
+                }
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }
+
+    async function confirmDeleteEmail(emailId, threadLength) {
+        const isThread = threadLength > 1;
+
+        const confirmation = await Swal.fire({
+            title: isThread ? `Вы действительно хотите удалить весь поток?` : `Вы действительно хотите удалить письмо?`,
+            text: isThread ? `Писем в потоке: ${threadLength}` : '',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Удалить',
+            cancelButtonText: 'Отмена',
+            reverseButtons: true
+        });
+
+        if (confirmation.isConfirmed) {
+            try {
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                const response = await fetch(`/admin/emails/delete/${emailId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken // Используем токен из метатега
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Ошибка при удалении письма');
+                }
+
+                const result = await response.json();
+                Swal.fire({
+                    title: 'Удалено',
+                    text: result.message,
+                    icon: 'success'
+                });
+
+                // Удаляем строку письма из интерфейса
+                const threadRow = document.querySelector(`tr.thread-header[data-thread-id="${emailId}"]`);
+                if (threadRow) threadRow.remove();
+            } catch (error) {
+                Swal.fire({
+                    title: 'Ошибка',
+                    text: error.message,
+                    icon: 'error'
+                });
+            }
+        }
+    }
+
+    // Функция открытия модального окна для отправки письма
+    function openSendEmailModal() {
+        $('#sendEmailModal').modal('show');
+    }
+
+// Обработка отправки письма через модальное окно
+	document.getElementById('send-email-form').addEventListener('submit', function(event) {
+		event.preventDefault();
+		const sender = document.getElementById('send-sender').value;
+		const recipient = document.getElementById('send-recipient').value;
+		const subject = document.getElementById('send-subject').value;
+		const body = document.getElementById('send-body').value;
+		const attachments = document.getElementById('send-attachments').files;
+		const formData = new FormData();
+		formData.append('sender', sender);
+		formData.append('recipient', recipient);
+		formData.append('subject', subject);
+		formData.append('body', body);
+		for (let i = 0; i < attachments.length; i++) {
+			formData.append('attachments', attachments[i]);
+		}
+		fetch('/send_email', {
+			method: 'POST',
+			headers: {
+				'X-CSRFToken': csrfToken
+			},
+			body: formData
+		})
+		.then(response => response.json())
+		.then(data => {
+			if (data.status === 'success') {
+				Swal.fire({
+					title: 'Успех',
+					text: 'Письмо успешно отправлено',
+					icon: 'success'
+				});
+				$('#sendEmailModal').modal('hide');
+				filterEmails();
+			} else {
+				Swal.fire({
+					title: 'Ошибка',
+					text: data.message,
+					icon: 'error'
+				});
+			}
+		})
+		.catch(error => {
+			console.error('Ошибка при отправке письма:', error);
+			Swal.fire({
+				title: 'Ошибка',
+				text: 'Не удалось отправить письмо',
+				icon: 'error'
+			});
+		});
+	});
+
+
+
+
+
+		
+// Функция для обновления номеров строк
+function updateLineNumbers(textareaId, lineNumbersId) {
+    const textarea = document.getElementById(textareaId);
+    const lineNumbers = document.getElementById(lineNumbersId);
+    const lines = textarea.value.split('\n').length;
+    let lineNumbersContent = '';
+    for (let i = 1; i <= lines; i++) {
+        lineNumbersContent += i + '\n';
+    }
+    lineNumbers.textContent = lineNumbersContent;
+}
+
+// Функция для обновления счётчиков символов и строк
+function updateCounters(textareaId, charCountId, lineCountId) {
+    const textarea = document.getElementById(textareaId);
+    const charCount = document.getElementById(charCountId);
+    const lineCount = document.getElementById(lineCountId);
+    const text = textarea.value;
+    const chars = text.length;
+    const lines = text.split('\n').length;
+    charCount.textContent = `Символов: ${chars}`;
+    lineCount.textContent = `Строк: ${lines}`;
+}
+
+// Инициализация редакторов JSON
+document.addEventListener('DOMContentLoaded', function() {
+    // Обработка добавления тарифа
+    {% for service in services %}
+        const textareaAdd{{ service.id }} = document.getElementById('jsonTextareaAdd{{ service.id }}');
+        const lineNumbersAdd{{ service.id }} = document.getElementById('lineNumbersAdd{{ service.id }}');
+        const charCountAdd{{ service.id }} = document.getElementById('charCountAdd{{ service.id }}');
+        const lineCountAdd{{ service.id }} = document.getElementById('lineCountAdd{{ service.id }}');
+
+        // Инициализация начальных значений
+        updateLineNumbers('jsonTextareaAdd{{ service.id }}', 'lineNumbersAdd{{ service.id }}');
+        updateCounters('jsonTextareaAdd{{ service.id }}', 'charCountAdd{{ service.id }}', 'lineCountAdd{{ service.id }}');
+
+        // Добавление обработчика событий
+        textareaAdd{{ service.id }}.addEventListener('input', function() {
+            updateLineNumbers('jsonTextareaAdd{{ service.id }}', 'lineNumbersAdd{{ service.id }}');
+            updateCounters('jsonTextareaAdd{{ service.id }}', 'charCountAdd{{ service.id }}', 'lineCountAdd{{ service.id }}');
+        });
+    {% endfor %}
+
+    // Обработка редактирования тарифа
+    {% for service in services %}
+        {% for service_tariff in service.service_tariffs %}
+            const textareaEdit{{ service_tariff.id }} = document.getElementById('jsonTextareaEdit{{ service_tariff.id }}');
+            const lineNumbersEdit{{ service_tariff.id }} = document.getElementById('lineNumbersEdit{{ service_tariff.id }}');
+            const charCountEdit{{ service_tariff.id }} = document.getElementById('charCountEdit{{ service_tariff.id }}');
+            const lineCountEdit{{ service_tariff.id }} = document.getElementById('lineCountEdit{{ service_tariff.id }}');
+
+            // Инициализация начальных значений
+            updateLineNumbers('jsonTextareaEdit{{ service_tariff.id }}', 'lineNumbersEdit{{ service_tariff.id }}');
+            updateCounters('jsonTextareaEdit{{ service_tariff.id }}', 'charCountEdit{{ service_tariff.id }}', 'lineCountEdit{{ service_tariff.id }}');
+
+            // Добавление обработчика событий
+            textareaEdit{{ service_tariff.id }}.addEventListener('input', function() {
+                updateLineNumbers('jsonTextareaEdit{{ service_tariff.id }}', 'lineNumbersEdit{{ service_tariff.id }}');
+                updateCounters('jsonTextareaEdit{{ service_tariff.id }}', 'charCountEdit{{ service_tariff.id }}', 'lineCountEdit{{ service_tariff.id }}');
+            });
+        {% endfor %}
+    {% endfor %}
+});
+	
+        $(document).ready(function() {
+            $('#addCategoryBtn').click(function() {
+                $('#addCategoryModal').addClass('show');
+            });
+
+            $('#closeModal, #cancelModal').click(function() {
+                $('#addCategoryModal').removeClass('show');
+            });
+
+            $('#categoryImage').change(function() {
+                readURL(this, '#categoryImagePreview');
+            });
+
+            function readURL(input, target) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        $(target).attr('src', e.target.result).show();
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $('.edit-category-btn').click(function() {
+                var id = $(this).data('id');
+                var name = $(this).data('name');
+                var description = $(this).data('description');
+                var image = $(this).data('image');
+
+                $('#editCategoryId').val(id);
+                $('#editCategoryName').val(name);
+                $('#editCategoryDescription').val(description);
+                if (image) {
+                    $('#editCategoryImagePreview').attr('src', '{{ url_for('admin_bp.uploaded_file', folder='category', filename="") }}' + image).show();
+                } else {
+                    $('#editCategoryImagePreview').hide();
+                }
+                $('#editCategoryModal').addClass('show');
+            });
+
+            $('#closeEditModal, #cancelEditModal').click(function() {
+                $('#editCategoryModal').removeClass('show');
+            });
+
+            $('#editCategoryImage').change(function() {
+                readURL(this, '#editCategoryImagePreview');
+            });
+
+            $('.delete-category-btn').click(function() {
+                var id = $(this).data('id');
+                $('#deleteCategoryId').val(id);
+                $('#deleteCategoryModal').addClass('show');
+            });
+
+            $('#closeDeleteModal, #cancelDeleteModal').click(function() {
+                $('#deleteCategoryModal').removeClass('show');
+            });
+
+            $('.open-category-btn').click(function() {
+                var id = $(this).data('id');
+                window.location.href = "/admin/category/" + id;
+            });
+
+            $('#listViewBtn').click(function() {
+                $('main').addClass('list-view');
+            });
+
+            $('#cardViewBtn').click(function() {
+                $('main').removeClass('list-view');
+            });
+        });
+		
+		
+		
+document.addEventListener('DOMContentLoaded', function () {
+    const editButtons = document.querySelectorAll('.edit-element-btn');
+    const editModal = document.getElementById('editElementModal');
+    const editFormContent = document.getElementById('editFormContent');
+    const renderedPreview = document.getElementById('renderedPreview');
+    const saveButton = document.getElementById('saveChangesButton');
+    let currentElementId = null;
+    let elementMapping = new Map(); // Для хранения связей между формами и элементами
+    let styleMapping = new Map(); // Для хранения стилей элементов
+
+    editButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            currentElementId = button.getAttribute('data-id');
+            fetch(`/admin/elements/edit/${currentElementId}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('elementName').value = data.element.name;
+                    editFormContent.innerHTML = '';
+                    renderedPreview.innerHTML = data.element_data;
+
+                    elementMapping.clear();
+                    styleMapping.clear();
+                    createStructuredForms(renderedPreview); // Создаем структурированные формы для элементов
+                    $(editModal).modal('show');
+                })
+                .catch(error => console.error('Ошибка при загрузке элемента:', error));
+        });
+    });
+
+    saveButton.addEventListener('click', function () {
+        const name = document.getElementById('elementName').value;
+        const updatedHtmlContent = getUpdatedHtmlContent();
+
+        console.log('Сохраняем данные:', { name, updatedHtmlContent });
+
+        fetch(`/admin/elements/save/${currentElementId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                name: name,
+                html_content: updatedHtmlContent
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log("Изменения успешно сохранены.");
+                    $(editModal).modal('hide');
+                } else {
+                    alert('Ошибка при сохранении');
+                }
+            })
+            .catch(error => console.error('Ошибка при сохранении элемента:', error));
+    });
+
+    // Функция для создания структурированных форм редактирования с аккордеонами
+    function createStructuredForms(container) {
+        const blocks = container.querySelectorAll('.carousel-item'); // Ищем блоки по классам, можно изменить на нужные
+        const accordion = document.createElement('div');
+        accordion.classList.add('accordion', 'mb-3');
+        accordion.id = 'editAccordion'; // Присваиваем id аккордеону для использования в data-parent
+
+        blocks.forEach((block, index) => {
+            const blockName = getBlockName(block, index); // Получаем реальное название блока
+            const accordionItem = createAccordionItem(block, blockName, index);
+            accordion.appendChild(accordionItem);
+        });
+
+        editFormContent.appendChild(accordion);
+    }
+
+    // Функция для получения реального названия блока
+    function getBlockName(block, index) {
+        // Ищем первый текстовый элемент внутри блока для определения названия
+        const header = block.querySelector('h1, h2, h3, h4, h5, p');
+        if (header && header.textContent.trim() !== '') {
+            return header.textContent.trim(); // Используем текст заголовка как название блока
+        }
+        // Если заголовок не найден, используем дефолтное название
+        return `Блок ${index + 1}`;
+    }
+
+    function createAccordionItem(block, blockName, index) {
+        const itemId = `accordionItem_${index}`;
+        const accordionItem = document.createElement('div');
+        accordionItem.classList.add('card');
+
+        const header = document.createElement('div');
+        header.classList.add('card-header');
+        header.id = `heading_${itemId}`;
+
+        const button = document.createElement('button');
+        button.classList.add('btn', 'btn-link', 'collapsed');
+        button.type = 'button';
+        button.setAttribute('data-toggle', 'collapse');
+        button.setAttribute('data-target', `#collapse_${itemId}`);
+        button.setAttribute('aria-expanded', 'false');
+        button.setAttribute('aria-controls', `collapse_${itemId}`);
+        button.textContent = blockName;
+
+        header.appendChild(button);
+        accordionItem.appendChild(header);
+
+        const collapse = document.createElement('div');
+        collapse.id = `collapse_${itemId}`;
+        collapse.classList.add('collapse');
+        collapse.setAttribute('aria-labelledby', `heading_${itemId}`);
+        collapse.setAttribute('data-parent', `#editAccordion`);
+
+        const body = document.createElement('div');
+        body.classList.add('card-body');
+
+        // Создаем формы для всех редактируемых элементов внутри текущего блока
+        createFormsForEditableElements(block, body);
+
+        collapse.appendChild(body);
+        accordionItem.appendChild(collapse);
+
+        return accordionItem;
+    }
+
+    // Функция для создания форм редактирования внутри аккордеона
+    function createFormsForEditableElements(container, parentElement) {
+        const editableElements = container.querySelectorAll('h1, h2, h3, h4, h5, p, img, a');
+        editableElements.forEach((element, index) => {
+            const elementId = `editable-element-${index}`;
+            element.setAttribute('data-edit-id', elementId);
+
+            // Сохраняем оригинальный стиль элемента
+            styleMapping.set(elementId, element.getAttribute('style') || '');
+
+            const inputValue = element.tagName.toLowerCase() === 'img' ? element.src : (element.href || element.textContent);
+            const field = createInputField(inputValue, elementId, element); // Передаем элемент для связи
+            parentElement.appendChild(field);
+
+            elementMapping.set(elementId, element);
+        });
+    }
+
+    function createInputField(inputValue, elementId, element) {
+        const field = document.createElement('div');
+        field.classList.add('form-group', 'd-flex', 'align-items-center');
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.classList.add('form-control', 'mr-2');
+        input.value = inputValue;
+
+        const applyButton = document.createElement('button');
+        applyButton.textContent = '✔';
+        applyButton.classList.add('btn', 'btn-success', 'ml-2');
+        applyButton.addEventListener('click', () => {
+            updateElement(elementId, input.value, element); // Передаем элемент в функцию обновления
+            console.log(`Изменено значение на ${input.value}`);
+            updateRenderedPreviewFromForms(); // Обновляем превью после изменения
+        });
+
+        field.appendChild(input);
+        field.appendChild(applyButton);
+
+        return field;
+    }
+
+    function updateElement(elementId, newValue, element) {
+        if (!element) {
+            console.error('Элемент не найден для обновления:', elementId);
+            return;
+        }
+
+        // Обновляем данные элемента в зависимости от его типа
+        if (element.tagName.toLowerCase() === 'img') {
+            element.src = newValue;
+        } else if (element.tagName.toLowerCase() === 'a') {
+            element.href = newValue;
+        } else {
+            element.textContent = newValue;
+        }
+
+        const originalStyle = styleMapping.get(elementId) || '';
+        element.setAttribute('style', originalStyle);
+
+        console.log(`Элемент ${elementId} обновлен на ${newValue} с восстановлением стилей: ${originalStyle}`);
+    }
+
+    function updateRenderedPreviewFromForms() {
+        const inputs = editFormContent.querySelectorAll('input');
+        inputs.forEach(input => {
+            const element = renderedPreview.querySelector(`[data-edit-id="${input.dataset.editId}"]`);
+            if (element) {
+                if (element.tagName.toLowerCase() === 'img' || element.tagName.toLowerCase() === 'a') {
+                    element.src = input.value;
+                    element.href = input.value;
+                } else {
+                    element.textContent = input.value;
+                }
+            }
+        });
+        console.log('Превью обновлено');
+    }
+
+    function getUpdatedHtmlContent() {
+        const updatedContent = renderedPreview.innerHTML;
+        console.log(`Обновленное содержимое для сохранения: ${updatedContent}`);
+        return updatedContent;
+    }
+});
+
+    function editService(serviceId) {
+        // Логика для открытия модального окна редактирования сервиса
+        console.log("Редактировать сервис", serviceId);
+    }
+
+    function deleteService(serviceId) {
+        if (confirm("Вы уверены, что хотите удалить этот сервис?")) {
+            fetch(`/admin/delete_service/${serviceId}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token() }}"
+                }
+            }).then(response => response.json()).then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert("Не удалось удалить сервис.");
+                }
+            });
+        }
+    }
+
+    function addTariff(serviceId) {
+        // Логика для открытия модального окна добавления тарифа
+        console.log("Добавить тариф к сервису", serviceId);
+    }
+
+</script>
+</body>
+
+</html>
