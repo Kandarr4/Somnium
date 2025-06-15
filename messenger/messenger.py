@@ -155,7 +155,13 @@ def chat_home():
     
     # Устанавливаем guest_id в куки с долгим сроком действия
     if not current_user.is_authenticated:
-        response.set_cookie('guest_id', guest_id, max_age=31536000)  # 1 год
+        response.set_cookie(
+            'guest_id',
+            guest_id,
+            max_age=31536000,  # 1 год
+            samesite='None',
+            secure=True
+        )
     
     return response
 
@@ -259,7 +265,13 @@ def view_chat(chat_id):
     
     # Устанавливаем guest_id в куки с долгим сроком действия
     if not current_user.is_authenticated and guest_id:
-        response.set_cookie('guest_id', guest_id, max_age=31536000)  # 1 год
+        response.set_cookie(
+            'guest_id',
+            guest_id,
+            max_age=31536000,  # 1 год
+            samesite='None',
+            secure=True
+        )
     
     return response
 
@@ -607,11 +619,20 @@ def create_chat():
     
     try:
         db.session.commit()
-        return jsonify({
-            'success': True, 
+        response = jsonify({
+            'success': True,
             'chat_id': new_chat.id,
             'title': new_chat.title
         })
+        if not current_user.is_authenticated and guest_id:
+            response.set_cookie(
+                'guest_id',
+                guest_id,
+                max_age=31536000,  # 1 год
+                samesite='None',
+                secure=True
+            )
+        return response
     except Exception as e:
         db.session.rollback()
         current_app.logger.error(f"Error creating chat: {e}")
